@@ -85,3 +85,42 @@
 		/* IE6-8 */ url('../../public/fonts/woff/iranyekanwebextrablackfanum.woff') format('woff'),
 		/* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('../../public/fonts/ttf/iranyekanwebextrablackfanum.ttf') format('truetype');
 }
+
+/* ======================= */
+/* yekan bakh*/
+/* ======================= */
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 400;
+	src: url('../../public/fonts2/Yekan-Bakh-FaNum-04-Regular.woff') format('woff');
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 500;
+	src: url('../../public/fonts2/Yekan-Bakh-FaNum-05-Medium.woff') format('woff');
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 600;
+	src: url('../../public/fonts2/Yekan-Bakh-FaNum-06-Bold.woff') format('woff');
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 700;
+	src: url('../../public/fonts2/Yekan-Bakh-FaNum-07-Heavy.woff') format('woff');
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 800;
+	src: url('../../public/fonts2/Yekan-Bakh-FaNum-08-Fat.woff') format('woff');
+}

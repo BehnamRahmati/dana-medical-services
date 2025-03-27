@@ -36,6 +36,54 @@
 body {
 	background: var(--background);
 	color: var(--foreground);
-	font-family: iranyekan, Helvetica, sans-serif;
+	font-family: yekanbakh, iranyekan, Helvetica, sans-serif;
 	@apply text-content;
+}
+
+.content-area p,
+.content-area ul,
+.content-area ol,
+.content-area blockquote,
+.content-area pre,
+.content-area table,
+.content-area h2,
+.content-area h3,
+.content-area h4,
+.content-area h5,
+.content-area h6,
+.content-area hr,
+.content-area img {
+	@apply text-content mb-5;
+}
+
+.content-area p {
+	@apply text-lg font-light leading-10;
+}
+
+.content-area h2 {
+	@apply text-2xl font-extrabold;
+}
+
+.content-area h3 {
+	@apply text-lg font-bold;
+}
+
+.content-area h4,
+.content-area h5,
+.content-area h6,
+.content-area strong,
+.content-area b {
+	@apply font-extrabold;
+}
+
+.content-area img {
+	@apply w-full;
+}
+
+.content-area ul {
+	@apply mr-5 list-disc pr-5;
+}
+
+.content-area ol {
+	@apply mr-5 list-decimal pr-5;
 }

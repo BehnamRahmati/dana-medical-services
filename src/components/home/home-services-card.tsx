@@ -1,11 +1,11 @@
-import { ArrowLeft3, Image } from 'iconsax-react'
+import { ArrowLeft3 } from 'iconsax-react'
 import Link from 'next/link'
 
 export default function HomeServicesCard() {
 	return (
 		<div className='bg-accent border border-border rounded-xl mt-12'>
 			<div className='bg-primary/60 w-11/12 rounded-xl h-44 mx-auto -mt-12 overflow-hidden flex items-center justify-center'>
-				<Image size='50' className='fill-content' variant='Bulk' />
+				{/* <Image size='50' className='fill-content' variant='Bulk' /> */}
 				{/* <Image alt='image' src={sampleImage} width={300} height={300} className='size-full rounded-xl' /> */}
 			</div>
 			<div className='info w-11/12 mx-auto'>
