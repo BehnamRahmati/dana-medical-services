@@ -1,9 +1,11 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { TickSquare } from 'iconsax-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Button from './ui/Button'
-import Section from './ui/section'
+import Button from '../ui/Button'
+import Section from '../ui/section'
 
 const formSchema = z.object({
 	category: z.string(),
@@ -22,24 +24,27 @@ export default function HomeRequestForm() {
 			phone: 0,
 		},
 	})
+	const [rules, setRules] = useState(false)
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		console.warn(values)
+		console.warn('values', values)
 	}
 	return (
-		<Section className='bg-primary/60'>
+		<Section className='bg-primary px-5 lg:px-0'>
 			<form onSubmit={form.handleSubmit(onSubmit)}>
-				<div className='flex flex-row'>
-					<div className='w-1/2'>
-						<h2 className='text-5xl font-extrabold text-white'>ثبت درخواست خدمات</h2>
-						<p className='text-white mt-5'>کافیست خدمت مورد نیاز خود را ثبت کنید و منتظر تماس کارشناسان ما بمانید.</p>
+				<div className='flex flex-col items-center gap-10 lg:gap-20 container mx-auto py-10'>
+					<div className=''>
+						<h2 className='text-4xl lg:text-7xl font-extrabold text-white text-center'>ثبت درخواست خدمات</h2>
+						<p className='text-white mt-5 text-center'>
+							کافیست خدمت مورد نیاز خود را ثبت کنید و منتظر تماس کارشناسان ما بمانید.
+						</p>
 					</div>
-					<div className='w-1/2 grid grid-cols-2 gap-5 text-white'>
+					<div className=' grid grid-cols-1 lg:grid-cols-2 gap-5 text-white'>
 						<label htmlFor='firstname'>
 							<p>نام</p>
 							<input
 								id='firstname'
-								name='firstname'
+								{...form.register('firstname')}
 								type='text'
 								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
 								placeholder='مثال: محمد'
@@ -49,7 +54,7 @@ export default function HomeRequestForm() {
 							<p>نام خانوادگی</p>
 							<input
 								id='lastname'
-								name='lastname'
+								{...form.register('lastname')}
 								type='text'
 								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
 								placeholder='مثال: محمدی'
@@ -59,7 +64,7 @@ export default function HomeRequestForm() {
 							<p>شماره تماس</p>
 							<input
 								id='phone'
-								name='phone'
+								{...form.register('phone')}
 								type='number'
 								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
 								placeholder='مثال: 09123456789 '
@@ -69,7 +74,7 @@ export default function HomeRequestForm() {
 							<p>خدمت</p>
 							<select
 								id='service'
-								name='service'
+								{...form.register('category')}
 								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
 							>
 								<option value={'hi'}>تزریقات</option>
@@ -81,10 +86,26 @@ export default function HomeRequestForm() {
 							</select>
 						</label>
 						<label htmlFor='rules' className='flex items-start gap-2'>
-							<input id='rules' name='rules' type='checkbox' className='bg-accent size-5 rounded-lg' />
+							<div className=' flex items-center justify-center'>
+								{rules ? (
+									<TickSquare
+										className='fill-secondary size-5 border border-secondary rounded-sm'
+										variant='Bulk'
+									/>
+								) : (
+									<div className='size-5 border border-secondary rounded-sm  '></div>
+								)}
+							</div>
+							<input id='rules' name='rules' type='checkbox' hidden onChange={() => setRules(prev => !prev)} />
 							<p>شرایط انجام خدمات و قوانین دنا را مطالعه کرده‌ام و می‌پذیرم.</p>
 						</label>
-						<Button variant='default' size='lg' type='submit' className='bg-secondary'>
+						<Button
+							variant='default'
+							size='lg'
+							type='submit'
+							disabled={!rules}
+							className='bg-secondary hover:bg-secondary/80'
+						>
 							ثبت درخواست
 						</Button>
 					</div>

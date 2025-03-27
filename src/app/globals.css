@@ -5,16 +5,20 @@
 
 :root {
 	--background: #f3f4f6;
-	--accent: #ffffff;
 	--foreground: #171717;
+	--accent: #ffffff;
+	--border: oklch(0.87 0 0);
+	--content: rgb(51 65 85);
 	--primary: oklch(0.704 0.14 182.503);
 	--secondary: oklch(0.606 0.25 292.717);
 }
 
 .dark {
 	--background: oklch(0.279 0.041 260.031);
-	--accent: oklch(0.446 0.043 257.281);
 	--foreground: #ededed;
+	--accent: oklch(0.446 0.043 257.281);
+	--border: oklch(0.967 0.003 264.542);
+	--content: oklch(0.967 0.003 264.542);
 	--primary: oklch(0.704 0.14 182.503);
 	--secondary: oklch(0.606 0.25 292.717);
 }
@@ -25,10 +29,13 @@
 	--color-primary: var(--primary);
 	--color-secondary: var(--secondary);
 	--color-accent: var(--accent);
+	--color-border: var(--border);
+	--color-content: var(--content);
 }
 
 body {
 	background: var(--background);
 	color: var(--foreground);
 	font-family: iranyekan, Helvetica, sans-serif;
+	@apply text-content;
 }
