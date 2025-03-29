@@ -1,10 +1,13 @@
 import { Bookmark2, Heart, MessageText1, Watch } from 'iconsax-react'
+import Link from 'next/link'
 
 export default function PostCard() {
 	return (
 		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-slate-300'>
 			<div className='bg-slate-400 w-full h-52 rounded-xl'></div>
-			<h3 className='text-xl mt-2 font-extrabold'>جشنواره نوروزی راکت! - بزرگترین تخفیف‌های سال!</h3>
+			<Link href={'/articles/sd'} className='text-xl mt-2 font-extrabold block'>
+				جشنواره نوروزی راکت! - بزرگترین تخفیف‌های سال!
+			</Link>
 			<div className='flex items-center justify-between mt-5'>
 				<div className='flex items-center gap-2'>
 					<div className='size-7 bg-slate-500 rounded-full'></div>

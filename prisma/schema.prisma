@@ -12,3 +12,217 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String    @default("/user-placeholder.png")
+  hashedPassword String?
+  role           Role      @default(USER)
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  isOnline         Boolean   @default(false) // Tracks if user is currently online
+  lastActive       DateTime? // Tracks the last time the user was active
+  pushSubscription Json? // Store user's Web Push subscription object
+  deviceReady      Boolean   @default(false) // Tracks whether the user registered their notification permissions
+
+  // relations
+  accounts           Account[]
+  sessions           Session[]
+  articles           Article[] @relation("articleAuthor")
+  likedArticles      Article[] @relation("likedArticles")
+  bookmarkedArticles Article[] @relation("bookmarkedArticles")
+  likedComments      Comment[] @relation("likedcomments")
+  comments           Comment[]
+  likedServices      Service[] @relation("likedServices")
+  BookmarkedServices Service[] @relation("bookmarkedServices")
+  Service            Service?  @relation(fields: [serviceId], references: [id])
+  serviceId          String?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+model Article {
+  id String @id @default(cuid())
+
+  // fields
+  title     String
+  slug      String
+  excerpt   String
+  thumbnail String
+  content   String
+  views     Int    @default(0)
+  readTime  Int    @default(0)
+
+  // relations
+  author    User      @relation("articleAuthor", fields: [userId], references: [id])
+  category  Category  @relation(fields: [categoryId], references: [id])
+  tags      Tag[]
+  comments  Comment[]
+  likes     User[]    @relation("likedArticles")
+  bookmarks User[]    @relation("bookmarkedArticles")
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relatins identifiers
+  userId     String
+  categoryId String
+}
+
+model Category {
+  id   String @id @default(cuid())
+  // fields
+  name String
+  slug String
+
+  // relations
+  articles Article[]
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id String @id @default(cuid())
+
+  // fields
+  name String
+  slug String
+
+  // relations
+  Article Article[]
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id String @id @default(cuid())
+
+  // fields
+  content  String
+  approved Boolean @default(false)
+
+  // relations
+  article Article   @relation(fields: [articleId], references: [id])
+  user    User      @relation(fields: [userId], references: [id])
+  likes   User[]    @relation("likedcomments")
+  parent  Comment   @relation("CommentReplies", fields: [commentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
+  service Service?  @relation(fields: [serviceId], references: [id])
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation identifiers
+  articleId String
+  userId    String
+  serviceId String?
+  commentId String
+}
+
+model Service {
+  id String @id @default(cuid())
+
+  // fields
+  title     String
+  slug      String
+  excerpt   String
+  thumbnail String
+  content   String
+  views     Int    @default(0)
+
+  // relations 
+  comments  Comment[]
+  likes     User[]    @relation("likedServices")
+  bookmarks User[]    @relation("bookmarkedServices")
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User[]
+}
+
+model Menu {
+  id String @id @default(cuid())
+
+  name   String
+  links  Link[]
+  parent Menu?   @relation("MenuHierarchy", fields: [menuId], references: [id])
+  Menu   Menu[]  @relation("MenuHierarchy")
+  menuId String?
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Link {
+  id String @id @default(cuid())
+
+  name  String
+  url   String
+  menus Menu[]
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Social {
+  id String @id @default(cuid())
+
+  name String
+  url  String
+  icon String
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
