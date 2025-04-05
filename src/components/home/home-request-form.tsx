@@ -4,7 +4,7 @@ import { TickSquare } from 'iconsax-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Button from '../ui/Button'
+import Button from '../ui/button'
 import Section from '../ui/section'
 
 const formSchema = z.object({

@@ -1,5 +1,5 @@
 'use client'
-import { SidebarContext } from '@/components/dashboard/sidebar/sidebar-provider'
+import { SidebarContext } from '@/components/ui/sidebar-custom'
 import React from 'react'
 
 export default function useSidebar() {

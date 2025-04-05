@@ -1,3 +1,9 @@
+import ArticlesCreateForm from '@/components/dashboard/articles/articles-create'
+
 export default function DashboardArticleCreate() {
-	return <div>DashboardArticleCreate</div>
+	return (
+		<div>
+			<ArticlesCreateForm />
+		</div>
+	)
 }

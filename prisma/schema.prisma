@@ -39,8 +39,7 @@ model User {
   comments           Comment[]
   likedServices      Service[] @relation("likedServices")
   BookmarkedServices Service[] @relation("bookmarkedServices")
-  Service            Service?  @relation(fields: [serviceId], references: [id])
-  serviceId          String?
+  services           Service[] @relation("serviceAuthor")
 }
 
 model Account {
@@ -88,12 +87,13 @@ model Article {
 
   // fields
   title     String
-  slug      String
+  slug      String @unique
   excerpt   String
   thumbnail String
   content   String
   views     Int    @default(0)
   readTime  Int    @default(0)
+  status    Status @default(DRAFT)
 
   // relations
   author    User      @relation("articleAuthor", fields: [userId], references: [id])
@@ -110,13 +110,21 @@ model Article {
   // relatins identifiers
   userId     String
   categoryId String
+
+  @@unique([slug, id])
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 model Category {
   id   String @id @default(cuid())
   // fields
   name String
-  slug String
+  slug String @unique
 
   // relations
   articles Article[]
@@ -124,6 +132,8 @@ model Category {
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([slug, id])
 }
 
 model Tag {
@@ -131,7 +141,7 @@ model Tag {
 
   // fields
   name String
-  slug String
+  slug String @unique
 
   // relations
   Article Article[]
@@ -139,6 +149,8 @@ model Tag {
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([slug, id])
 }
 
 model Comment {
@@ -172,11 +184,14 @@ model Service {
 
   // fields
   title     String
-  slug      String
+  slug      String @unique
   excerpt   String
   thumbnail String
   content   String
   views     Int    @default(0)
+  author    User   @relation("serviceAuthor", fields: [userId], references: [id])
+  status    Status @default(DRAFT)
+  readTime  Int    @default(0)
 
   // relations 
   comments  Comment[]
@@ -186,7 +201,9 @@ model Service {
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User[]
+  userId    String
+
+  @@unique([slug, id])
 }
 
 model Menu {
@@ -221,6 +238,18 @@ model Social {
   name String
   url  String
   icon String
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id String @id @default(cuid())
+
+  filename String
+  size     Int
+  url      String @unique
 
   // times
   createdAt DateTime @default(now())

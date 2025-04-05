@@ -1,45 +1,73 @@
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+'use client'
 
-export default function Table({ columns, data }: { columns: any; data: any }) {
-	const table = useReactTable({
-		data,
-		columns,
-		getCoreRowModel: getCoreRowModel(),
-	})
+import * as React from 'react'
+
+import { cn } from '@/lib/utils'
+
+function Table({ className, ...props }: React.ComponentProps<'table'>) {
 	return (
-		<div>
-			<div className='header'>
-				{table.getHeaderGroups().map(headerGroup => (
-					<div key={headerGroup.id} className='header-row'>
-						{headerGroup.headers.map(header => {
-							return (
-								<div key={header.id} className='header-item'>
-									{header.isPlaceholder
-										? null
-										: flexRender(header.column.columnDef.header, header.getContext())}
-								</div>
-							)
-						})}
-					</div>
-				))}
-			</div>
-			<div className='body'>
-				{table.getRowModel().rows?.length ? (
-					table.getRowModel().rows.map(row => (
-						<div className='body-rows' key={row.id} data-state={row.getIsSelected() && 'selected'}>
-							{row.getVisibleCells().map(cell => (
-								<div key={cell.id} className='body-item'>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</div>
-							))}
-						</div>
-					))
-				) : (
-					<div className='body-rows'>
-						<div className='body-items'>No results.</div>
-					</div>
-				)}
-			</div>
+		<div data-slot='table-container' className='relative w-full overflow-x-auto'>
+			<table data-slot='table' className={cn('w-full caption-bottom text-sm', className)} {...props} />
 		</div>
 	)
 }
+
+function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
+	return <thead data-slot='table-header' className={cn('[&_tr]:border-b', className)} {...props} />
+}
+
+function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
+	return <tbody data-slot='table-body' className={cn('[&_tr:last-child]:border-0', className)} {...props} />
+}
+
+function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
+	return (
+		<tfoot
+			data-slot='table-footer'
+			className={cn('bg-muted/50 border-t font-medium [&>tr]:last:border-b-0', className)}
+			{...props}
+		/>
+	)
+}
+
+function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
+	return (
+		<tr
+			data-slot='table-row'
+			className={cn('hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors', className)}
+			{...props}
+		/>
+	)
+}
+
+function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
+	return (
+		<th
+			data-slot='table-head'
+			className={cn(
+				'text-foreground text-right h-10 px-2 align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+				className,
+			)}
+			{...props}
+		/>
+	)
+}
+
+function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
+	return (
+		<td
+			data-slot='table-cell'
+			className={cn(
+				'p-2 max-w-xs truncate align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+				className,
+			)}
+			{...props}
+		/>
+	)
+}
+
+function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) {
+	return <caption data-slot='table-caption' className={cn('text-muted-foreground mt-4 text-sm', className)} {...props} />
+}
+
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow }

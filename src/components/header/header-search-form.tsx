@@ -3,11 +3,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SearchNormal1 } from 'iconsax-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Button from '../ui/Button'
+import Button from '../ui/button'
 
 const formSchema = z.object({
 	term: z.string(),
 })
+
 export default function HeaderSearchForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),

@@ -1,3 +1,5 @@
+import ArticlesTable from '@/components/dashboard/articles/articles-table'
+
 export default function DashboardArticles() {
-	return <div>DashboardArticles</div>
+	return <ArticlesTable />
 }

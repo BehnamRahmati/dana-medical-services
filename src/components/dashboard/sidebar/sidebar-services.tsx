@@ -1,24 +1,36 @@
-import { I3DSquare } from 'iconsax-react'
-import DashboardCollapsible from './sidebar-collapsible'
-import DashboardSidebarCollapsibleContent from './sidebar-collapsible-content'
-import DashboardSidebarCollapsibleTriger from './sidebar-collapsible-trigger'
-import DashboardSidebarMenu from './sidebar-menu'
-import DashboardSidebarMenuItem from './sidebar-menu-item'
+'use client'
+import {
+	SidebarCollapsible,
+	SidebarCollapsibleContent,
+	SidebarCollapsibleTrigger,
+	SidebarMenu,
+	SidebarMenuItem,
+} from '@/components/ui/sidebar-custom'
+import { AddSquare, HambergerMenu, I3DSquare } from 'iconsax-react'
+import Link from 'next/link'
 
 export default function DashboardSidebarServices() {
 	return (
-		<DashboardCollapsible>
-			<DashboardSidebarCollapsibleTriger title='خدمات'>
+		<SidebarCollapsible>
+			<SidebarCollapsibleTrigger title='خدمات'>
 				<I3DSquare variant='Broken' />
-			</DashboardSidebarCollapsibleTriger>
-			<DashboardSidebarCollapsibleContent>
-				<DashboardSidebarMenu isSubMenu>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-				</DashboardSidebarMenu>
-			</DashboardSidebarCollapsibleContent>
-		</DashboardCollapsible>
+			</SidebarCollapsibleTrigger>
+			<SidebarCollapsibleContent>
+				<SidebarMenu isSubMenu>
+					<SidebarMenuItem>
+						<Link href={'/dashboard/services'} className='flex items-center gap-2.5 *:shrink-0'>
+							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
+							<span>مشاهده همه خدمات</span>
+						</Link>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href={'/dashboard/services/create'} className='flex items-center gap-2.5 *:shrink-0'>
+							<AddSquare className='size-5 stroke-content/60' variant='Broken' />
+							<span>نوشتن خدمت جدید</span>
+						</Link>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarCollapsibleContent>
+		</SidebarCollapsible>
 	)
 }

@@ -1,24 +1,30 @@
-import { Profile2User } from 'iconsax-react'
-import DashboardCollapsible from './sidebar-collapsible'
-import DashboardSidebarCollapsibleContent from './sidebar-collapsible-content'
-import DashboardSidebarCollapsibleTriger from './sidebar-collapsible-trigger'
-import DashboardSidebarMenu from './sidebar-menu'
-import DashboardSidebarMenuItem from './sidebar-menu-item'
+'use client'
+import {
+	SidebarCollapsible,
+	SidebarCollapsibleContent,
+	SidebarCollapsibleTrigger,
+	SidebarMenu,
+	SidebarMenuItem,
+} from '@/components/ui/sidebar-custom'
+import { HambergerMenu, Profile2User } from 'iconsax-react'
+import Link from 'next/dist/client/link'
 
 export default function DashboardSidebarUsers() {
 	return (
-		<DashboardCollapsible>
-			<DashboardSidebarCollapsibleTriger title='کاربران'>
+		<SidebarCollapsible>
+			<SidebarCollapsibleTrigger title='کاربران'>
 				<Profile2User variant='Broken' />
-			</DashboardSidebarCollapsibleTriger>
-			<DashboardSidebarCollapsibleContent>
-				<DashboardSidebarMenu isSubMenu>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>نوشتن مقاله جدید</DashboardSidebarMenuItem>
-				</DashboardSidebarMenu>
-			</DashboardSidebarCollapsibleContent>
-		</DashboardCollapsible>
+			</SidebarCollapsibleTrigger>
+			<SidebarCollapsibleContent>
+				<SidebarMenu isSubMenu>
+					<SidebarMenuItem>
+						<Link href={'/dashboard/users'} className='flex items-center gap-2.5 *:shrink-0'>
+							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
+							<span>مشاهده همه کاربران</span>
+						</Link>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarCollapsibleContent>
+		</SidebarCollapsible>
 	)
 }

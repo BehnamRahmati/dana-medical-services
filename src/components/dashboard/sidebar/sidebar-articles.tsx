@@ -1,33 +1,36 @@
-import { Cards, HambergerMenu, PenAdd } from 'iconsax-react'
+'use client'
+import {
+	SidebarCollapsible,
+	SidebarCollapsibleContent,
+	SidebarCollapsibleTrigger,
+	SidebarMenu,
+	SidebarMenuItem,
+} from '@/components/ui/sidebar-custom'
+import { AddSquare, Cards, HambergerMenu } from 'iconsax-react'
 import Link from 'next/link'
-import DashboardCollapsible from './sidebar-collapsible'
-import DashboardSidebarCollapsibleContent from './sidebar-collapsible-content'
-import DashboardSidebarCollapsibleTriger from './sidebar-collapsible-trigger'
-import DashboardSidebarMenu from './sidebar-menu'
-import DashboardSidebarMenuItem from './sidebar-menu-item'
 
 export default function DashboardSidebarArticles() {
 	return (
-		<DashboardCollapsible>
-			<DashboardSidebarCollapsibleTriger title='مقالات'>
+		<SidebarCollapsible>
+			<SidebarCollapsibleTrigger title='مقالات'>
 				<Cards variant='Broken' />
-			</DashboardSidebarCollapsibleTriger>
-			<DashboardSidebarCollapsibleContent>
-				<DashboardSidebarMenu isSubMenu>
-					<DashboardSidebarMenuItem>
-						<Link href={'/dashboard/articles'} className='flex items-center gap-2'>
-							<HambergerMenu className='size-5 stroke-content' />
+			</SidebarCollapsibleTrigger>
+			<SidebarCollapsibleContent>
+				<SidebarMenu isSubMenu>
+					<SidebarMenuItem>
+						<Link href={'/dashboard/articles'} className='flex items-center gap-2.5 *:shrink-0'>
+							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
 							<span>مشاهده همه مقالات</span>
 						</Link>
-					</DashboardSidebarMenuItem>
-					<DashboardSidebarMenuItem>
-						<Link href={'/dashboard/articles/create'} className='flex items-center gap-2'>
-							<PenAdd className='size-5 stroke-content' />
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href={'/dashboard/articles/create'} className='flex items-center gap-2.5 *:shrink-0'>
+							<AddSquare className='size-5 stroke-content/60' variant='Broken' />
 							<span>نوشتن مقاله جدید</span>
 						</Link>
-					</DashboardSidebarMenuItem>
-				</DashboardSidebarMenu>
-			</DashboardSidebarCollapsibleContent>
-		</DashboardCollapsible>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarCollapsibleContent>
+		</SidebarCollapsible>
 	)
 }
