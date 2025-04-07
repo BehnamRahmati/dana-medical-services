@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { TArticles, TTag } from './types'
+import { TArticles, TCategory, TTag } from './types'
 
 export async function fetchArticles(url: string): Promise<TArticles[]> {
 	const response = await axios.get(url)
@@ -9,4 +9,9 @@ export async function fetchArticles(url: string): Promise<TArticles[]> {
 export async function fetchTags(url: string): Promise<TTag[]> {
 	const response = await axios.get(url)
 	return response.data.tags
+}
+
+export async function fetchCategory(url: string): Promise<TCategory[]> {
+	const response = await axios.get(url)
+	return response.data.categories
 }

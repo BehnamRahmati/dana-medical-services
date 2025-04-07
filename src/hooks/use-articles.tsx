@@ -1,6 +1,6 @@
 'use client'
 
-import { ArticlesContext } from '@/components/articles/article-container'
+import { ArticlesContext } from '@/components/articles/table-provider'
 import React from 'react'
 
 export default function useArticles() {
