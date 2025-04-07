@@ -9,7 +9,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { TServices } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowSwapVertical, Edit, MoreSquare } from 'iconsax-react'
+import axios from 'axios'
+import { ArrowSwapVertical, Edit, MoreSquare, Trash } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -55,8 +56,22 @@ export const ServicesColumns: ColumnDef<TServices>[] = [
 		},
 	},
 	{
-		accessorKey: 'excerpt',
-		header: 'توضیح مختصر',
+		accessorKey: 'status',
+		header: 'وضعیت',
+		cell({ row }) {
+			const status = row.getValue('status') as string
+			switch (status) {
+				case 'PUBLISHED':
+					return <div className='text-green-500 bg-green-500/20 w-fit py-1 px-2.5 rounded-md'>منتشر شده</div>
+					break
+				case 'DRAFT':
+					return <div className='text-amber-500 bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>پیش نویس</div>
+					break
+				default:
+					return <div className='text-content bg-content/20 w-fit py-1 px-2.5 rounded-md'>بایگانی</div>
+					break
+			}
+		},
 	},
 
 	{
@@ -93,10 +108,21 @@ export const ServicesColumns: ColumnDef<TServices>[] = [
 						<DropdownMenuLabel> عملیات</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>
-							<Link href={`/dashboard/articles/${slug}/edit`} className='flex items-center gap-2'>
+							<Link href={`/dashboard/services/${slug}/edit`} className='flex items-center gap-2'>
 								<Edit className='stroke-content size-4 shrink-0' variant='Broken' />
 								<p>ویرایش</p>
 							</Link>
+						</DropdownMenuItem>
+						<DropdownMenuItem>
+							<button
+								className='flex items-center gap-2 cursor-pointer'
+								onClick={() => {
+									axios.delete(`/api/dashboard/services/${slug}`)
+								}}
+							>
+								<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
+								<p>حذف مقاله</p>
+							</button>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

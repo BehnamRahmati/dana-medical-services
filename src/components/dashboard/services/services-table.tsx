@@ -10,13 +10,14 @@ async function fetcher(url: string): Promise<{ services: TServices[] }> {
 	const response = await axios.get(url)
 	return await response.data
 }
+
 export default function ServicesTable() {
-	const { data, isLoading } = useSWR('/api/dashboard/users', fetcher)
+	const { data, isLoading } = useSWR('/api/dashboard/services', fetcher)
 
 	if (isLoading || !data) return <p>loading</p>
 
 	return (
-		<div className='rounded-md border max-w-full overflow-hidden bg-accent p-5'>
+		<div className='rounded-lg max-w-full overflow-hidden bg-accent h-full p-5 flex flex-col'>
 			<ServicesDataTable data={data.services} columns={ServicesColumns} />
 		</div>
 	)

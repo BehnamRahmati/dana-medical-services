@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { FolderAdd } from 'iconsax-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
@@ -26,7 +27,7 @@ const formSchema = z.object({
 	excerpt: z.string().min(1, { message: 'توضیحی کوتاه برای مقاله وارد کنید' }),
 	author: z.string().min(1, { message: 'نویسنده مقاله را انتخاب کنید' }),
 	tag: z.string().min(1, { message: 'یک تگ برای مقاله انتخاب کنید' }),
-	readTime: z.number().min(1, { message: 'زمان مطالعه مقاله را وارد کنید' }),
+	readTime: z.string().min(1, { message: 'زمان مطالعه مقاله را وارد کنید' }),
 	category: z.string().min(1, { message: 'یک دسته بندی برای مقاله انتخاب کنید' }),
 	content: z.string().min(1, { message: 'محتوای مقاله را وارد کنید' }),
 	status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED'], {
@@ -39,17 +40,17 @@ const formSchema = z.object({
 		.refine(file => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'فقط فایل های jpg, png, jpeg مجاز هستند'),
 })
 
-async function tagFetcher(url: string): Promise<TTag[]> {
+async function tagFetcher(url: string): Promise<{ tags: TTag[] }> {
 	const response = await axios.get(url)
-	return await response.data.tags
+	return await response.data
 }
-async function categotyFetcher(url: string): Promise<TCategory[]> {
+async function categotyFetcher(url: string): Promise<{ categories: TCategory[] }> {
 	const response = await axios.get(url)
-	return await response.data.categories
+	return await response.data
 }
-async function userFetcher(url: string): Promise<TUser[]> {
+async function userFetcher(url: string): Promise<{ users: TUser[] }> {
 	const response = await axios.get(url)
-	return await response.data.users
+	return await response.data
 }
 
 export default function ArticlesCreateForm() {
@@ -57,6 +58,7 @@ export default function ArticlesCreateForm() {
 	const { data: categoriesData, isLoading: categoriesLoading } = useSWR('/api/dashboard/categories', categotyFetcher)
 	const { data: usersData, isLoading: usersLoading } = useSWR('/api/dashboard/users', userFetcher)
 	const [imageUrl, setImageUrl] = useState('')
+	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -66,14 +68,14 @@ export default function ArticlesCreateForm() {
 			tag: '',
 			category: '',
 			thumbnail: '',
-			readTime: 0,
+			readTime: '0',
 			author: '',
 			content: '',
 			status: 'DRAFT',
 		},
 	})
 
-	async function onSubmit(values: z.infer<typeof formSchema>) {
+	async function createArticle(values: z.infer<typeof formSchema>) {
 		const formData = new FormData()
 		formData.append('thumbnail', values.thumbnail)
 		formData.append('title', values.title)
@@ -85,13 +87,27 @@ export default function ArticlesCreateForm() {
 		formData.append('readTime', values.readTime.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
+		return await axios.post('/api/dashboard/articles', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+	}
+
+	async function onSubmitToArticles(values: z.infer<typeof formSchema>) {
 		try {
-			const response = await axios.post('/api/dashboard/articles', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			})
-			console.warn(response.data)
+			const response = await createArticle(values)
+			console.warn(response)
+			router.replace('/dashboard/articles')
+		} catch (error) {
+			console.error(error)
+		}
+	}
+	async function onSubmitToNewArticle(values: z.infer<typeof formSchema>) {
+		try {
+			const response = await createArticle(values)
+			console.warn(response)
+			router.refresh()
 		} catch (error) {
 			console.error(error)
 		}
@@ -99,7 +115,7 @@ export default function ArticlesCreateForm() {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
+			<form>
 				<div className='flex flex-col md:flex-row gap-5'>
 					<div className='flex-1 bg-accent p-5 rounded-lg flex flex-col gap-10'>
 						<FormField
@@ -210,7 +226,7 @@ export default function ArticlesCreateForm() {
 						/>
 					</div>
 					<div className='w-full md:w-80 flex flex-col gap-10 bg-accent p-5 rounded-lg'>
-						{tagsLoading ? (
+						{tagsLoading || !tagsData || !tagsData.tags ? (
 							<p>loading</p>
 						) : (
 							<FormField
@@ -227,8 +243,8 @@ export default function ArticlesCreateForm() {
 											</FormControl>
 											<SelectContent>
 												<SelectGroup>
-													{tagsData &&
-														tagsData.map(tag => (
+													{tagsData.tags.length &&
+														tagsData.tags.map(tag => (
 															<SelectItem value={tag.id} key={tag.id}>
 																{tag.name}
 															</SelectItem>
@@ -242,7 +258,7 @@ export default function ArticlesCreateForm() {
 							/>
 						)}
 
-						{categoriesLoading ? (
+						{categoriesLoading || !categoriesData || !categoriesData.categories ? (
 							<p>loading</p>
 						) : (
 							<FormField
@@ -259,8 +275,8 @@ export default function ArticlesCreateForm() {
 											</FormControl>
 											<SelectContent>
 												<SelectGroup>
-													{categoriesData &&
-														categoriesData.map(cat => (
+													{categoriesData.categories.length &&
+														categoriesData.categories.map(cat => (
 															<SelectItem value={cat.id} key={cat.id}>
 																{cat.name}
 															</SelectItem>
@@ -273,7 +289,7 @@ export default function ArticlesCreateForm() {
 								)}
 							/>
 						)}
-						{usersLoading ? (
+						{usersLoading || !usersData || !usersData.users ? (
 							<p>loading</p>
 						) : (
 							<FormField
@@ -290,8 +306,8 @@ export default function ArticlesCreateForm() {
 											</FormControl>
 											<SelectContent>
 												<SelectGroup>
-													{usersData &&
-														usersData.map(user => (
+													{usersData.users.length &&
+														usersData.users.map(user => (
 															<SelectItem value={user.id} key={user.id}>
 																{user.name}
 															</SelectItem>
@@ -345,9 +361,28 @@ export default function ArticlesCreateForm() {
 								</FormItem>
 							)}
 						/>
-						<Button type='submit' variant='default' size='lg' className='text-lg shrink-0 cursor-pointer'>
-							ثبت مقاله جدید
-						</Button>
+						<div className='flex flex-col gap-2.5'>
+							<Button
+								type='button'
+								disabled={form.formState.isSubmitting}
+								variant='outline'
+								size='lg'
+								className='text-base shrink-0 cursor-pointer'
+								onClick={form.handleSubmit(onSubmitToArticles)}
+							>
+								ثبت مقاله و رفتن به صفحه مقالات
+							</Button>
+							<Button
+								type='button'
+								disabled={form.formState.isSubmitting}
+								variant='default'
+								size='lg'
+								className='text-base shrink-0 cursor-pointer'
+								onClick={form.handleSubmit(onSubmitToNewArticle)}
+							>
+								ثبت مقاله و ساخت مقاله بعدی
+							</Button>
+						</div>
 					</div>
 				</div>
 			</form>

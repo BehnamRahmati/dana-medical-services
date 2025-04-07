@@ -2,9 +2,9 @@ import { ArrowLeft3 } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import instagramImage from '../../../public/static/index_instagram_phone_2.png'
-import PostCard from '../ui/post-card'
 import Section from '../ui/section'
 import Title from '../ui/title'
+import LandingArticles from './articles/landing-articles'
 import HomeMoreLink from './home-more-link'
 
 export default function HomeLatestPosts() {
@@ -22,18 +22,7 @@ export default function HomeLatestPosts() {
 						مشاهده همه مقالات
 					</HomeMoreLink>
 				</div>
-				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 lg:w-1/2 lg:absolute lg:-top-1/2 lg:left-10 '>
-					<div className='grid grid-cols-1 gap-6'>
-						{[...new Array(2)].map((_, i) => (
-							<PostCard key={'post' + i} />
-						))}
-					</div>
-					<div className='grid grid-cols-1 gap-6 lg:transform lg:translate-y-10'>
-						{[...new Array(2)].map((_, i) => (
-							<PostCard key={'pst' + i} />
-						))}
-					</div>
-				</div>
+				<LandingArticles />
 			</div>
 
 			<div className='mt-44 lg:mt-72 flex flex-col lg:flex-row gap-10 rounded-2xl bg-gradient-to-l from-primary to-secondary items-center  justify-between py-10 lg:py-0'>

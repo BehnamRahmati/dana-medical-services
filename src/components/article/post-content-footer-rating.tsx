@@ -2,7 +2,7 @@ import { Star1 } from 'iconsax-react'
 
 export default function PostContentFooterRating() {
 	return (
-		<div className='flex flex-col sm-flex-row gap-5 items-center justify-between bg-content/20 p-2.5 rounded-lg'>
+		<div className='flex flex-col sm:flex-row gap-5 items-center justify-between bg-content/20 p-2.5 rounded-lg'>
 			<p className=''>چه امتیازی به این مقاله میدهید؟</p>
 			<div className='flex items-center gap-2'>
 				<ul className='flex items-center '>

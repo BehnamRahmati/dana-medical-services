@@ -97,7 +97,7 @@ model Article {
 
   // relations
   author    User      @relation("articleAuthor", fields: [userId], references: [id])
-  category  Category  @relation(fields: [categoryId], references: [id])
+  category  Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   tags      Tag[]
   comments  Comment[]
   likes     User[]    @relation("likedArticles")
@@ -161,8 +161,8 @@ model Comment {
   approved Boolean @default(false)
 
   // relations
-  article Article   @relation(fields: [articleId], references: [id])
-  user    User      @relation(fields: [userId], references: [id])
+  article Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes   User[]    @relation("likedcomments")
   parent  Comment   @relation("CommentReplies", fields: [commentId], references: [id])
   replies Comment[] @relation("CommentReplies")
@@ -189,7 +189,7 @@ model Service {
   thumbnail String
   content   String
   views     Int    @default(0)
-  author    User   @relation("serviceAuthor", fields: [userId], references: [id])
+  author    User   @relation("serviceAuthor", fields: [userId], references: [id], onDelete: Cascade)
   status    Status @default(DRAFT)
   readTime  Int    @default(0)
 
@@ -223,13 +223,14 @@ model Menu {
 model Link {
   id String @id @default(cuid())
 
-  name  String
-  url   String
-  menus Menu[]
+  name String
+  url  String
+  menu Menu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
 
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  menuId    String
 }
 
 model Social {

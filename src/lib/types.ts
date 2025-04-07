@@ -30,6 +30,11 @@ type TArticles = {
 	bookmarks: TUser[]
 	userId: string
 	categoryId: string
+	_count: {
+		likes: number
+		comments: number
+		bookmarks: number
+	}
 }
 
 type TServices = {

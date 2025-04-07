@@ -16,7 +16,7 @@ export default function UsersTable() {
 	if (isLoading || !data) return <p>loading</p>
 
 	return (
-		<div className='rounded-md border max-w-full overflow-hidden bg-accent p-5'>
+		<div className='rounded-lg max-w-full overflow-hidden bg-accent p-5 h-full flex flex-col'>
 			<UsersDataTable data={data.users} columns={UserColumns} />
 		</div>
 	)

@@ -1,7 +1,23 @@
+'use client'
+import { fetchArticles } from '@/lib/helpers'
 import { Cards } from 'iconsax-react'
+import useSWR from 'swr'
+import { Skeleton } from '../ui/skeleton'
 import PostSidebarRelatedCard from './post-sidebar-related-card'
 
 export default function PostSidebarRelated() {
+	const { data: articles, isLoading } = useSWR('/api/articles?tags=depression', fetchArticles)
+	console.warn(articles)
+
+	if (isLoading || !articles)
+		return (
+			<div className='flex flex-col gap-5 mb-5'>
+				<Skeleton className='h-14 w-full' />
+				<Skeleton className='h-14 w-full' />
+				<Skeleton className='h-14 w-full' />
+				<Skeleton className='h-14 w-full' />
+			</div>
+		)
 	return (
 		<div className='border border-border rounded-xl p-5 mb-5'>
 			<div className='flex gap-2'>
@@ -12,9 +28,9 @@ export default function PostSidebarRelated() {
 				</div>
 			</div>
 			<ul className='flex flex-col mt-5 gap-2'>
-				{[1, 2, 3, 4, 5].map((_, index) => (
-					<li key={'sd' + index}>
-						<PostSidebarRelatedCard />
+				{articles.slice(0, 4).map(article => (
+					<li key={article.id}>
+						<PostSidebarRelatedCard slug={article.slug} title={article.title} />
 					</li>
 				))}
 			</ul>

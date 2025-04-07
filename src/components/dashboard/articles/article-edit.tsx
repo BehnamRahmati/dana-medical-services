@@ -106,7 +106,6 @@ export default function ArticlesEditForm({ article }: { article: TArticles }) {
 							render={({ field: { onChange, value, ...field } }) => (
 								<FormItem>
 									<FormLabel>
-										{' '}
 										<div className=' w-full h-96 rounded-lg overflow-hidden relative'>
 											{imageUrl && (
 												<Image
@@ -343,9 +342,16 @@ export default function ArticlesEditForm({ article }: { article: TArticles }) {
 								</FormItem>
 							)}
 						/>
-						<Button type='submit' variant='default' size='lg' className='text-lg shrink-0 cursor-pointer'>
+						<Button
+							type='submit'
+							disabled={form.formState.isSubmitting}
+							variant='default'
+							size='lg'
+							className='text-lg shrink-0 cursor-pointer'
+						>
 							بروزرسانی مقاله
 						</Button>
+						{form.formState.isSubmitSuccessful && <p className='text-primary'>با موفقیت مقاله جدید ثبت شد</p>}
 					</div>
 				</div>
 			</form>

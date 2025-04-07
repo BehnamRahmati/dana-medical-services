@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { handleUpload } from '../articles/route'
 
 export async function GET() {
 	const services = await prisma.service.findMany({
@@ -15,4 +16,95 @@ export async function GET() {
 		return NextResponse.json({ services: [] })
 	}
 	return NextResponse.json({ services })
+}
+
+export async function POST(req: NextRequest) {
+	try {
+		const formData = await req.formData()
+		const file = formData.get('thumbnail') as File
+		// Ensure the file exists and is not a simple string
+		if (!file || typeof file === 'string') {
+			throw new Error('File not found or invalid file type')
+		}
+
+		const fileName = await handleUpload(file)
+
+		const service = await prisma.service.create({
+			data: {
+				title: formData.get('title') as string,
+				slug: formData.get('slug') as string,
+				thumbnail: `/uploads/${fileName}`,
+				excerpt: formData.get('excerpt') as string,
+				content: formData.get('content') as string,
+				readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
+				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
+				author: { connect: { id: formData.get('author') as string } },
+			},
+		})
+
+		if (!service) {
+			throw new Error('failed to create service')
+		}
+
+		return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
+	} catch (error) {
+		return NextResponse.json({ error, message: 'Error creating service' }, { status: 500 })
+	}
+}
+
+export async function PUT(req: NextRequest) {
+	try {
+		const formData = await req.formData()
+		const file = formData.get('thumbnail') as File
+		// Ensure the file exists and is not a simple string
+		if (!file || typeof file === 'string') {
+			console.log('sfgvsg')
+
+			const service = await prisma.service.update({
+				where: {
+					id: formData.get('id') as string,
+				},
+				data: {
+					title: formData.get('title') as string,
+					slug: formData.get('slug') as string,
+					excerpt: formData.get('excerpt') as string,
+					content: formData.get('content') as string,
+					readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
+					status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
+					author: { connect: { id: formData.get('author') as string } },
+				},
+			})
+
+			if (!service) {
+				throw new Error('failed to create service')
+			}
+
+			return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
+		}
+
+		const fileName = await handleUpload(file)
+
+		const service = await prisma.service.update({
+			where: {
+				slug: formData.get('slug') as string,
+			},
+			data: {
+				title: formData.get('title') as string,
+				slug: formData.get('slug') as string,
+				thumbnail: `/uploads/${fileName}`,
+				excerpt: formData.get('excerpt') as string,
+				content: formData.get('content') as string,
+				readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
+				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
+				author: { connect: { id: formData.get('author') as string } },
+			},
+		})
+		if (!service) {
+			throw new Error('failed to create service')
+		}
+
+		return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
+	} catch (error) {
+		return NextResponse.json({ error, message: 'Error creating service' }, { status: 500 })
+	}
 }

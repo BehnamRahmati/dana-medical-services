@@ -66,14 +66,24 @@ export const columns: ColumnDef<TArticles>[] = [
 		},
 	},
 	{
-		accessorKey: 'excerpt',
-		header: 'توضیح مختصر',
+		accessorKey: 'status',
+		header: 'وضعیت',
+		cell({ row }) {
+			const status = row.getValue('status') as string
+			switch (status) {
+				case 'PUBLISHED':
+					return <div className='text-green-500 bg-green-500/20 w-fit py-1 px-2.5 rounded-md'>منتشر شده</div>
+					break
+				case 'DRAFT':
+					return <div className='text-amber-500 bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>پیش نویس</div>
+					break
+				default:
+					return <div className='text-content bg-content/20 w-fit py-1 px-2.5 rounded-md'>بایگانی</div>
+					break
+			}
+		},
 	},
 
-	{
-		accessorKey: 'content',
-		header: 'محتوا',
-	},
 	{
 		accessorKey: 'tags',
 		header: 'برچسب ها',

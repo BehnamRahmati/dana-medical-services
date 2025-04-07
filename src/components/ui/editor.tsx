@@ -62,10 +62,12 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 				[{ header: [2, 3, 4, false] }],
 				[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
 				['bold', 'italic', 'underline', 'strike'],
+				[{ direction: 'rtl' }], // text direction
+				[{ align: [] }],
+				[{ color: [] }, { background: [] }],
+				[{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
 				['blockquote', 'code-block'],
 				['link', 'image'],
-				[{ color: [] }, { background: [] }],
-				[{ align: [] }],
 				['table'],
 				['clean'],
 			],
@@ -79,7 +81,7 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 		<div dir='ltr'>
 			<ReactQuill
 				ref={quillRef}
-				className='h-96 mb-28 lg:mb-10'
+				className='h-[600px] mb-32 lg:mb-16'
 				theme='snow'
 				value={editorValue}
 				onChange={e => onChangeEditor(e)}
