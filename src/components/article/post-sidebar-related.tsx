@@ -7,7 +7,6 @@ import PostSidebarRelatedCard from './post-sidebar-related-card'
 
 export default function PostSidebarRelated() {
 	const { data: articles, isLoading } = useSWR('/api/articles?tags=depression', fetchArticles)
-	console.warn(articles)
 
 	if (isLoading || !articles)
 		return (

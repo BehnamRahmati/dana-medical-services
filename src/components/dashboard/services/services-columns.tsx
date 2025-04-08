@@ -34,7 +34,7 @@ export const ServicesColumns: ColumnDef<TServices>[] = [
 		cell: ({ row }) => {
 			const slug = row.getValue('slug') as string
 			return (
-				<Link href={`/articles/${slug}`} className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>
+				<Link href={`/services/${slug}`} className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>
 					{slug}
 				</Link>
 			)
@@ -72,11 +72,6 @@ export const ServicesColumns: ColumnDef<TServices>[] = [
 					break
 			}
 		},
-	},
-
-	{
-		accessorKey: 'content',
-		header: 'محتوا',
 	},
 
 	{

@@ -1,5 +1,6 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Button from '../ui/button'
@@ -21,6 +22,7 @@ export default function LoginForm() {
 			password: '',
 		},
 	})
+
 	return (
 		<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col'>
 			<div className='flex items-center gap-2 my-10'>
@@ -41,7 +43,13 @@ export default function LoginForm() {
 				placeholder='رمز عبور'
 				className='bg-accent border border-border rounded-lg p-2.5 mb-5'
 			/>
-			<Button variant='default' size='lg' type='submit' className='bg-secondary hover:bg-secondary/80'>
+			<Button
+				variant='default'
+				onClick={() => signIn('credentials')}
+				size='lg'
+				type='submit'
+				className='bg-secondary hover:bg-secondary/80'
+			>
 				ورود به حساب کاربری
 			</Button>
 		</form>

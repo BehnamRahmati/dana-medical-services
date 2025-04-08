@@ -11,7 +11,7 @@ export default function PostContentFooter({ article }: { article: TArticles }) {
 			<div className='border-t border-t-border pt-10 mt-10'>
 				<PostContentFooterMeta createdAt={article.createdAt} tags={article.tags} />
 				<div className='flex flex-col md:flex-row gap-5 items-center justify-between mt-5 md:mt-10'>
-					<PostContentFooterButtons counts={article._count} />
+					<PostContentFooterButtons counts={article._count} slug={article.slug} />
 					<PostContentFooterSharing slug={article.slug} />
 				</div>
 			</div>

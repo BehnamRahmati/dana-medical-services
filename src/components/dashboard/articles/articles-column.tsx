@@ -7,7 +7,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { TArticles, TCategory, TTag } from '@/lib/types'
+import { TArticles, TCategory, TTag, TUser } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
 import { ArrowSwapVertical, Edit, MoreSquare, Trash } from 'iconsax-react'
@@ -63,6 +63,40 @@ export const columns: ColumnDef<TArticles>[] = [
 		cell: ({ row }) => {
 			const author = row.getValue('author') as { name: string }
 			return <span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>{author.name}</span>
+		},
+	},
+	{
+		accessorKey: 'views',
+		header: ({ column }) => {
+			return (
+				<Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+					بازدید
+					<ArrowSwapVertical className='stroke-content size-4 shrink-0' variant='Broken' />
+				</Button>
+			)
+		},
+		cell: ({ row }) => {
+			const views = row.getValue('views') as number
+			return <span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs mr-5'>{views}</span>
+		},
+	},
+	{
+		accessorKey: 'likes',
+		header: ({ column }) => {
+			return (
+				<Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+					لایک ها
+					<ArrowSwapVertical className='stroke-content size-4 shrink-0' variant='Broken' />
+				</Button>
+			)
+		},
+		cell: ({ row }) => {
+			const likes = row.getValue('likes') as TUser[]
+			return (
+				<span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs mr-5'>
+					{likes ? likes.length : '0'}
+				</span>
+			)
 		},
 	},
 	{

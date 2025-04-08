@@ -1,6 +1,6 @@
 import AuthenticationPage from '@/components/authentication-page'
 
-export default function Register() {
+export default function RegisterPage() {
 	return (
 		<main>
 			<AuthenticationPage title='ثبت نام در دنا' subtitle='یکی از روش های زیر را برای ثبت نام در دنا انتخاب کنید.'>

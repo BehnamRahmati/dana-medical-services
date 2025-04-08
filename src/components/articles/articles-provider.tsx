@@ -13,7 +13,7 @@ type TArticlesContext = {
 
 export const ArticlesContext = React.createContext<TArticlesContext | null>(null)
 
-export default function TableProvider({ children }: { children: React.ReactNode }) {
+export default function ArticlesProvider({ children }: { children: React.ReactNode }) {
 	const searchParams = useSearchParams()
 
 	const url = searchParams?.size !== 0 ? `?${searchParams}` : ''

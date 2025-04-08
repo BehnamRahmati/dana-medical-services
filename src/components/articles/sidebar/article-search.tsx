@@ -4,11 +4,13 @@ import { Input } from '@/components/ui/input'
 import useQueries from '@/hooks/use-queries'
 import { FilterSearch, SearchNormal1 } from 'iconsax-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function ArticleSearch() {
 	const { currentParams, pathname } = useQueries()
 	const [term, setTerm] = React.useState('')
+	const router = useRouter()
 	return (
 		<div className='border border-border rounded-lg py-10 px-5'>
 			<div className='flex items-center gap-2'>
@@ -22,6 +24,11 @@ export default function ArticleSearch() {
 					value={term}
 					onChange={e => setTerm(e.target.value)}
 					placeholder='عنوان مقاله را وارد کنید ...'
+					onKeyDown={e => {
+						if (e.key === 'Enter') {
+							router.push(`${pathname}?${new URLSearchParams({ ...currentParams, ...{ search: term } })}`)
+						}
+					}}
 				/>
 				<Link
 					className='inline-block absolute top-2 left-1'

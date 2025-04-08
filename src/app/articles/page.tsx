@@ -1,14 +1,14 @@
 import ArticlesMain from '@/components/articles/articles-main'
+import ArticlesProvider from '@/components/articles/articles-provider'
 import ArticlesSidebar from '@/components/articles/articles-sidebar'
-import TableProvider from '@/components/articles/table-provider'
 
-export default function Posts() {
+export default function ArticlesPage() {
 	return (
-		<TableProvider>
+		<ArticlesProvider>
 			<div className='flex gap-5 mt-10 lg:mt-20 container mx-auto'>
 				<ArticlesSidebar />
 				<ArticlesMain />
 			</div>
-		</TableProvider>
+		</ArticlesProvider>
 	)
 }

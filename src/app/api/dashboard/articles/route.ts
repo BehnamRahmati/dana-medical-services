@@ -8,6 +8,8 @@ export async function GET() {
 		include: {
 			tags: true,
 			category: true,
+			likes: true,
+			bookmarks: true,
 			author: {
 				select: {
 					name: true,

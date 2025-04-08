@@ -164,8 +164,8 @@ model Comment {
   article Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes   User[]    @relation("likedcomments")
-  parent  Comment   @relation("CommentReplies", fields: [commentId], references: [id])
-  replies Comment[] @relation("CommentReplies")
+  parent  Comment?  @relation("replies", fields: [commentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("replies")
   service Service?  @relation(fields: [serviceId], references: [id])
 
   // times
@@ -176,7 +176,7 @@ model Comment {
   articleId String
   userId    String
   serviceId String?
-  commentId String
+  commentId String?
 }
 
 model Service {

@@ -1,7 +1,6 @@
 import { TUser } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import Image from 'next/image'
-
 export const UserColumns: ColumnDef<TUser>[] = [
 	{
 		accessorKey: 'image',

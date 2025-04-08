@@ -7,7 +7,6 @@ import useSWR from 'swr'
 
 export default function LandingArticles() {
 	const { data: articles, isLoading } = useSWR('/api/articles/landing', fetchArticles)
-	console.warn(articles)
 
 	if (isLoading || !articles)
 		return (

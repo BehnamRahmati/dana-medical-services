@@ -15,8 +15,7 @@ export default function HomeMoreLink({ className, href = '/', children, ...props
 		>
 			{children}
 			<DirectLeft
-				size='27'
-				className='fill-content/60 group-hover:fill-primary transition-colors duration-200'
+				className='size-6 fill-content/60 group-hover:fill-primary transition-colors duration-200 mb-2'
 				variant='Bulk'
 			/>
 		</Link>

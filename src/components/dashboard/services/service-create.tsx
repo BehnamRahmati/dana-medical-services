@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { FolderAdd } from 'iconsax-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
@@ -43,6 +44,7 @@ async function userFetcher(url: string): Promise<TUser[]> {
 export default function ServiceCreateForm() {
 	const { data: usersData, isLoading: usersLoading } = useSWR('/api/dashboard/users', userFetcher)
 	const [imageUrl, setImageUrl] = useState('')
+	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -75,6 +77,7 @@ export default function ServiceCreateForm() {
 				},
 			})
 			console.warn(response.data)
+			router.push('/dashboard/services/create')
 		} catch (error) {
 			console.error(error)
 		}

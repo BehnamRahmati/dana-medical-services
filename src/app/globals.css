@@ -6,7 +6,7 @@
 
 :root {
 	--accent: #ffffff;
-	--border: oklch(0.87 0 0);
+	--border: oklch(0.929 0.013 255.508);
 	--content: rgb(51 65 85);
 	--primary: oklch(0.704 0.14 182.503);
 	--secondary: oklch(0.606 0.25 292.717);
@@ -41,11 +41,11 @@
 }
 
 .dark {
-	--background: oklch(0.279 0.041 260.031);
+	--background: oklch(0.129 0.042 264.695);
 	--foreground: #ededed;
-	--accent: oklch(0.446 0.043 257.281);
-	--border: oklch(0.967 0.003 264.542);
-	--content: oklch(0.967 0.003 264.542);
+	--accent: oklch(0.208 0.042 265.755);
+	--border: oklch(0.372 0.044 257.287);
+	--content: oklch(0.869 0.022 252.894);
 	--primary: oklch(0.704 0.14 182.503);
 	--secondary: oklch(0.606 0.25 292.717);
 	--card: oklch(0.21 0.034 264.665);

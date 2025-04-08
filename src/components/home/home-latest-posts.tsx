@@ -18,7 +18,10 @@ export default function HomeLatestPosts() {
 						شکلی آماده کردیم تا شما بتونید ایده‌ها و مطالب جالب حوزه برنامه‌نویسی رو در اختیار هزاران برنامه‌نویس عضو
 						راکت قرار بدید.
 					</p>
-					<HomeMoreLink className='border border-border lg:w-fit px-5 py-2 rounded-lg hover:border-primary justify-center'>
+					<HomeMoreLink
+						href='/articles'
+						className='border border-border lg:w-fit px-5 py-2 rounded-lg hover:border-primary justify-center'
+					>
 						مشاهده همه مقالات
 					</HomeMoreLink>
 				</div>

@@ -1,27 +1,61 @@
-import { HeartAdd } from 'iconsax-react'
-import Link from 'next/link'
+'use client'
+import { TComment } from '@/lib/types'
+import axios from 'axios'
+import { Heart } from 'iconsax-react'
+import moment from 'moment'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
-export default function PostCommentItem() {
+export default function PostCommentItem({ comment }: { comment: TComment }) {
+	const { data: session } = useSession()
+
+	async function handleAddLike() {
+		if (!session?.user) {
+			return alert('لطفا وارد حساب کاربری خود شوید')
+		}
+		await axios.patch(`/api/articles/${comment.article.slug}/comments`, { userId: session?.user.id, commentId: comment.id })
+	}
+
 	return (
-		<li className='border border-border rounded-xl px-5'>
-			<div className='py-5 border-b border-b-border flex justify-between'>
-				<div className='flex items-center gap-2'>
-					<div className='bg-content size-14 rounded-full'></div>
+		<li>
+			<div className='border border-border rounded-xl px-5'>
+				<div className='py-5 border-b border-b-border flex justify-between'>
+					<div className='flex items-center gap-2'>
+						<div className='bg-content size-14 rounded-full'>
+							<Image
+								src={comment.user.image}
+								alt={comment.user.name}
+								className='rounded-full size-full'
+								width={50}
+								height={50}
+							/>
+						</div>
+						<div className=''>
+							<p className='font-bold text-xl'>{comment.user.name}</p>
+							<p> {moment(comment.createdAt).locale('fa').fromNow()} </p>
+						</div>
+					</div>
 					<div className=''>
-						<p className='font-bold text-xl'>سید حسین شهابی</p>
-						<p>5 ماه پیش</p>
+						<button
+							onClick={() => handleAddLike()}
+							className='bg-red-500/20 py-1 px-2.5 rounded-sm flex items-center gap-1'
+						>
+							<Heart className='size-6 stroke-red-500' variant='TwoTone' />
+							<span className='mt-1 text-lg text-red-500'>{comment._count.likes}</span>
+						</button>
 					</div>
 				</div>
-				<div className=''>
-					<Link href='/' className='bg-red-500/20 py-1 px-2.5 rounded-sm flex items-center gap-1'>
-						<HeartAdd className='size-6 stroke-red-500' variant='TwoTone' />
-						<span className='mt-1 text-lg text-red-500'>2</span>
-					</Link>
+				<div className='py-5'>
+					<div className='py-5'> {comment.content} </div>
 				</div>
 			</div>
-			<div className='py-5'>
-				<div className='py-5'>مرسی. مفید بود واقعا. 🙏</div>
-			</div>
+			{comment.replies.length > 0 && (
+				<ul className='flex flex-col gap-5 my-5 mr-5'>
+					{comment.replies.map(reply => (
+						<PostCommentItem comment={reply} key={reply.id} />
+					))}
+				</ul>
+			)}
 		</li>
 	)
 }

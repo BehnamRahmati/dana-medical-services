@@ -5,11 +5,21 @@ import Link from 'next/link'
 
 export default function PostCard({ article }: { article: TArticles }) {
 	return (
-		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-slate-300'>
+		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-slate-300 group'>
 			<div className='bg-slate-400 w-full h-52 rounded-xl overflow-hidden'>
-				<Image src={article.thumbnail} className='w-full h-full' height={300} width={100} alt={article.title} />
+				<Image
+					src={article.thumbnail}
+					className='w-full h-full transform group-hover:scale-110 transition-transform duration-200 ease-in-out'
+					height={500}
+					width={300}
+					loading='lazy'
+					alt={article.title}
+				/>
 			</div>
-			<Link href={`/articles/${article.slug}`} className='text-xl mt-2 font-extrabold block'>
+			<Link
+				href={`/articles/${article.slug}`}
+				className='text-xl mt-2 font-extrabold block transition-colors duration-200 hover:text-primary'
+			>
 				{article.title}
 			</Link>
 			<div className='flex items-center justify-between mt-5'>
@@ -19,7 +29,12 @@ export default function PostCard({ article }: { article: TArticles }) {
 					</div>
 					<p className='text-sm font-bold text-slate-400'>{article.author.name}</p>
 				</div>
-				<div className='bg-primary/20 px-2.5 py-1 rounded-lg text-sm text-primary'>{article.category.name}</div>
+				<Link
+					href={`/articles?category=${article.category.slug}`}
+					className='bg-primary/20 px-2.5 py-1 rounded-lg text-sm text-primary hover:bg-primary/40 transition-colors duration-200 hover:text-primary'
+				>
+					{article.category.name}
+				</Link>
 			</div>
 			<div className='flex items-center justify-between mt-4'>
 				<ul className='flex gap-2.5 items-center'>

@@ -1,16 +1,23 @@
 'use client'
 import { Moon, Setting2, Sun1 } from 'iconsax-react'
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
-
-const themes = ['system', 'light', 'dark']
+import { useEffect, useMemo, useState } from 'react'
 
 export default function ToggleThemeButton() {
 	const { theme, setTheme } = useTheme()
-	const [visible, setVisible] = useState(theme)
+	const [visible, setVisible] = useState('')
 
-	function toNextMode(index: number) {
-		switch (themes[index]) {
+	const themes = useMemo(
+		() => [
+			{ name: 'light', icon: <Sun1 size='25' className='fill-content' variant='Bulk' /> },
+			{ name: 'dark', icon: <Moon size='25' className='fill-slate-700' variant='Bulk' /> },
+			{ name: 'system', icon: <Setting2 size='25' className='fill-content' variant='Bulk' /> },
+		],
+		[],
+	)
+
+	function toNextMode(name: string) {
+		switch (name) {
 			case 'light':
 				setVisible('system')
 				setTheme('system')
@@ -22,22 +29,28 @@ export default function ToggleThemeButton() {
 			default:
 				setVisible('dark')
 				setTheme('dark')
+				break
 		}
 	}
+
+	useEffect(() => {
+		if (theme) {
+			setVisible(theme)
+		}
+	}, [theme])
 	return (
 		<>
-			{themes.map((thme, i) => (
-				<button
-					key={thme}
-					type='button'
-					onClick={() => toNextMode(i)}
-					className={visible !== thme ? 'hidden' : 'bg-slate-100/70 rounded-full p-2 cursor-pointer text-slate-600'}
-				>
-					{theme === 'light' && <Sun1 size='25' className='fill-content' variant='Bulk' />}
-					{theme === 'dark' && <Moon size='25' className='fill-slate-700' variant='Bulk' />}
-					{theme === 'system' && <Setting2 size='25' className='fill-content' variant='Bulk' />}
-				</button>
-			))}
+			{visible &&
+				themes.map(theme => (
+					<button
+						key={theme.name}
+						type='button'
+						onClick={() => toNextMode(theme.name)}
+						className={`bg-slate-100/70 rounded-full p-2 cursor-pointer text-slate-600 ${visible === theme.name ? 'block' : 'hidden'}`}
+					>
+						{theme.icon}
+					</button>
+				))}
 		</>
 	)
 }

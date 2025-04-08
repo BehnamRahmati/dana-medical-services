@@ -53,6 +53,11 @@ type TServices = {
 	likes: TUser[]
 	bookmarks: TUser[]
 	userId: string
+	_count: {
+		likes: number
+		comments: number
+		bookmarks: number
+	}
 }
 
 type TCategory = {
@@ -89,6 +94,7 @@ type TComment = {
 	userId: string
 	serviceId: string
 	commentId: string
+	_count: { likes: number }
 }
 
 type TMenu = {
