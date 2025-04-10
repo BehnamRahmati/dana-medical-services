@@ -1,3 +1,5 @@
+/* eslint no-use-before-define: 0 */
+
 'use client'
 
 import axios from 'axios'

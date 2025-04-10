@@ -1,6 +1,6 @@
+import { handleUpload } from '@/lib/backend.helpers'
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
-import { handleUpload } from '../articles/route'
 
 export async function GET() {
 	const services = await prisma.service.findMany({
@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
 				readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
 				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
 				author: { connect: { id: formData.get('author') as string } },
+				ServiceCategory: { connect: { id: formData.get('category') as string } },
 			},
 		})
 
@@ -57,32 +58,10 @@ export async function PUT(req: NextRequest) {
 		const formData = await req.formData()
 		const file = formData.get('thumbnail') as File
 		// Ensure the file exists and is not a simple string
-		if (!file || typeof file === 'string') {
-			console.log('sfgvsg')
-
-			const service = await prisma.service.update({
-				where: {
-					id: formData.get('id') as string,
-				},
-				data: {
-					title: formData.get('title') as string,
-					slug: formData.get('slug') as string,
-					excerpt: formData.get('excerpt') as string,
-					content: formData.get('content') as string,
-					readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
-					status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
-					author: { connect: { id: formData.get('author') as string } },
-				},
-			})
-
-			if (!service) {
-				throw new Error('failed to create service')
-			}
-
-			return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
+		let fileName
+		if (file) {
+			fileName = await handleUpload(file)
 		}
-
-		const fileName = await handleUpload(file)
 
 		const service = await prisma.service.update({
 			where: {
@@ -91,12 +70,13 @@ export async function PUT(req: NextRequest) {
 			data: {
 				title: formData.get('title') as string,
 				slug: formData.get('slug') as string,
-				thumbnail: `/uploads/${fileName}`,
+				...(fileName && { thumbnail: `/uploads/${fileName}` }),
 				excerpt: formData.get('excerpt') as string,
 				content: formData.get('content') as string,
 				readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
 				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
 				author: { connect: { id: formData.get('author') as string } },
+				ServiceCategory: { connect: { id: formData.get('category') as string } },
 			},
 		})
 		if (!service) {
@@ -105,6 +85,7 @@ export async function PUT(req: NextRequest) {
 
 		return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
 	} catch (error) {
+		console.log('failed to create service')
 		return NextResponse.json({ error, message: 'Error creating service' }, { status: 500 })
 	}
 }

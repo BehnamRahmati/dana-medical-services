@@ -6,7 +6,7 @@ import {
 	SidebarMenu,
 	SidebarMenuItem,
 } from '@/components/ui/sidebar-custom'
-import { AddSquare, HambergerMenu, I3DSquare } from 'iconsax-react'
+import { AddSquare, HambergerMenu, HashtagSquare, I3DSquare } from 'iconsax-react'
 import Link from 'next/link'
 
 export default function DashboardSidebarServices() {
@@ -27,6 +27,12 @@ export default function DashboardSidebarServices() {
 						<Link href={'/dashboard/services/create'} className='flex items-center gap-2.5 *:shrink-0'>
 							<AddSquare className='size-5 stroke-content/60' variant='Broken' />
 							<span>نوشتن خدمت جدید</span>
+						</Link>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<Link href={'/dashboard/services/categories'} className='flex items-center gap-2.5 *:shrink-0'>
+							<HashtagSquare className='size-5 stroke-content/60' variant='Broken' />
+							<span> دسته بندی های خدمات</span>
 						</Link>
 					</SidebarMenuItem>
 				</SidebarMenu>

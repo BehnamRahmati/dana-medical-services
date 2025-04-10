@@ -1,116 +1,98 @@
 'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { TickSquare } from 'iconsax-react'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Button from '../ui/button'
+import { Progress } from '../ui/progress'
 import Section from '../ui/section'
+import { H2, H3, Paragraph } from '../ui/typography'
+import RequestInfoForm, { infoSchema } from './request/request-info-form'
+import RequestServiceForm, { serviceSchema } from './request/request-service-form'
+import RequestSubmitted from './request/request-submited'
+import RequestTimeForm, { timeSchema } from './request/request-time-form'
 
-const formSchema = z.object({
-	category: z.string(),
-	phone: z.number(),
-	firstname: z.string(),
-	lastname: z.string(),
-})
+type timetype = z.infer<typeof timeSchema>
+type servicetype = z.infer<typeof serviceSchema>
+type infotype = z.infer<typeof infoSchema>
 
 export default function HomeRequestForm() {
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			category: '',
-			firstname: '',
-			lastname: '',
-			phone: 0,
-		},
-	})
-	const [rules, setRules] = useState(false)
+	const [progress, setProgress] = useState(1)
+	const [formData, setFormData] = useState<Partial<timetype & servicetype & infotype>>({})
 
-	async function onSubmit(values: z.infer<typeof formSchema>) {
-		console.warn('values', values)
+	const handleBack = () => {
+		setProgress(prev => prev - 1)
 	}
-	return (
-		<Section className='bg-primary px-5 lg:px-0'>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
-				<div className='flex flex-col items-center gap-10 lg:gap-20 container mx-auto py-10'>
-					<div className=''>
-						<h2 className='text-4xl lg:text-7xl font-extrabold text-white text-center'>ثبت درخواست خدمات</h2>
-						<p className='text-white mt-5 text-center'>
-							کافیست خدمت مورد نیاز خود را ثبت کنید و منتظر تماس کارشناسان ما بمانید.
-						</p>
-					</div>
-					<div className=' grid grid-cols-1 lg:grid-cols-2 gap-5 text-white'>
-						<label htmlFor='firstname'>
-							<p>نام</p>
-							<input
-								id='firstname'
-								{...form.register('firstname')}
-								type='text'
-								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
-								placeholder='مثال: محمد'
-							/>
-						</label>
-						<label htmlFor='lastname'>
-							<p>نام خانوادگی</p>
-							<input
-								id='lastname'
-								{...form.register('lastname')}
-								type='text'
-								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
-								placeholder='مثال: محمدی'
-							/>
-						</label>
-						<label htmlFor='phone'>
-							<p>شماره تماس</p>
-							<input
-								id='phone'
-								{...form.register('phone')}
-								type='number'
-								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
-								placeholder='مثال: 09123456789 '
-							/>
-						</label>
-						<label htmlFor='service'>
-							<p>خدمت</p>
-							<select
-								id='service'
-								{...form.register('category')}
-								className='bg-accent h-10 rounded-lg mt-2 p-2 w-full text-foreground outline-0 '
-							>
-								<option value={'hi'}>تزریقات</option>
-								<option value={'hi'}>تفسیر آزمایش</option>
-								<option value={'hi'}>چکاپ سالمندان</option>
-								<option value={'hi'}>خدمات تخصصی پرستاری</option>
-								<option value={'hi'}>سونوگرافی در منزل</option>
-								<option value={'hi'}>چکاپ کودکان</option>
-							</select>
-						</label>
-						<label htmlFor='rules' className='flex items-start gap-2'>
-							<div className=' flex items-center justify-center'>
-								{rules ? (
-									<TickSquare
-										className='fill-secondary size-5 border border-secondary rounded-sm'
-										variant='Bulk'
-									/>
-								) : (
-									<div className='size-5 border border-secondary rounded-sm  '></div>
-								)}
-							</div>
-							<input id='rules' name='rules' type='checkbox' hidden onChange={() => setRules(prev => !prev)} />
-							<p>شرایط انجام خدمات و قوانین دنا را مطالعه کرده‌ام و می‌پذیرم.</p>
-						</label>
-						<Button
-							variant='default'
-							size='lg'
-							type='submit'
-							disabled={!rules}
-							className='bg-secondary hover:bg-secondary/80'
-						>
-							ثبت درخواست
-						</Button>
-					</div>
+	const handleForward = () => {
+		setProgress(prev => prev + 1)
+	}
+
+	const handleTimeSubmit = (data: timetype) => {
+		setFormData(prevData => ({ ...prevData, ...data }))
+		handleForward()
+	}
+	const handleServiceSubmit = (data: servicetype) => {
+		setFormData(prevData => ({ ...prevData, ...data }))
+		handleForward()
+	}
+	const handleInfoSubmit = (data: infotype) => {
+		const finalForm = { ...formData, ...data }
+		handleForward()
+		console.warn('Final Form Data:', finalForm)
+	}
+
+	const renderingForms = (step: number) => {
+		switch (step) {
+			case 2:
+				return <RequestTimeForm onBack={handleBack} onSubmit={handleTimeSubmit} />
+			case 3:
+				return <RequestInfoForm onBack={handleBack} onSubmit={handleInfoSubmit} />
+			case 4:
+				return <RequestSubmitted onReset={() => setProgress(1)} />
+			default:
+				return <RequestServiceForm onSubmit={handleServiceSubmit} />
+		}
+	}
+
+	const renderingProgress = (step: number) => {
+		return (
+			<div className='flex items-center gap-2 mt-5 *:flex-1'>
+				<div className=''>
+					<Paragraph>1. ثبت سرویس</Paragraph>
+					<Progress value={step > 1 ? 100 : 0} />
 				</div>
-			</form>
+				<div className=''>
+					<Paragraph>2. ثبت تاریخ</Paragraph>
+					<Progress value={step > 2 ? 100 : 0} />
+				</div>
+				<div className=''>
+					<Paragraph>3. اطلاعات بیمار</Paragraph>
+					<Progress value={step > 3 ? 100 : 0} />
+				</div>
+			</div>
+		)
+	}
+
+	return (
+		<Section className='bg-primary px-5 lg:px-0' id='request-service'>
+			<div className='flex flex-col lg:flex-row gap-10 py-10 lg:py-0 lg:px-20 relative'>
+				<div className='*:text-white max-w-lg'>
+					<H2>ثبت درخواست خدمات</H2>
+					<Paragraph>
+						دنا مجموعه ارائه‌ دهنده خدمات سلامت در منزل و محل کار است. دنا یک «آزمایشگاه» یا «مرکز درمانی» نیست بلکه
+						تلاش می‌کند تا از طریق اتصال کاربران به آزمایشگاه‌های معتبر، پرستاران کارآزموده و پزشکان متخصص، انجام
+						خدمات سلامت در محل را برای کاربران تسهیل نماید.
+					</Paragraph>
+				</div>
+				<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-10 shadow-md lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
+					<div className='mb-10'>
+						<H3 className=' w-fit mx-auto'>فرم درخواست خدمات</H3>
+						<Paragraph className='text-center '>
+							با پرکردن فرم زیر درخواست خود را برای دریافت خدمات ثبت کنید.
+						</Paragraph>
+					</div>
+					<div className=''>{renderingForms(progress)}</div>
+
+					<div className=''>{renderingProgress(progress)}</div>
+				</div>
+			</div>
 		</Section>
 	)
 }

@@ -5,6 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -20,11 +21,13 @@ export default function CategroriesCreate() {
 			slug: '',
 		},
 	})
+	const router = useRouter()
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
 			const response = await axios.post('/api/dashboard/categories', values)
 			console.warn(response.data)
+			router.refresh()
 		} catch (error) {
 			console.error(error)
 		}
@@ -38,7 +41,7 @@ export default function CategroriesCreate() {
 						control={form.control}
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>عنوان تگ</FormLabel>
+								<FormLabel>عنوان دسته بندی</FormLabel>
 								<FormControl>
 									<Input placeholder='name' {...field} />
 								</FormControl>

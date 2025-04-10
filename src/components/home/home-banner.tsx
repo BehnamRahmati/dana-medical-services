@@ -7,7 +7,7 @@ import Section from '../ui/section'
 export default function Homebanner() {
 	return (
 		<Section>
-			<div className='relative flex flex-col-reverse lg:flex-row items-center justify-between '>
+			<div className='relative flex flex-col-reverse lg:flex-row items-center justify-between lg:px-5 '>
 				<div className='info lg:w-1/2 px-5 lg:px-0'>
 					<div className='flex flex-col lg:block items-center justify-center'>
 						<h2 className='text-5xl lg:text-7xl text-center lg:text-start font-extrabold leading-28 text-primary'>
@@ -17,7 +17,7 @@ export default function Homebanner() {
 							انجام انواع خدمات پزشکی در منزل و محل کار توسط پرسنل دنا
 						</p>
 						<Link
-							href='/'
+							href='#request-service'
 							className='flex items-center gap-2 py-3 px-5 bg-primary w-fit text-white font-bold text-xl rounded-lg mt-5 hover:bg-primary/80 transition-colors duration-200'
 						>
 							<span>ثبت درخواست خدمات</span>

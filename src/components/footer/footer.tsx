@@ -9,7 +9,7 @@ import FooterTopServices from './footer-top-services'
 function Footer() {
 	return (
 		<NoHeaderFooterAuthentication>
-			<footer className='px-5 lg:px-0'>
+			<footer className='px-5'>
 				<FooterHeader />
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 py-10 container mx-auto'>
 					<FooterAbout />

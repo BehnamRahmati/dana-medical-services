@@ -6,6 +6,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { fetchCategory } from '@/lib/helpers'
 import { TServices, TUser } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
@@ -27,6 +28,7 @@ const formSchema = z.object({
 		errorMap: () => ({ message: 'وضعیت مقاله را انتخاب کنید' }),
 	}),
 	thumbnail: z.any(),
+	category: z.string().min(1, { message: 'دسته بندی مقاله را انتخاب کنید' }),
 })
 async function userFetcher(url: string): Promise<TUser[]> {
 	const response = await axios.get(url)
@@ -35,6 +37,7 @@ async function userFetcher(url: string): Promise<TUser[]> {
 
 export default function ServiceEditForm({ service }: { service: TServices }) {
 	const { data: usersData, isLoading: usersLoading } = useSWR('/api/dashboard/users', userFetcher)
+	const { data: categoriesData, isLoading: categoriesLoading } = useSWR('/api/dashboard/services/categories', fetchCategory)
 	const [imageUrl, setImageUrl] = useState(service.thumbnail || '')
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -47,10 +50,12 @@ export default function ServiceEditForm({ service }: { service: TServices }) {
 			author: service.userId,
 			content: service.content,
 			status: service.status,
+			category: service.serviceCategoryId || '',
 		},
 	})
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
+		console.warn(values)
 		const formData = new FormData()
 		if (values.thumbnail) {
 			formData.append('thumbnail', values.thumbnail)
@@ -62,9 +67,10 @@ export default function ServiceEditForm({ service }: { service: TServices }) {
 		formData.append('readTime', values.readTime.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
+		formData.append('category', values.category)
 
 		try {
-			const response = await axios.post('/api/dashboard/services', formData, {
+			const response = await axios.put('/api/dashboard/services', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
@@ -187,6 +193,37 @@ export default function ServiceEditForm({ service }: { service: TServices }) {
 						/>
 					</div>
 					<div className='w-full md:w-80 flex flex-col gap-10 bg-accent p-5 rounded-lg'>
+						{categoriesLoading ? (
+							<p>loading</p>
+						) : (
+							<FormField
+								control={form.control}
+								name='category'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> دسته بندی:</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className='w-full'>
+													<SelectValue placeholder='یکی از دسته بندی ها را انتخاب کنید  ' />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectGroup>
+													{categoriesData &&
+														categoriesData.map(cat => (
+															<SelectItem value={cat.id} key={cat.id}>
+																{cat.name}
+															</SelectItem>
+														))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						)}
 						{usersLoading ? (
 							<p>loading</p>
 						) : (

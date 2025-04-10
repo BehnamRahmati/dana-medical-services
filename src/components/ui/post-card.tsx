@@ -5,8 +5,8 @@ import Link from 'next/link'
 
 export default function PostCard({ article }: { article: TArticles }) {
 	return (
-		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-slate-300 group'>
-			<div className='bg-slate-400 w-full h-52 rounded-xl overflow-hidden'>
+		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-border group'>
+			<div className='bg-border w-full h-52 rounded-xl overflow-hidden'>
 				<Image
 					src={article.thumbnail}
 					className='w-full h-full transform group-hover:scale-110 transition-transform duration-200 ease-in-out'
@@ -24,7 +24,7 @@ export default function PostCard({ article }: { article: TArticles }) {
 			</Link>
 			<div className='flex items-center justify-between mt-5'>
 				<div className='flex items-center gap-2'>
-					<div className='size-7 bg-slate-500 rounded-full'>
+					<div className='size-7 bg-slate-500 rounded-full overflow-hidden'>
 						<Image src={article.author.image} height={50} width={50} alt={article.author.name} />
 					</div>
 					<p className='text-sm font-bold text-slate-400'>{article.author.name}</p>

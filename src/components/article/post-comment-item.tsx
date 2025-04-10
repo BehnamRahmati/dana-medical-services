@@ -6,7 +6,7 @@ import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 
-export default function PostCommentItem({ comment }: { comment: TComment }) {
+export default function PostCommentItem({ comment, isReply }: { comment: TComment; isReply?: boolean }) {
 	const { data: session } = useSession()
 
 	async function handleAddLike() {
@@ -18,8 +18,8 @@ export default function PostCommentItem({ comment }: { comment: TComment }) {
 
 	return (
 		<li>
-			<div className='border border-border rounded-xl px-5'>
-				<div className='py-5 border-b border-b-border flex justify-between'>
+			<div className={`border rounded-xl px-5 py-5 ${isReply ? 'bg-secondary/20 border-secondary' : 'border-border'}`}>
+				<div className={`py-5 border-b ${isReply ? ' border-b-secondary' : 'border-b-border'} flex justify-between`}>
 					<div className='flex items-center gap-2'>
 						<div className='bg-content size-14 rounded-full'>
 							<Image
@@ -49,10 +49,10 @@ export default function PostCommentItem({ comment }: { comment: TComment }) {
 					<div className='py-5'> {comment.content} </div>
 				</div>
 			</div>
-			{comment.replies.length > 0 && (
+			{comment.replies && comment.replies.length > 0 && (
 				<ul className='flex flex-col gap-5 my-5 mr-5'>
 					{comment.replies.map(reply => (
-						<PostCommentItem comment={reply} key={reply.id} />
+						<PostCommentItem isReply comment={reply} key={reply.id} />
 					))}
 				</ul>
 			)}

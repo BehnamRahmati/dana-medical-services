@@ -11,9 +11,13 @@ export default function ArticleComments() {
 
 	if (isLoading || !data) return <p>loading</p>
 
+	const comments = data.filter(comment => !comment.commentId && comment.approved)
+
 	return (
 		<ul className='flex flex-col gap-10 mt-10'>
-			{data.length > 0 ? data.map(comment => <PostCommentItem comment={comment} key={comment.id} />) : 'no comment yet'}
+			{comments.length > 0
+				? comments.map(comment => <PostCommentItem comment={comment} key={comment.id} />)
+				: 'no comment yet'}
 		</ul>
 	)
 }

@@ -9,7 +9,7 @@ import HomeMoreLink from './home-more-link'
 
 export default function HomeLatestPosts() {
 	return (
-		<Section>
+		<Section className='lg:px-5'>
 			<div className='flex flex-col lg:flex-row gap-10 bg-content/10 py-20 my-20 lg:my-52 px-5 md:px-10 rounded-xl relative'>
 				<div className='flex flex-col lg:w-1/3 gap-10'>
 					<Title>آخرین مقالات</Title>

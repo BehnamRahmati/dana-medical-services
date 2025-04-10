@@ -5,6 +5,7 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Skeleton } from './skeleton'
 
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
 	return <SelectPrimitive.Root data-slot='select' {...props} />
@@ -145,6 +146,15 @@ function SelectScrollDownButton({ className, ...props }: React.ComponentProps<ty
 	)
 }
 
+function SelectSkeleton({ className, ...props }: React.ComponentProps<typeof Skeleton>) {
+	return (
+		<div className=''>
+			<Skeleton className='h-6 w-20 rounded-md bg-muted mb-1' />
+			<Skeleton className={cn('h-8 w-full rounded-md bg-muted', className)} {...props} />
+		</div>
+	)
+}
+
 export {
 	Select,
 	SelectContent,
@@ -154,6 +164,7 @@ export {
 	SelectScrollDownButton,
 	SelectScrollUpButton,
 	SelectSeparator,
+	SelectSkeleton,
 	SelectTrigger,
 	SelectValue,
 }

@@ -4,8 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url)
 	const search = searchParams.get('search')
+	const category = searchParams.get('category')
 	const sort = searchParams.get('sort') || 'views_asc'
 	const where = {
+		...(category && { ServiceCategory: { is: { slug: category } } }),
 		...(search && {
 			title: {
 				contains: search,

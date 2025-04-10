@@ -21,10 +21,10 @@ export default function AuthnticationPage({
 	const isRegister = patthname === '/register'
 	return (
 		<div className='container mx-auto min-h-dvh grid place-content-center py-20'>
-			<div className='flex items-end gap-2 mb-10 w-fit mx-auto'>
+			<Link href='/' className='flex items-end gap-2 mb-10 w-fit mx-auto'>
 				<span className='text-lg'>خدمات پزشکی</span>
 				<span className='text-7xl font-extrabold leading-7 text-primary'>دنــا .</span>
-			</div>
+			</Link>
 			<div className='bg-accent/60 rounded-xl border border-border p-10 shadow-2xl'>
 				<div className='flex items-center mb-10 mx-auto w-fit'>
 					<Link
@@ -53,19 +53,19 @@ export default function AuthnticationPage({
 					<p className='text-sm text-content/60 mt-2'>{subtitle} </p>
 				</div>
 				<div className='grid grid-cols-2 gap-5 *:w-56 *:cursor-pointer'>
-					<button type='button' onClick={() => signIn('google')} className='bg-white rounded-lg p-4 flex items-center'>
+					<button type='button' onClick={() => signIn('google')} className='bg-accent rounded-lg p-4 flex items-center'>
 						<FcGoogle className='text-2xl inline-block ml-2' />
 						<span>ورود یا ثیت نام با گوگل</span>
 					</button>
-					<button type='button' className='bg-white rounded-lg p-4 flex items-center'>
+					<button type='button' className='bg-accent rounded-lg p-4 flex items-center'>
 						<FaYahoo className='text-2xl inline-block text-purple-700 ml-2' />
 						<span>ورود یا ثیت نام با یاهو</span>
 					</button>
-					<button type='button' className='bg-white rounded-lg p-4 flex items-center'>
+					<button type='button' className='bg-accent rounded-lg p-4 flex items-center'>
 						<Instagram className='size-6 fill-pink-500 inline-block ml-2' variant='Bulk' />
 						<span>ورود یا ثیت نام با اینستگرام</span>
 					</button>
-					<button type='button' className='bg-white rounded-lg p-4 flex items-center'>
+					<button type='button' className='bg-accent rounded-lg p-4 flex items-center'>
 						<FaLinkedin className='text-2xl inline-block text-sky-500 ml-2' />
 						<span>ورود یا ثیت نام با لینکداین</span>
 					</button>

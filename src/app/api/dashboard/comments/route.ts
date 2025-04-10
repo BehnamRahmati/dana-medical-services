@@ -1,10 +1,55 @@
 import { prisma } from '@/lib/prisma'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
-	const comments = await prisma.comment.findMany()
+	const comments = await prisma.comment.findMany({ include: { article: { select: { title: true, id: true } } } })
 	if (!comments) {
 		return NextResponse.json({ comments: [] })
 	}
 	return NextResponse.json({ comments })
+}
+
+export async function PUT(req: NextRequest) {
+	try {
+		const { content, commentId, userId, articleId } = await req.json()
+		if (!content || !commentId || !userId || !articleId) {
+			return NextResponse.json({ message: 'لطفا همه فیلدها را پر کنید' }, { status: 400 })
+		}
+		const comment = await prisma.comment.update({
+			where: { id: commentId },
+			data: {
+				replies: {
+					create: {
+						content,
+						article: { connect: { id: articleId } },
+						user: { connect: { id: userId } },
+						approved: true,
+					},
+				},
+			},
+		})
+		return NextResponse.json({ message: 'دیدگاه با موفقیت ویرایش شد', comment })
+	} catch (error) {
+		console.log(error)
+		return NextResponse.json({ message: 'خطا در ویرایش دیدگاه' }, { status: 500 })
+	}
+}
+
+export async function PATCH(req: NextRequest) {
+	try {
+		const { commentId } = await req.json()
+		if (!commentId) {
+			return NextResponse.json({ message: 'لطفا همه فیلدها را پر کنید' }, { status: 400 })
+		}
+		const comment = await prisma.comment.update({
+			where: { id: commentId },
+			data: {
+				approved: true,
+			},
+		})
+		return NextResponse.json({ message: 'دیدگاه با موفقیت تایید شد', comment })
+	} catch (error) {
+		console.log(error)
+		return NextResponse.json({ message: 'خطا در ویرایش دیدگاه' }, { status: 500 })
+	}
 }

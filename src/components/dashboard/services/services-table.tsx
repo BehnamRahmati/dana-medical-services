@@ -17,7 +17,7 @@ export default function ServicesTable() {
 	if (isLoading || !data) return <p>loading</p>
 
 	return (
-		<div className='rounded-lg max-w-full overflow-hidden bg-accent h-full p-5 flex flex-col'>
+		<div className='rounded-xl max-w-full overflow-hidden bg-accent h-full p-5 flex flex-col'>
 			<ServicesDataTable data={data.services} columns={ServicesColumns} />
 		</div>
 	)

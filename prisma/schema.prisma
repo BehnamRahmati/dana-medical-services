@@ -40,6 +40,7 @@ model User {
   likedServices      Service[] @relation("likedServices")
   BookmarkedServices Service[] @relation("bookmarkedServices")
   services           Service[] @relation("serviceAuthor")
+  Request            Request[]
 }
 
 model Account {
@@ -183,15 +184,16 @@ model Service {
   id String @id @default(cuid())
 
   // fields
-  title     String
-  slug      String @unique
-  excerpt   String
-  thumbnail String
-  content   String
-  views     Int    @default(0)
-  author    User   @relation("serviceAuthor", fields: [userId], references: [id], onDelete: Cascade)
-  status    Status @default(DRAFT)
-  readTime  Int    @default(0)
+  title           String
+  slug            String           @unique
+  excerpt         String
+  thumbnail       String
+  content         String
+  views           Int              @default(0)
+  author          User             @relation("serviceAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  status          Status           @default(DRAFT)
+  readTime        Int              @default(0)
+  ServiceCategory ServiceCategory? @relation(fields: [serviceCategoryId], references: [id])
 
   // relations 
   comments  Comment[]
@@ -199,9 +201,28 @@ model Service {
   bookmarks User[]    @relation("bookmarkedServices")
 
   // times
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  userId            String
+  Request           Request[]
+  serviceCategoryId String?
+
+  @@unique([slug, id])
+}
+
+model ServiceCategory {
+  id String @id @default(cuid())
+
+  // fields
+  name String
+  slug String @unique
+
+  // relations
+  services Service[]
+
+  // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    String
 
   @@unique([slug, id])
 }
@@ -255,4 +276,32 @@ model File {
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Request {
+  id String @id @default(cuid())
+
+  // fields
+  name          String
+  email         String?
+  phone         String
+  notes         String?
+  service       Service       @relation(fields: [serviceId], references: [id])
+  expert        User          @relation(fields: [expertId], references: [id])
+  status        RequestStatus @default(PENDING)
+  requatedDate  DateTime
+  requestedTime String
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  serviceId String
+  expertId  String
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
 }

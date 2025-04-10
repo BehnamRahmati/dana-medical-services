@@ -5,7 +5,7 @@ import LandingServices from './services/landing-services'
 
 export default function HomeServices() {
 	return (
-		<Section>
+		<Section className='lg:px-5'>
 			<div className='flex flex-row justify-between items-center mt-20'>
 				<Title>خدمات</Title>
 				<HomeMoreLink>مشاهده همه خدمات</HomeMoreLink>

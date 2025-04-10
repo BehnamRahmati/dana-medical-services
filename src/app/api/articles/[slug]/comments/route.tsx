@@ -9,7 +9,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
 			include: {
 				user: { select: { id: true, name: true, image: true } },
 				article: { select: { slug: true } },
-				replies: true,
+				replies: {
+					include: {
+						user: { select: { id: true, name: true, image: true } },
+						_count: { select: { likes: true } },
+					},
+				},
 				_count: { select: { likes: true } },
 			},
 		})

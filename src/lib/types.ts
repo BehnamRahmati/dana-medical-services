@@ -53,6 +53,8 @@ type TServices = {
 	likes: TUser[]
 	bookmarks: TUser[]
 	userId: string
+	ServiceCategory: TCategory
+	serviceCategoryId: string
 	_count: {
 		likes: number
 		comments: number

@@ -6,6 +6,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { fetchCategory } from '@/lib/helpers'
 import { TUser } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
@@ -27,6 +28,7 @@ const formSchema = z.object({
 	author: z.string().min(1, { message: 'نویسنده مقاله را انتخاب کنید' }),
 	readTime: z.string().min(1, { message: 'زمان مطالعه مقاله را وارد کنید' }),
 	content: z.string().min(1, { message: 'محتوای مقاله را وارد کنید' }),
+	category: z.string().min(1, { message: 'دسته بندی مقاله را انتخاب کنید' }),
 	status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED'], {
 		errorMap: () => ({ message: 'وضعیت مقاله را انتخاب کنید' }),
 	}),
@@ -43,6 +45,7 @@ async function userFetcher(url: string): Promise<TUser[]> {
 
 export default function ServiceCreateForm() {
 	const { data: usersData, isLoading: usersLoading } = useSWR('/api/dashboard/users', userFetcher)
+	const { data: categoriesData, isLoading: categoriesLoading } = useSWR('/api/dashboard/services/categories', fetchCategory)
 	const [imageUrl, setImageUrl] = useState('')
 	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -56,6 +59,7 @@ export default function ServiceCreateForm() {
 			author: '',
 			content: '',
 			status: 'DRAFT',
+			category: '',
 		},
 	})
 
@@ -195,6 +199,37 @@ export default function ServiceCreateForm() {
 						/>
 					</div>
 					<div className='w-full md:w-80 flex flex-col gap-10 bg-accent p-5 rounded-lg'>
+						{categoriesLoading ? (
+							<p>loading</p>
+						) : (
+							<FormField
+								control={form.control}
+								name='category'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> دسته بندی:</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className='w-full'>
+													<SelectValue placeholder='یکی از دسته بندی ها را انتخاب کنید  ' />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectGroup>
+													{categoriesData &&
+														categoriesData.map(cat => (
+															<SelectItem value={cat.id} key={cat.id}>
+																{cat.name}
+															</SelectItem>
+														))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						)}
 						{usersLoading ? (
 							<p>loading</p>
 						) : (

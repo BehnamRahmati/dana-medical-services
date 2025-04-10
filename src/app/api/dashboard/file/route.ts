@@ -1,6 +1,6 @@
+import { handleUpload } from '@/lib/backend.helpers'
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
-import { handleUpload } from '../articles/route'
 
 export async function POST(req: NextRequest) {
 	const formData = await req.formData()
