@@ -16,18 +16,18 @@ export default function PostSimilars({ categorySlug, articleId }: { categorySlug
 	if (isLoading || !data)
 		return (
 			<div className='mt-10'>
-				<Skeleton className='w-64 h-20 rounded-xl mb-5' />
-				<div className='grid grid-cols-3 gap-5'>
-					<Skeleton className='w-[370px] h-[400px] rounded-xl' />
-					<Skeleton className='w-[370px] h-[400px] rounded-xl' />
-					<Skeleton className='w-[370px] h-[400px] rounded-xl' />
+				<Skeleton className='w-64 h-16 rounded-xl mb-5' />
+				<div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
+					<Skeleton className='w-full h-[400px] rounded-xl' />
+					<Skeleton className='w-full h-[400px] rounded-xl' />
+					<Skeleton className='w-full h-[400px] rounded-xl' />
 				</div>
 			</div>
 		)
 
 	const articles = filterArticles(data, articleId)
 
-	if (articleId.length === 0) return <></>
+	if (articles.length === 0) return <></>
 
 	return (
 		<div className='mt-10'>

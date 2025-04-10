@@ -7,11 +7,11 @@ export default function HomeRequestSteps() {
 	return (
 		<Section>
 			<div className='pt-40 pb-0'>
-				<div className='mx-auto w-fit'>
+				<div className='mx-auto w-fit px-5'>
 					<Title>مراحل ثبت درخواست</Title>
 				</div>
-				<div className='max-w-lg mx-auto mt-32'>
-					<ul className='flex flex-col gap-20 pr-5 *:pr-20 *:relative'>
+				<div className='max-w-lg mx-auto mt-32 '>
+					<ul className='flex flex-col gap-20 pl-5 lg:pr-5 *:pr-20 *:relative'>
 						<li>
 							<ListBullet step={0} />
 							<H3>ثبت درخواست</H3>

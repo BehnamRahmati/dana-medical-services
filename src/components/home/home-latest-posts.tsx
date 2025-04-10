@@ -10,8 +10,8 @@ import HomeMoreLink from './home-more-link'
 export default function HomeLatestPosts() {
 	return (
 		<Section className='lg:px-5'>
-			<div className='flex flex-col lg:flex-row gap-10 bg-content/10 py-20 my-20 lg:my-52 px-5 md:px-10 rounded-xl relative'>
-				<div className='flex flex-col lg:w-1/3 gap-10'>
+			<div className='flex flex-col lg:flex-row gap-10 bg-content/10 py-20 my-20 lg:my-52 px-5 md:px-10 lg:rounded-xl relative'>
+				<div className='flex flex-col items-center lg:w-1/3 gap-10 text-center'>
 					<Title>آخرین مقالات</Title>
 					<p className='text-content'>
 						نوشتن کار جالبیه که از هزاران سال همراه ما بوده و کمک کرده تا همیشه به روز باشیم، ما در راکت فضای رو به

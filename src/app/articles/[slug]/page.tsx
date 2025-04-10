@@ -13,7 +13,7 @@ export default async function SingleArticlePage({ params }: { params: Promise<{ 
 	const article = await fetchArticle(slug)
 
 	return (
-		<div className='flex flex-col lg:flex-row gap-5 p-2.5 lg:p-0 container mx-auto mt-10 lg:my-20'>
+		<div className='flex flex-col lg:flex-row gap-5 p-5 lg:p-0 container mx-auto md:mt-10 lg:my-20'>
 			<PostMain article={article} />
 			<PostSidebar content={article.content} />
 			<PostViews postSlug={article.slug} />

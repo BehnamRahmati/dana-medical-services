@@ -73,7 +73,7 @@ export default function HomeRequestForm() {
 	return (
 		<Section className='bg-primary px-5 lg:px-0' id='request-service'>
 			<div className='flex flex-col lg:flex-row gap-10 py-10 lg:py-0 lg:px-20 relative'>
-				<div className='*:text-white max-w-lg'>
+				<div className='*:text-white max-w-lg text-center lg:text-right'>
 					<H2>ثبت درخواست خدمات</H2>
 					<Paragraph>
 						دنا مجموعه ارائه‌ دهنده خدمات سلامت در منزل و محل کار است. دنا یک «آزمایشگاه» یا «مرکز درمانی» نیست بلکه

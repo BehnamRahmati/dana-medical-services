@@ -16,7 +16,9 @@ export default function HomeServicesCard({ service }: { service: TServices }) {
 				/>
 			</div>
 			<div className='info w-11/12 mx-auto'>
-				<p className='text-secondary mt-3 text-sm'>{service.author.name}</p>
+				<Link href={`/services?category:${service.ServiceCategory.slug}`} className='text-secondary mt-3 text-sm block'>
+					{service.ServiceCategory.name}
+				</Link>
 				<Link
 					href={`/services/${service.slug}`}
 					className='text-2xl font-extrabold text-content mb-4 mt-2 transition-colors duration-200 hover:text-primary/80 block'
@@ -29,7 +31,7 @@ export default function HomeServicesCard({ service }: { service: TServices }) {
 			</div>
 			<Link
 				href={`/services/${service.slug}`}
-				className='mt-5 text-center py-3 border-t border-t-border text-primary flex items-center justify-center transition-colors duration-200 hover:bg-primary/10'
+				className='mt-5 text-center py-3 border-t border-t-border rounded-b-xl text-primary flex items-center justify-center transition-colors duration-200 hover:bg-primary/10'
 			>
 				<span className='text-lg font-bold'>مشاهده</span>
 				<ArrowLeft3 size={25} className='fill-primary inline-block' variant='Bulk' />

@@ -14,7 +14,7 @@ export default async function HomeCategories() {
 					<Title>دسته بندی خدمات</Title>
 				</div>
 
-				<div className='grid grid-cols-1 lg:flex items-center justify-center gap-10 lg:gap-20 '>
+				<div className='grid grid-cols-1 md:flex items-center justify-center gap-10 lg:gap-20 '>
 					{categories && categories.map(cat => <HomeCategoriesCard category={cat} key={cat.id} />)}
 				</div>
 			</div>

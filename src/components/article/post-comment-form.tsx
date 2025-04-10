@@ -65,7 +65,7 @@ export default function ArticleCommentForm() {
 						<Textarea className='min-h-44 text-lg! p-4' {...field} placeholder='دیدگاه خود را بنویسید...' />
 					)}
 				/>
-				<div className='flex flex-col lg:flex-row items-center justify-between'>
+				<div className='flex flex-col lg:flex-row gap-5 items-center justify-between'>
 					<label htmlFor='rules' className='flex items-center gap-3'>
 						<input
 							type='checkbox'
@@ -78,7 +78,7 @@ export default function ArticleCommentForm() {
 					<button
 						type='submit'
 						disabled={form.formState.isSubmitting || !rules}
-						className='bg-secondary cursor-pointer hover:bg-secondary/80 disabled:opacity-50 disabled:hover:bg-secondary disabled:cursor-default text-white text-xl font-bold pt-3 pb-2 px-5 rounded-lg w-fit'
+						className='bg-secondary cursor-pointer hover:bg-secondary/80 disabled:opacity-50 disabled:hover:bg-secondary disabled:cursor-default text-white text-xl font-bold pt-3 pb-2 px-5 rounded-lg w-full md:w-fit'
 					>
 						ارسال دیدگاه
 					</button>

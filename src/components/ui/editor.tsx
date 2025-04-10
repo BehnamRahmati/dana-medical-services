@@ -1,21 +1,15 @@
-/* eslint no-use-before-define: 0 */
-
 'use client'
 
 import axios from 'axios'
-import dynamic from 'next/dynamic'
-import { useRef } from 'react'
-import QuillEditorRef from 'react-quill-new'
-// import ForwardedReactQuill from './ForwardedReactQuill'
-
-// Dynamically import the Quill editor to prevent SSR issues
-const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false })
+import { useEffect, useRef, useState } from 'react'
+import ReactQuill from 'react-quill-new'
 
 // Import Quill styles
 import 'react-quill-new/dist/quill.snow.css' // For snow theme
 
 function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: string) => void; editorValue: string }) {
-	const quillRef = useRef<QuillEditorRef>(null)
+	const quillRef = useRef<ReactQuill | null>(null)
+	const [isLoaded, setIsLoaded] = useState(false)
 
 	const uploadImage = async (file: File): Promise<string> => {
 		const formData = new FormData()
@@ -29,7 +23,6 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 		return fileRes.file.url // Return the URL of the uploaded image
 	}
 
-	// Custom image handler that triggers file input
 	const handleImageUpload = () => {
 		const input = document.createElement('input')
 		input.setAttribute('type', 'file')
@@ -41,7 +34,7 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 				const file = input.files[0]
 				const imageUrl = await uploadImage(file)
 				// Get the Quill editor instance
-				const editor = quillRef.current?.getEditor()
+				const editor = quillRef.current?.getEditor ? quillRef.current.getEditor() : null
 				console.warn('imageUrl', imageUrl)
 				if (editor) {
 					const range = editor.getSelection(true)
@@ -79,16 +72,24 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 		},
 	}
 
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			setIsLoaded(true)
+		}
+	}, [])
+
 	return (
 		<div dir='ltr'>
-			<ReactQuill
-				ref={quillRef}
-				className='h-[600px] mb-32 lg:mb-16'
-				theme='snow'
-				value={editorValue}
-				onChange={e => onChangeEditor(e)}
-				modules={quillModules}
-			/>
+			{isLoaded && (
+				<ReactQuill
+					ref={quillRef}
+					className='h-[600px] mb-32 lg:mb-16'
+					theme='snow'
+					value={editorValue}
+					onChange={e => onChangeEditor(e)}
+					modules={quillModules}
+				/>
+			)}
 		</div>
 	)
 }
