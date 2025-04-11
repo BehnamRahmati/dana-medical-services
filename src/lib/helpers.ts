@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { TArticles, TCategory, TComment, TServices, TTag, TUser } from './types'
+import { TArticles, TCategory, TComment, TRequest, TServices, TTag, TUser } from './types'
 
 export async function fetchArticles(url: string): Promise<TArticles[]> {
 	const response = await axios.get(url)
@@ -15,7 +15,6 @@ export async function fetchUsers(url: string): Promise<TUser[]> {
 	const response = await axios.get(url)
 	return response.data.users
 }
-
 export async function fetchCategory(url: string): Promise<TCategory[]> {
 	const response = await axios.get(url)
 	return response.data.categories
@@ -27,4 +26,12 @@ export async function fetchServices(url: string): Promise<TServices[]> {
 export async function fetchComments(url: string): Promise<TComment[]> {
 	const response = await axios.get(url)
 	return response.data.comments
+}
+export async function fetchRequests(url: string): Promise<TRequest[]> {
+	const response = await axios.get(url)
+	return response.data.requests
+}
+export async function fetchServicesCategories(url: string): Promise<TCategory[]> {
+	const response = await axios.get(url)
+	return response.data.categories
 }

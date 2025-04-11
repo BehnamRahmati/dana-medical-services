@@ -1,11 +1,17 @@
+'use client'
+import useVisibleSection from '@/hooks/use-visible-section'
 import Section from '../ui/section'
 import Title from '../ui/title'
 import { H3, Paragraph } from '../ui/typography'
 import ListBullet from './list-bullet'
 
 export default function HomeRequestSteps() {
+	const { sectionRef, isVisible } = useVisibleSection()
 	return (
-		<Section>
+		<Section
+			ref={sectionRef}
+			className={`px-2.5 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
+		>
 			<div className='pt-40 pb-0'>
 				<div className='mx-auto w-fit px-5'>
 					<Title>مراحل ثبت درخواست</Title>

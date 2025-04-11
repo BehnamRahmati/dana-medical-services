@@ -4,7 +4,7 @@ import ArticleTags from './sidebar/article-tags'
 
 export default function ArticlesSidebar() {
 	return (
-		<aside className='w-full lg:w-80 flex flex-col gap-5'>
+		<aside className='w-full lg:w-80 flex-col gap-5 hidden lg:flex'>
 			<ArticleSearch />
 			<ArticleTags />
 			<ArticleCategories />

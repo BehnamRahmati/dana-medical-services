@@ -1,30 +1,34 @@
-import { HambergerMenu } from 'iconsax-react'
+'use client'
+import { useIsMobile } from '@/hooks/use-mobile'
 import Logo from '../logo'
 import NoHeaderFooterAuthentication from '../NoHeaderFooterAuthentication'
 import HeaderButtons from './header-buttons'
 import HeaderLinks from './header-links'
+import HeaderResponsive from './header-responsive'
 import HeaderSearchForm from './header-search-form'
 
 function Header() {
+	const isMobile = useIsMobile()
 	return (
 		<NoHeaderFooterAuthentication>
-			<header>
-				<div className='container mx-auto'>
-					<div className='flex flex-col px-5'>
-						<div className='header-top bg-accent rounded-xl mt-2.5 p-4 lg:p-9.5 shadow-xs w-full flex flex-row items-center justify-between'>
-							<div className='lg:hidden'>
-								<HambergerMenu size='45' className='fill-content' variant='Bulk' />
+			{isMobile ? (
+				<HeaderResponsive />
+			) : (
+				<header>
+					<div className='container mx-auto'>
+						<div className='flex flex-col px-2.5 lg:px-5'>
+							<div className='header-top bg-accent rounded-xl mt-2.5 p-4 lg:p-9.5 shadow-xs w-full flex flex-row items-center justify-between'>
+								<Logo />
+								<HeaderSearchForm />
+								<HeaderButtons />
 							</div>
-							<Logo />
-							<HeaderSearchForm />
-							<HeaderButtons />
-						</div>
-						<div className='hidden lg:block'>
-							<HeaderLinks />
+							<div>
+								<HeaderLinks />
+							</div>
 						</div>
 					</div>
-				</div>
-			</header>
+				</header>
+			)}
 		</NoHeaderFooterAuthentication>
 	)
 }

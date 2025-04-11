@@ -9,7 +9,25 @@ import {
 import { AddSquare, HambergerMenu, HashtagSquare, I3DSquare } from 'iconsax-react'
 import Link from 'next/link'
 
-export default function DashboardSidebarServices() {
+const links = [
+	{
+		label: 'مشاهده همه خدمات',
+		icon: <HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />,
+		href: '/dashboard/services',
+	},
+	{
+		label: 'نوشتن خدمت جدید',
+		icon: <AddSquare className='size-5 stroke-content/60' variant='Broken' />,
+		href: '/dashboard/services/create',
+	},
+	{
+		label: 'دسته بندی های خدمات',
+		icon: <HashtagSquare className='size-5 stroke-content/60' variant='Broken' />,
+		href: '/dashboard/services/categories',
+	},
+]
+
+export default function DashboardSidebarServices({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
 	return (
 		<SidebarCollapsible>
 			<SidebarCollapsibleTrigger title='خدمات'>
@@ -17,24 +35,18 @@ export default function DashboardSidebarServices() {
 			</SidebarCollapsibleTrigger>
 			<SidebarCollapsibleContent>
 				<SidebarMenu isSubMenu>
-					<SidebarMenuItem>
-						<Link href={'/dashboard/services'} className='flex items-center gap-2.5 *:shrink-0'>
-							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
-							<span>مشاهده همه خدمات</span>
-						</Link>
-					</SidebarMenuItem>
-					<SidebarMenuItem>
-						<Link href={'/dashboard/services/create'} className='flex items-center gap-2.5 *:shrink-0'>
-							<AddSquare className='size-5 stroke-content/60' variant='Broken' />
-							<span>نوشتن خدمت جدید</span>
-						</Link>
-					</SidebarMenuItem>
-					<SidebarMenuItem>
-						<Link href={'/dashboard/services/categories'} className='flex items-center gap-2.5 *:shrink-0'>
-							<HashtagSquare className='size-5 stroke-content/60' variant='Broken' />
-							<span> دسته بندی های خدمات</span>
-						</Link>
-					</SidebarMenuItem>
+					{links.map((link, index) => (
+						<SidebarMenuItem key={index}>
+							<Link
+								href={link.href}
+								onClick={() => setOpen && setOpen(prev => !prev)}
+								className='flex items-center gap-2.5 *:shrink-0'
+							>
+								{link.icon}
+								<span>{link.label}</span>
+							</Link>
+						</SidebarMenuItem>
+					))}
 				</SidebarMenu>
 			</SidebarCollapsibleContent>
 		</SidebarCollapsible>

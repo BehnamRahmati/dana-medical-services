@@ -9,7 +9,7 @@ import {
 import { HambergerMenu, Messages1 } from 'iconsax-react'
 import Link from 'next/link'
 
-export default function DashboardSidebarComments() {
+export default function DashboardSidebarComments({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
 	return (
 		<SidebarCollapsible>
 			<SidebarCollapsibleTrigger title='دیدگاه ها'>
@@ -18,7 +18,11 @@ export default function DashboardSidebarComments() {
 			<SidebarCollapsibleContent>
 				<SidebarMenu isSubMenu>
 					<SidebarMenuItem>
-						<Link href={'/dashboard/comments'} className='flex items-center gap-2.5 *:shrink-0'>
+						<Link
+							href={'/dashboard/comments'}
+							onClick={() => setOpen && setOpen(prev => !prev)}
+							className='flex items-center gap-2.5 *:shrink-0'
+						>
 							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
 							<span>مشاهده همه دیدگاه ها</span>
 						</Link>

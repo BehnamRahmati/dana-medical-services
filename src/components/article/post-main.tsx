@@ -8,7 +8,7 @@ import PostSimilars from './post-similars'
 export default function PostMain({ article }: { article: TArticles }) {
 	return (
 		<div className='flex-1'>
-			<main className='bg-accent border border-border p-5 lg:p-10 rounded-xl'>
+			<main className='bg-accent border border-border p-2.5 md:p-5 lg:p-10 rounded-xl'>
 				<PostContentHeader
 					category={article.category.name}
 					readTime={article.readTime}

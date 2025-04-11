@@ -9,7 +9,15 @@ import {
 import { HambergerMenu, Profile2User } from 'iconsax-react'
 import Link from 'next/dist/client/link'
 
-export default function DashboardSidebarUsers() {
+const links = [
+	{
+		label: 'مشاهده همه  کاربران',
+		icon: <HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />,
+		href: '/dashboard/usres',
+	},
+]
+
+export default function DashboardSidebarUsers({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
 	return (
 		<SidebarCollapsible>
 			<SidebarCollapsibleTrigger title='کاربران'>
@@ -17,12 +25,18 @@ export default function DashboardSidebarUsers() {
 			</SidebarCollapsibleTrigger>
 			<SidebarCollapsibleContent>
 				<SidebarMenu isSubMenu>
-					<SidebarMenuItem>
-						<Link href={'/dashboard/users'} className='flex items-center gap-2.5 *:shrink-0'>
-							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
-							<span>مشاهده همه کاربران</span>
-						</Link>
-					</SidebarMenuItem>
+					{links.map((link, index) => (
+						<SidebarMenuItem key={index}>
+							<Link
+								href={link.href}
+								onClick={() => setOpen && setOpen(prev => !prev)}
+								className='flex items-center gap-2.5 *:shrink-0'
+							>
+								{link.icon}
+								<span>{link.label}</span>
+							</Link>
+						</SidebarMenuItem>
+					))}
 				</SidebarMenu>
 			</SidebarCollapsibleContent>
 		</SidebarCollapsible>

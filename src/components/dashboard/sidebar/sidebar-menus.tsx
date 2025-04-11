@@ -9,7 +9,15 @@ import {
 import { Fatrows, HambergerMenu } from 'iconsax-react'
 import Link from 'next/link'
 
-export default function DashboardSidebarMenus() {
+const links = [
+	{
+		label: 'مشاهده همه منو ها',
+		icon: <HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />,
+		href: '/dashboard/menus',
+	},
+]
+
+export default function DashboardSidebarMenus({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
 	return (
 		<SidebarCollapsible>
 			<SidebarCollapsibleTrigger title='منو ها'>
@@ -17,12 +25,18 @@ export default function DashboardSidebarMenus() {
 			</SidebarCollapsibleTrigger>
 			<SidebarCollapsibleContent>
 				<SidebarMenu isSubMenu>
-					<SidebarMenuItem>
-						<Link href={'/dashboard/menus'} className='flex items-center gap-2.5 *:shrink-0'>
-							<HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />
-							<span>مشاهده همه منو ها</span>
-						</Link>
-					</SidebarMenuItem>
+					{links.map((link, index) => (
+						<SidebarMenuItem key={index}>
+							<Link
+								href={link.href}
+								onClick={() => setOpen && setOpen(prev => !prev)}
+								className='flex items-center gap-2.5 *:shrink-0'
+							>
+								{link.icon}
+								<span>{link.label}</span>
+							</Link>
+						</SidebarMenuItem>
+					))}
 				</SidebarMenu>
 			</SidebarCollapsibleContent>
 		</SidebarCollapsible>

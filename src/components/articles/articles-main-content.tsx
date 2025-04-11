@@ -9,7 +9,7 @@ export default function ArticlesMainContent() {
 
 	if (isLoading || !articles) {
 		return (
-			<div className='grid grid-cols-3 gap-5'>
+			<div className='grid grid-cols-1 md:grid-ols-2 lg:grid-cols-3 gap-5'>
 				<Skeleton className='h-[350] w-full bg-content/30' />
 				<Skeleton className='h-[350] w-full bg-content/30' />
 				<Skeleton className='h-[350] w-full bg-content/30' />
@@ -20,7 +20,7 @@ export default function ArticlesMainContent() {
 		)
 	}
 	return (
-		<div className='grid grid-cols-3 gap-5'>
+		<div className='grid grid-cols-1 md:grid-ols-2 lg:grid-cols-3 gap-5'>
 			{articles.length !== 0 ? (
 				articles.map(article => <PostCard article={article} key={article.id} />)
 			) : (

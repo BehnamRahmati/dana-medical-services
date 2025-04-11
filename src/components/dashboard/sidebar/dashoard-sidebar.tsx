@@ -12,8 +12,9 @@ import {
 	SidebarTrigger,
 } from '@/components/ui/sidebar-custom'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Category, Image, MenuBoard } from 'iconsax-react'
+import { DocumentText, FavoriteChart, Image, MenuBoard } from 'iconsax-react'
 import Link from 'next/link'
+import React from 'react'
 import DashboardSidebarArticles from './sidebar-articles'
 import DashboardSidebarComments from './sidebar-comments'
 import DashboardSidebarMenus from './sidebar-menus'
@@ -22,11 +23,11 @@ import DashboardSidebarUsers from './sidebar-users'
 
 export default function DashboardSidebar() {
 	const isMobile = useIsMobile()
-
+	const [open, setOpen] = React.useState(false)
 	if (isMobile) {
 		return (
 			<SidebarProvider>
-				<Sheet>
+				<Sheet open={open} onOpenChange={setOpen}>
 					<SheetTrigger asChild className='fixed bottom-5 right-5 z-50 bg-secondary size-10 p-2.5 rounded-lg shadow-lg'>
 						<MenuBoard className='stroke-white size-6 ' variant='Broken' />
 					</SheetTrigger>
@@ -39,8 +40,12 @@ export default function DashboardSidebar() {
 						</SheetHeader>
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<Link href='/dashboard' className='flex items-center flex-1 gap-2 group *:shrink-0 '>
-									<Category
+								<Link
+									href='/dashboard'
+									onClick={() => setOpen(prev => !prev)}
+									className='flex items-center flex-1 gap-2 group *:shrink-0 '
+								>
+									<FavoriteChart
 										className='h-8.5 stroke-content transform group-hover:scale-110 transition-transform duration:200 p-1 rounded-lg'
 										variant='Broken'
 									/>
@@ -48,20 +53,46 @@ export default function DashboardSidebar() {
 								</Link>
 							</SidebarMenuItem>
 							<SidebarMenuItem>
-								<DashboardSidebarArticles />
+								<DashboardSidebarArticles setOpen={setOpen} />
 							</SidebarMenuItem>
 							<SidebarMenuItem>
-								<DashboardSidebarServices />
-							</SidebarMenuItem>
-
-							<SidebarMenuItem>
-								<DashboardSidebarMenus />
+								<DashboardSidebarServices setOpen={setOpen} />
 							</SidebarMenuItem>
 							<SidebarMenuItem>
-								<DashboardSidebarUsers />
+								<DashboardSidebarMenus setOpen={setOpen} />
 							</SidebarMenuItem>
 							<SidebarMenuItem>
-								<DashboardSidebarComments />
+								<DashboardSidebarUsers setOpen={setOpen} />
+							</SidebarMenuItem>
+							<SidebarMenuItem>
+								<DashboardSidebarComments setOpen={setOpen} />
+							</SidebarMenuItem>
+							<SidebarMenuItem>
+								<Link
+									href='/dashboard'
+									onClick={() => setOpen(prev => !prev)}
+									className='flex items-center flex-1 gap-2 group *:shrink-0 '
+								>
+									{/* eslint-disable-next-line jsx-a11y/alt-text */}
+									<Image
+										className='h-8.5 stroke-content transform group-hover:scale-110 transition-transform duration:200 p-1 rounded-lg'
+										variant='Broken'
+									/>
+									<p className='text-lg font-bold px-2.5 pb-1 pt-1.5 rounded-lg'>تصاویر</p>
+								</Link>
+							</SidebarMenuItem>
+							<SidebarMenuItem>
+								<Link
+									href='/dashboard/requests'
+									onClick={() => setOpen(prev => !prev)}
+									className='flex items-center flex-1 gap-2 group *:shrink-0 '
+								>
+									<DocumentText
+										className='h-8.5 stroke-content transform group-hover:scale-110 transition-transform duration:200 p-1 rounded-lg'
+										variant='Broken'
+									/>
+									<p className='text-lg font-bold px-2.5 pb-1 pt-1.5 rounded-lg'>درخواست ها</p>
+								</Link>
 							</SidebarMenuItem>
 						</SidebarMenu>
 					</SheetContent>
@@ -83,7 +114,7 @@ export default function DashboardSidebar() {
 					<SidebarMenu>
 						<SidebarMenuItem>
 							<Link href='/dashboard' className='flex items-center flex-1 gap-2 group *:shrink-0 '>
-								<Category
+								<FavoriteChart
 									className='h-8.5 stroke-content transform group-hover:scale-110 transition-transform duration:200 p-1 rounded-lg'
 									variant='Broken'
 								/>
@@ -96,7 +127,6 @@ export default function DashboardSidebar() {
 						<SidebarMenuItem>
 							<DashboardSidebarServices />
 						</SidebarMenuItem>
-
 						<SidebarMenuItem>
 							<DashboardSidebarMenus />
 						</SidebarMenuItem>
@@ -114,6 +144,15 @@ export default function DashboardSidebar() {
 									variant='Broken'
 								/>
 								<p className='text-lg font-bold px-2.5 pb-1 pt-1.5 rounded-lg'>تصاویر</p>
+							</Link>
+						</SidebarMenuItem>
+						<SidebarMenuItem>
+							<Link href='/dashboard/requests' className='flex items-center flex-1 gap-2 group *:shrink-0 '>
+								<DocumentText
+									className='h-8.5 stroke-content transform group-hover:scale-110 transition-transform duration:200 p-1 rounded-lg'
+									variant='Broken'
+								/>
+								<p className='text-lg font-bold px-2.5 pb-1 pt-1.5 rounded-lg'>درخواست ها</p>
 							</Link>
 						</SidebarMenuItem>
 					</SidebarMenu>

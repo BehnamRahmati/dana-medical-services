@@ -40,6 +40,12 @@ export async function GET(req: NextRequest) {
 					image: true,
 				},
 			},
+			ServiceCategory: {
+				select: {
+					slug: true,
+					name: true,
+				},
+			},
 			_count: {
 				select: { likes: true, comments: true, bookmarks: true },
 			},

@@ -1,3 +1,4 @@
+
 type TUser = {
 	id: string
 	name: string
@@ -119,4 +120,21 @@ type TLink = {
 	updatedAt: Date
 }
 
-export { type TArticles, type TCategory, type TComment, type TLink, type TMenu, type TServices, type TTag, type TUser }
+type TRequest = {
+	id :string 
+	name          :string
+	email         :string
+	phone         :string
+	notes         :string
+	service       :TServices
+	expert        :TUser
+	status        :"PENDING" | "ACCEPTED" | "REJECTED" | "COMPLETED"
+	requatedDate  :Date
+	requestedTime :string
+	createdAt :Date
+	updatedAt :Date 
+	serviceId :string
+	expertId  :string
+}
+
+export { type TArticles, type TCategory, type TComment, type TLink, type TMenu, type TServices, type TTag, type TUser , type TRequest}

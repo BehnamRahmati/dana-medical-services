@@ -1,9 +1,5 @@
-import ArticlesCreateForm from '@/components/dashboard/articles/articles-create'
+import ArticlesCreateForm from '@/components/dashboard/articles/create-form/articles-create'
 
 export default function DashboardArticleCreate() {
-	return (
-		<div>
-			<ArticlesCreateForm />
-		</div>
-	)
+	return <ArticlesCreateForm />
 }

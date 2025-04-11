@@ -1,4 +1,5 @@
 'use client'
+import useVisibleSection from '@/hooks/use-visible-section'
 import { useState } from 'react'
 import { z } from 'zod'
 import { Progress } from '../ui/progress'
@@ -16,6 +17,7 @@ type infotype = z.infer<typeof infoSchema>
 export default function HomeRequestForm() {
 	const [progress, setProgress] = useState(1)
 	const [formData, setFormData] = useState<Partial<timetype & servicetype & infotype>>({})
+	const { sectionRef, isVisible } = useVisibleSection()
 
 	const handleBack = () => {
 		setProgress(prev => prev - 1)
@@ -71,7 +73,11 @@ export default function HomeRequestForm() {
 	}
 
 	return (
-		<Section className='bg-primary px-5 lg:px-0' id='request-service'>
+		<Section
+			ref={sectionRef}
+			className={`bg-primary px-2.5 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
+			id='request-service'
+		>
 			<div className='flex flex-col lg:flex-row gap-10 py-10 lg:py-0 lg:px-20 relative'>
 				<div className='*:text-white max-w-lg text-center lg:text-right'>
 					<H2>ثبت درخواست خدمات</H2>
@@ -81,7 +87,7 @@ export default function HomeRequestForm() {
 						خدمات سلامت در محل را برای کاربران تسهیل نماید.
 					</Paragraph>
 				</div>
-				<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-10 shadow-md lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
+				<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-5 md:p-10 shadow-md lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
 					<div className='mb-10'>
 						<H3 className=' w-fit mx-auto'>فرم درخواست خدمات</H3>
 						<Paragraph className='text-center '>

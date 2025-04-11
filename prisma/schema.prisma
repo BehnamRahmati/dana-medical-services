@@ -289,7 +289,7 @@ model Request {
   service       Service       @relation(fields: [serviceId], references: [id])
   expert        User          @relation(fields: [expertId], references: [id])
   status        RequestStatus @default(PENDING)
-  requatedDate  DateTime
+  requestedDate DateTime
   requestedTime String
 
   // times

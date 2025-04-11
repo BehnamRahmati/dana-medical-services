@@ -1,7 +1,5 @@
 'use client'
 
-export default function ArticleTableOfContent({ content }: { content: string }) {
-	console.warn(content)
-
+export default function ArticleTableOfContent() {
 	return <div className='HI'></div>
 }

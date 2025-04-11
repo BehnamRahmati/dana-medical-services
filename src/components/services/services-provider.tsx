@@ -18,6 +18,7 @@ export default function ServicesProvider({ children }: { children: React.ReactNo
 
 	const url = searchParams?.size !== 0 ? `?${searchParams}` : ''
 	const { data, isLoading } = useSWR(`/api/services${url}`, fetchServices)
+	console.warn(data)
 
 	return <ServicesContext.Provider value={{ data: data || [], isLoading }}>{children}</ServicesContext.Provider>
 }

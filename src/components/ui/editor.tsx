@@ -1,15 +1,35 @@
 'use client'
 
 import axios from 'axios'
-import { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { RefObject, useRef } from 'react'
 import ReactQuill from 'react-quill-new'
+import { Skeleton } from './skeleton'
 
 // Import Quill styles
 import 'react-quill-new/dist/quill.snow.css' // For snow theme
 
+const ReactQuillComponent = dynamic(
+	async () => {
+		const { default: RQ } = await import('react-quill-new')
+
+		const Component = ({ forwardedRef, ...props }: { forwardedRef: RefObject<ReactQuill> } & ReactQuill.ReactQuillProps) => (
+			<RQ ref={forwardedRef} {...props} />
+		)
+
+		Component.displayName = 'ReactQuillComponent'
+		return Component
+	},
+	{
+		ssr: false,
+		loading: () => <Skeleton className='h-[600px] bg-content/10 w-full' />,
+	},
+)
+
+ReactQuillComponent.displayName = 'ReactQuillComponent'
+
 function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: string) => void; editorValue: string }) {
 	const quillRef = useRef<ReactQuill | null>(null)
-	const [isLoaded, setIsLoaded] = useState(false)
 
 	const uploadImage = async (file: File): Promise<string> => {
 		const formData = new FormData()
@@ -72,24 +92,16 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 		},
 	}
 
-	useEffect(() => {
-		if (typeof window !== 'undefined') {
-			setIsLoaded(true)
-		}
-	}, [])
-
 	return (
 		<div dir='ltr'>
-			{isLoaded && (
-				<ReactQuill
-					ref={quillRef}
-					className='h-[600px] mb-32 lg:mb-16'
-					theme='snow'
-					value={editorValue}
-					onChange={e => onChangeEditor(e)}
-					modules={quillModules}
-				/>
-			)}
+			<ReactQuillComponent
+				forwardedRef={quillRef as RefObject<ReactQuill>}
+				className='h-[600px] mb-32 lg:mb-16'
+				theme='snow'
+				value={editorValue}
+				onChange={e => onChangeEditor(e)}
+				modules={quillModules}
+			/>
 		</div>
 	)
 }

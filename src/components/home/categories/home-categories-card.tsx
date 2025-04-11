@@ -1,6 +1,6 @@
 import { TCategory } from '@/lib/types'
 import Link from 'next/link'
-import { H2 } from '../ui/typography'
+import { H2 } from '../../ui/typography'
 
 export default function HomeCategoriesCard({ category }: { category: TCategory }) {
 	return (

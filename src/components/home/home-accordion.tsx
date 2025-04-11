@@ -1,9 +1,15 @@
+'use client'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import useVisibleSection from '@/hooks/use-visible-section'
 import Section from '../ui/section'
 import Title from '../ui/title'
 export default function HomeAccordion() {
+	const { sectionRef, isVisible } = useVisibleSection()
 	return (
-		<Section>
+		<Section
+			ref={sectionRef}
+			className={`px-2.5 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
+		>
 			<div className='lg:max-w-xl xl:max-w-3xl px-5 py-5 lg:px-20 mx-auto'>
 				<div className='mx-auto w-fit'>
 					<Title> پرسش های متداول </Title>
