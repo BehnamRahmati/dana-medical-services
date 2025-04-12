@@ -1,4 +1,4 @@
-import ServiceCreateForm from '@/components/dashboard/services/service-create'
+import ServiceCreateForm from '@/components/dashboard/services/create-form/service-create'
 
 export default function CreateServices() {
 	return (

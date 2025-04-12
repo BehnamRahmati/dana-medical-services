@@ -6,15 +6,14 @@ import DashboardExcerptInput from '../../form/excerpt-input'
 import DashboardSlugInput from '../../form/slug-input'
 import DashboardThumbnail from '../../form/thumbnail-input'
 import DashboardTitleInput from '../../form/title-input'
-import { createFormSchema } from '../lib/schemas'
+import { editFormSchema } from '../lib/schemas'
 
 type TProps = {
-	form: UseFormReturn<z.infer<typeof createFormSchema>>
+	form: UseFormReturn<z.infer<typeof editFormSchema>>
 	imageUrl: string
 	setImageUrl: React.Dispatch<React.SetStateAction<string>>
 }
-
-export default function CreateFormMain({ form, imageUrl, setImageUrl }: TProps) {
+export default function EditFormMain({ form, imageUrl, setImageUrl }: TProps) {
 	return (
 		<div className='flex-1 flex flex-col gap-10 bg-accent p-5 rounded-lg'>
 			<DashboardThumbnail form={form} imageUrl={imageUrl} setImageUrl={setImageUrl} />

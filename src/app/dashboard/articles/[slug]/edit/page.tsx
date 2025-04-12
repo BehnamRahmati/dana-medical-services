@@ -1,4 +1,4 @@
-import ArticlesEditForm from '@/components/dashboard/articles/article-edit'
+import ArticlesEditForm from '@/components/dashboard/articles/edit-form/article-edit'
 import { TArticles } from '@/lib/types'
 import axios from 'axios'
 

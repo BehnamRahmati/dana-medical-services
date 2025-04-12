@@ -1,4 +1,4 @@
-import ServiceEditForm from '@/components/dashboard/services/service-edit'
+import ServiceEditForm from '@/components/dashboard/services/edit-form/service-edit'
 import { TServices } from '@/lib/types'
 import axios from 'axios'
 
