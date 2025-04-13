@@ -162,7 +162,7 @@ model Comment {
   approved Boolean @default(false)
 
   // relations
-  article Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  article Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes   User[]    @relation("likedcomments")
   parent  Comment?  @relation("replies", fields: [commentId], references: [id], onDelete: Cascade)

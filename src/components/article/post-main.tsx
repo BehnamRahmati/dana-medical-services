@@ -3,7 +3,7 @@ import PostComment from './post-comment'
 import PostContent from './post-content'
 import PostContentFooter from './post-content-footer'
 import PostContentHeader from './post-content-header'
-import PostSimilars from './post-similars'
+import ArticleSimilars from './similars/article-similars'
 
 export default function PostMain({ article }: { article: TArticles }) {
 	return (
@@ -11,6 +11,7 @@ export default function PostMain({ article }: { article: TArticles }) {
 			<main className='bg-accent border border-border p-2.5 md:p-5 lg:p-10 rounded-xl'>
 				<PostContentHeader
 					category={article.category.name}
+					categorySlug={article.category.slug}
 					readTime={article.readTime}
 					title={article.title}
 					thumbnail={article.thumbnail}
@@ -18,7 +19,7 @@ export default function PostMain({ article }: { article: TArticles }) {
 				<PostContent content={article.content} />
 				<PostContentFooter article={article} />
 			</main>
-			<PostSimilars articleId={article.id} categorySlug={article.category.slug} />
+			<ArticleSimilars articleId={article.id} categorySlug={article.category.slug} />
 			<PostComment />
 		</div>
 	)

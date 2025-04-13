@@ -28,7 +28,7 @@ export default function PostSidebarRelated() {
 			</div>
 			<ul className='flex flex-col mt-5 gap-2'>
 				{articles.slice(0, 4).map(article => (
-					<li key={article.id}>
+					<li key={'related' + article.id}>
 						<PostSidebarRelatedCard slug={article.slug} title={article.title} />
 					</li>
 				))}

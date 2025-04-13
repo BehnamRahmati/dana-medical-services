@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 export async function GET() {
 	const articles = await prisma.article.findMany({
 		select: {
+			id: true,
 			title: true,
 			readTime: true,
 			thumbnail: true,

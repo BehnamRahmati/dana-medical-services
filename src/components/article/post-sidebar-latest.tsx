@@ -29,7 +29,7 @@ export default function PostSidebarLatest() {
 			</div>
 			<ul className='flex flex-col mt-5 gap-2'>
 				{articles.map(article => (
-					<li key={article.id}>
+					<li key={'ltst' + article.id}>
 						<PostSidebarLatestCard article={article} />
 					</li>
 				))}

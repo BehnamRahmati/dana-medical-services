@@ -45,6 +45,7 @@ export const authOptions: AuthOptions = {
 
 			if (existingUser) {
 				user.id = existingUser.id
+				user.role = existingUser.role
 			}
 
 			return true
@@ -53,6 +54,7 @@ export const authOptions: AuthOptions = {
 			// Handle user ID for both credential and OAuth logins
 			if (user) {
 				token.userId = user.id
+				token.userRole = user.role
 			}
 
 			// Update session after user update
@@ -72,6 +74,7 @@ export const authOptions: AuthOptions = {
 				// For TypeScript validation
 				session.user.name = token.name as string
 				session.user.email = token.email as string
+				session.user.role = token.userRole as 'ADMIN' | 'USER' | 'MODERATOR'
 			}
 			return session
 		},

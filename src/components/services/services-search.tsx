@@ -12,7 +12,7 @@ export default function ServicesSearch() {
 	const [term, setTerm] = React.useState('')
 	const router = useRouter()
 	return (
-		<div className=' px-5 max-w-xl mx-auto'>
+		<div className='px-2.5  lg:px-5 max-w-xl mx-auto'>
 			<div className='flex items-center justify-center gap-2 '>
 				<FilterSearch className='size-10 fill-content' variant='Bulk' />
 				<h3 className='text-2xl font-bold mt-2'> جستجوی خدمات</h3>

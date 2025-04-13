@@ -15,9 +15,13 @@ export default function ArticleComments() {
 
 	return (
 		<ul className='flex flex-col gap-10 mt-10'>
-			{comments.length > 0
-				? comments.map(comment => <PostCommentItem comment={comment} key={comment.id} />)
-				: 'no comment yet'}
+			{comments.length > 0 ? (
+				comments.map(comment => <PostCommentItem comment={comment} key={comment.id} />)
+			) : (
+				<div className='text-center p-2.5 lg:p-5 border border-border rounded-lg bg-muted '>
+					هنوز هیچ دیدگاهی در مورد این مقاله ثبت نشده است.
+				</div>
+			)}
 		</ul>
 	)
 }

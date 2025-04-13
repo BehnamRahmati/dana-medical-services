@@ -11,12 +11,12 @@ export default function ServicesCategories() {
 	const { data: categories, isLoading } = useSWR('/api/dashboard/services/categories', fetchCategory)
 
 	return (
-		<div className='max-w-xl mx-auto py-10 px-5'>
-			<div className='flex items-center gap-2'>
+		<div className='max-w-xl mx-auto py-5 lg:py-10 px-2.5 lg:px-5'>
+			<div className='flex items-center justify-center lg:justify-start gap-2'>
 				<HashtagSquare className='size-10 fill-content' variant='Bulk' />
 				<h3 className='text-2xl font-bold mt-2'>دسته بندی های خدمات</h3>
 			</div>
-			<ul className='flex items-center flex-wrap mt-5 gap-2'>
+			<ul className='flex items-center justify-center lg:justify-start flex-wrap mt-5 gap-2'>
 				{isLoading || !categories ? (
 					<>
 						<Skeleton className='h-8 w-28 bg-content/20' />

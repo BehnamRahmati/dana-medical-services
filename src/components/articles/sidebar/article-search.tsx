@@ -12,10 +12,10 @@ export default function ArticleSearch() {
 	const [term, setTerm] = React.useState('')
 	const router = useRouter()
 	return (
-		<div className='border border-border rounded-lg py-10 px-5'>
+		<div className='border border-border rounded-lg py-5 lg:py-10 px-2.5 lg:px-5'>
 			<div className='flex items-center gap-2'>
-				<FilterSearch className='size-10 fill-content' variant='Bulk' />
-				<h3 className='text-2xl font-bold mt-2'> جستجوی مقالات</h3>
+				<FilterSearch className='size-8 lg:size-10 fill-content' variant='Bulk' />
+				<h3 className='text-xl lg:text-2xl font-bold mt-1 lg:mt-2'> جستجوی مقالات</h3>
 			</div>
 			<div className='flex items-center mt-5 relative'>
 				<Input

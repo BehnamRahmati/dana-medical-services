@@ -4,6 +4,10 @@ import HeaderServicesLinks from './header-services-links'
 
 const links = [
 	{
+		title: 'متخصصین',
+		link: '/experts',
+	},
+	{
 		title: 'رزرو خدمات',
 		link: '/#request-service',
 	},
@@ -28,7 +32,6 @@ export default function HeaderLinks({ setOpen }: { setOpen?: React.Dispatch<Reac
 				<nav>
 					<ul className='flex flex-col lg:flex-row lg:items-center gap-5'>
 						<HeaderServicesLinks setOpen={setOpen} />
-						<li>متخصصین</li>
 						{links.map(link => (
 							<li key={link.title}>
 								<Link href={link.link} onClick={() => setOpen && setOpen(prev => !prev)}>

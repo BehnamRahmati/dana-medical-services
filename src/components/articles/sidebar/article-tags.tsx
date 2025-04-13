@@ -11,12 +11,8 @@ export default function ArticleTags() {
 	const { currentParams, pathname } = useQueries()
 	const { data: tags, isLoading } = useSWR('/api/dashboard/tags', fetchTags)
 
-	return (
-		<div className='border border-border rounded-lg py-10 px-5'>
-			<div className='flex items-center gap-2'>
-				<Tag2 className='size-10 fill-content' variant='Bulk' />
-				<h3 className='text-2xl font-bold mt-2'>تگ های مقالات</h3>
-			</div>
+	const renderTags = () => {
+		return (
 			<ul className='flex items-center flex-wrap mt-5 gap-2'>
 				{isLoading || !tags ? (
 					<>
@@ -37,6 +33,16 @@ export default function ArticleTags() {
 					})
 				)}
 			</ul>
+		)
+	}
+
+	return (
+		<div className='border border-border rounded-lg py-10 px-5'>
+			<div className='flex items-center gap-2'>
+				<Tag2 className='size-10 fill-content' variant='Bulk' />
+				<h3 className='text-2xl font-bold mt-2'>تگ های مقالات</h3>
+			</div>
+			{renderTags()}
 		</div>
 	)
 }

@@ -23,10 +23,16 @@ export async function GET(req: NextRequest) {
 				return { views: 'asc' as const }
 			case 'views_desc':
 				return { views: 'desc' as const }
-			case 'name_asc':
-				return { name: 'asc' as const }
-			case 'name_desc':
-				return { name: 'desc' as const }
+			case 'comments_asc':
+				return { comments: { _count: 'asc' as const } }
+			case 'comments_desc':
+				return { comments: { _count: 'desc' as const } }
+			case 'createdAt_asc':
+				return { createdAt: 'asc' as const }
+			case 'likes_asc':
+				return { likes: { _count: 'asc' as const } }
+			case 'likes_desc':
+				return { likes: { _count: 'desc' as const } }
 			default:
 				return { createdAt: 'desc' as const }
 		}

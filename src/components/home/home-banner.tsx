@@ -4,6 +4,7 @@ import Link from 'next/link'
 import bannerImage from '../../../public/static/Doctors-bro.png'
 import curlyArrow from '../../../public/static/curly-arrow.svg'
 import Section from '../ui/section'
+
 export default function Homebanner() {
 	return (
 		<Section>
@@ -25,7 +26,7 @@ export default function Homebanner() {
 						</Link>
 					</div>
 
-					<ul className='grid grid-cols-1 md:grid-cols-2 gap-10 *:flex *:items-center *:gap-2 *:text-xl  *:font-bold w-fit my-20'>
+					<ul className='grid grid-cols-1 md:grid-cols-2 place-items-center gap-10 w-full *:flex *:items-center *:gap-2 *:text-xl  *:font-bold lg:w-fit my-20'>
 						<li>
 							<div className='flex flex-col'>
 								<Briefcase size='27' className='fill-red-400' variant='Bulk' />
@@ -64,7 +65,7 @@ export default function Homebanner() {
 				<div className='image md:w-1/2'>
 					<Image src={bannerImage} width={500} height={300} alt='banner' className='size-full' />
 				</div>
-				<div className='absolute top-11/12 lg:top-10/12 left-1/12 lg:left-1/2 block size-32 transform rotate-90'>
+				<div className='absolute top-full -mt-10 lg:top-10/12 left-1/12 lg:left-1/2 block size-32 transform rotate-90'>
 					<Image src={curlyArrow} width={500} height={300} alt='banner' className='size-full' />
 				</div>
 			</div>
