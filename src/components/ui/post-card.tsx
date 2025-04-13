@@ -1,9 +1,9 @@
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import { Bookmark2, Heart, MessageText1, Watch } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function PostCard({ article }: { article: TArticles }) {
+export default function PostCard({ article }: { article: TArticle }) {
 	return (
 		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-border group'>
 			<div className='bg-border w-full h-52 rounded-xl overflow-hidden'>
@@ -40,21 +40,21 @@ export default function PostCard({ article }: { article: TArticles }) {
 				<ul className='flex gap-2.5 items-center'>
 					<li className='text-secondary bg-secondary/20 p-1 rounded-sm flex items-center'>
 						<Bookmark2 size='15' className='fill-secondary' variant='Bulk' />
-						<span className='text-xs mr-1 -mb-1'>{article._count.bookmarks}</span>
+						<span className='text-xs mr-1 -mb-1'>{article._count?.bookmarks}</span>
 					</li>
 					<li className='text-red-500 bg-red-500/20 p-1 rounded-sm flex items-center'>
 						<Heart size='15' className='fill-red-500' variant='Bulk' />
-						<span className='text-xs mr-1 -mb-1'>{article._count.likes}</span>
+						<span className='text-xs mr-1 -mb-1'>{article._count?.likes}</span>
 					</li>
 					<li className='text-primary bg-primary/20 p-1 rounded-sm flex items-center'>
 						<MessageText1 size='15' className='fill-primary' variant='Bulk' />
-						<span className='text-xs mr-1 -mb-1'>{article._count.comments}</span>
+						<span className='text-xs mr-1 -mb-1'>{article._count?.comments}</span>
 					</li>
 				</ul>
 				<p className='text-sm text-slate-400 flex items-center gap-1'>
 					<Watch size='15' className='fill-content' variant='Bulk' />
 					<span>زمان مطالعه :</span>
-					<span>{article.readTime} دقیقه</span>
+					<span>{article.read} دقیقه</span>
 				</p>
 			</div>
 		</div>

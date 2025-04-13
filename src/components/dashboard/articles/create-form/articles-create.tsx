@@ -23,7 +23,7 @@ export default function ArticlesCreateForm() {
 			tag: '',
 			category: '',
 			thumbnail: '',
-			readTime: '0',
+			read: '0',
 			author: '',
 			content: '',
 			status: 'DRAFT',
@@ -39,7 +39,7 @@ export default function ArticlesCreateForm() {
 		formData.append('tag', values.tag)
 		formData.append('category', values.category)
 		formData.append('author', values.author)
-		formData.append('readTime', values.readTime.toString())
+		formData.append('read', values.read.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
 		return await axios.post('/api/dashboard/articles', formData, {

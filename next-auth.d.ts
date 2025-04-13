@@ -1,3 +1,4 @@
+import { TRole } from '@/lib/types'
 import 'next-auth'
 
 declare module 'next-auth' {
@@ -7,19 +8,19 @@ declare module 'next-auth' {
 			name?: string | null
 			email?: string | null
 			image?: string | null
-			role: 'ADMIN' | 'USER' | 'MODERATOR'
+			role?: TRole
 		}
 	}
 
 	interface User {
 		id: string
-		role: 'ADMIN' | 'USER' | 'MODERATOR'
+		role: TRole
 	}
 }
 
 declare module 'next-auth/jwt' {
 	interface JWT {
 		userId: string
-		userRole: 'ADMIN' | 'USER' | 'MODERATOR'
+		userRole: TRole
 	}
 }

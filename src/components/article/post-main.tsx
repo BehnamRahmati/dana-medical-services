@@ -1,18 +1,18 @@
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import PostComment from './post-comment'
 import PostContent from './post-content'
 import PostContentFooter from './post-content-footer'
 import PostContentHeader from './post-content-header'
 import ArticleSimilars from './similars/article-similars'
 
-export default function PostMain({ article }: { article: TArticles }) {
+export default function PostMain({ article }: { article: TArticle }) {
 	return (
 		<div className='flex-1'>
 			<main className='bg-accent border border-border p-2.5 md:p-5 lg:p-10 rounded-xl'>
 				<PostContentHeader
 					category={article.category.name}
 					categorySlug={article.category.slug}
-					readTime={article.readTime}
+					readTime={article.read}
 					title={article.title}
 					thumbnail={article.thumbnail}
 				/>

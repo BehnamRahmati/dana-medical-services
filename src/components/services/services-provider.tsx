@@ -1,13 +1,13 @@
 'use client'
 
 import { fetchServices } from '@/lib/helpers'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import useSWR from 'swr'
 
 type TServicesContext = {
-	data: TServices[]
+	data: TService[]
 	isLoading: boolean
 }
 

@@ -2,7 +2,7 @@
 
 import { Form } from '@/components/ui/form'
 
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
@@ -13,7 +13,7 @@ import { editFormSchema } from '../lib/schemas'
 import EditFormMain from './edit-form-main'
 import EditFormSidebar from './edit-form-sidebar'
 
-export default function ArticlesEditForm({ article }: { article: TArticles }) {
+export default function ArticlesEditForm({ article }: { article: TArticle }) {
 	const [imageUrl, setImageUrl] = useState(article.thumbnail)
 
 	const form = useForm<z.infer<typeof editFormSchema>>({
@@ -25,7 +25,7 @@ export default function ArticlesEditForm({ article }: { article: TArticles }) {
 			tag: (article.tags.length > 0 && article.tags[0].id) || '',
 			category: article.categoryId,
 			thumbnail: '',
-			readTime: article.readTime.toString(),
+			read: article.read.toString(),
 			author: article.userId,
 			content: article.content,
 			status: article.status,
@@ -43,7 +43,7 @@ export default function ArticlesEditForm({ article }: { article: TArticles }) {
 		formData.append('tag', values.tag)
 		formData.append('category', values.category)
 		formData.append('author', values.author)
-		formData.append('readTime', values.readTime.toString())
+		formData.append('read', values.read.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
 		formData.append('id', article.id)

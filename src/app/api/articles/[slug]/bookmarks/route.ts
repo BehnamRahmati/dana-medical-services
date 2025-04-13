@@ -12,14 +12,14 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 
 		const user = await prisma.user.findUnique({
 			where: { id: userId },
-			include: { bookmarkedArticles: true },
+			include: { bookmarks: { select: { article: true } } },
 		})
 
 		if (!user) {
 			throw new Error('user شناسایی نشد')
 		}
 
-		const alreadyBookmarked = user.bookmarkedArticles.some(article => article.slug === slug)
+		const alreadyBookmarked = user.bookmarks.some(bookmark => bookmark.article?.slug === slug)
 
 		const data = alreadyBookmarked
 			? { bookmarks: { disconnect: { id: userId } } }

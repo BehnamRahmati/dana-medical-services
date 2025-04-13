@@ -69,7 +69,7 @@ export default function ArticlesMainHeader() {
 				</Select>
 			</div>
 
-			<div className='flex-1'>
+			<div className='flex-1 lg:flex-none'>
 				<button
 					type='button'
 					aria-label='open menu'

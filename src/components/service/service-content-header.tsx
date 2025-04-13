@@ -2,7 +2,7 @@ import { Category, Clock } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-type TProps = { title: string; readTime: number; thumbnail: string; category: string; categorySlug: string }
+type TProps = { title: string; readTime: number; thumbnail: string; category?: string; categorySlug?: string }
 
 export default function ServiceContentHeader({ category, categorySlug, title, readTime, thumbnail }: TProps) {
 	return (

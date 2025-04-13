@@ -2,7 +2,7 @@
 
 import { DataTable, DataTableFilters, DatatablePagination } from '@/components/ui/data-table'
 import { Input } from '@/components/ui/input'
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -17,7 +17,7 @@ import {
 
 import React from 'react'
 
-export default function ArticlesDataTable({ data, columns }: { data: TArticles[]; columns: ColumnDef<TArticles>[] }) {
+export default function ArticlesDataTable({ data, columns }: { data: TArticle[]; columns: ColumnDef<TArticle>[] }) {
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})

@@ -1,8 +1,8 @@
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import { Clock, Profile } from 'iconsax-react'
 import Link from 'next/link'
 
-export default function ServiceSidebarLatestCard({ service }: { service: TServices }) {
+export default function ServiceSidebarLatestCard({ service }: { service: TService }) {
 	return (
 		<div className='bg-accent rounded-md py-5'>
 			<Link
@@ -19,7 +19,7 @@ export default function ServiceSidebarLatestCard({ service }: { service: TServic
 				<p className='text-xs pr-1'>
 					<Clock className='size-3 fill-content inline-block ml-1' variant='Bulk' />
 					<span>زمان مطالعه:</span>
-					<span>{service.readTime} دقیقه</span>
+					<span>{service.read} دقیقه</span>
 				</p>
 			</div>
 		</div>

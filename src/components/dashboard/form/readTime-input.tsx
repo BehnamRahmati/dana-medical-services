@@ -13,13 +13,13 @@ type SupportedSchema =
 	| z.infer<typeof editServiceSchema>
 
 // Generic type that ensures T has a readtime field and is one of our supported schemas
-type TProps<T extends SupportedSchema & { readTime: string }> = {
+type TProps<T extends SupportedSchema & { read: string }> = {
 	form: UseFormReturn<T>
 	label: string
 	placeholder?: string
 }
 
-export default function DashboardReadTimeInput<T extends SupportedSchema & { readTime: string }>({
+export default function DashboardReadTimeInput<T extends SupportedSchema & { read: string }>({
 	label,
 	form,
 	placeholder,

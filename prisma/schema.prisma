@@ -30,17 +30,15 @@ model User {
   deviceReady      Boolean   @default(false) // Tracks whether the user registered their notification permissions
 
   // relations
-  accounts           Account[]
-  sessions           Session[]
-  articles           Article[] @relation("articleAuthor")
-  likedArticles      Article[] @relation("likedArticles")
-  bookmarkedArticles Article[] @relation("bookmarkedArticles")
-  likedComments      Comment[] @relation("likedcomments")
-  comments           Comment[]
-  likedServices      Service[] @relation("likedServices")
-  BookmarkedServices Service[] @relation("bookmarkedServices")
-  services           Service[] @relation("serviceAuthor")
-  Request            Request[]
+  accounts  Account[]
+  sessions  Session[]
+  articles  Article[]
+  comments  Comment[]
+  services  Service[]
+  requests  Request[]
+  likes     Like[]
+  views     View[]
+  bookmarks Bookmark[]
 }
 
 model Account {
@@ -77,12 +75,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum Role {
-  USER
-  ADMIN
-  MODERATOR
-}
-
 model Article {
   id String @id @default(cuid())
 
@@ -92,43 +84,41 @@ model Article {
   excerpt   String
   thumbnail String
   content   String
-  views     Int    @default(0)
-  readTime  Int    @default(0)
+  images    File[]
+  read      Int    @default(0)
   status    Status @default(DRAFT)
 
   // relations
-  author    User      @relation("articleAuthor", fields: [userId], references: [id])
-  category  Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  author    User       @relation(fields: [userId], references: [id])
+  category  Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   tags      Tag[]
   comments  Comment[]
-  likes     User[]    @relation("likedArticles")
-  bookmarks User[]    @relation("bookmarkedArticles")
+  likes     Like[]
+  views     View[]
+  bookmarks Bookmark[]
 
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // relatins identifiers
+  // relations identifiers
   userId     String
   categoryId String
 
   @@unique([slug, id])
 }
 
-enum Status {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
-}
-
 model Category {
-  id   String @id @default(cuid())
+  id String @id @default(cuid())
+
   // fields
-  name String
-  slug String @unique
+  name  String
+  slug  String  @unique
+  image String?
 
   // relations
   articles Article[]
+  services Service[]
 
   // times
   createdAt DateTime @default(now())
@@ -141,11 +131,12 @@ model Tag {
   id String @id @default(cuid())
 
   // fields
-  name String
-  slug String @unique
+  name  String
+  slug  String  @unique
+  image String?
 
   // relations
-  Article Article[]
+  articles Article[]
 
   // times
   createdAt DateTime @default(now())
@@ -164,7 +155,7 @@ model Comment {
   // relations
   article Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  likes   User[]    @relation("likedcomments")
+  likes   Like[]
   parent  Comment?  @relation("replies", fields: [commentId], references: [id], onDelete: Cascade)
   replies Comment[] @relation("replies")
   service Service?  @relation(fields: [serviceId], references: [id])
@@ -174,7 +165,7 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   // relation identifiers
-  articleId String
+  articleId String?
   userId    String
   serviceId String?
   commentId String?
@@ -184,29 +175,30 @@ model Service {
   id String @id @default(cuid())
 
   // fields
-  title           String
-  slug            String           @unique
-  excerpt         String
-  thumbnail       String
-  content         String
-  views           Int              @default(0)
-  author          User             @relation("serviceAuthor", fields: [userId], references: [id], onDelete: Cascade)
-  status          Status           @default(DRAFT)
-  readTime        Int              @default(0)
-  ServiceCategory ServiceCategory? @relation(fields: [serviceCategoryId], references: [id])
+  title     String
+  slug      String    @unique
+  excerpt   String
+  thumbnail String
+  images    File[]
+  content   String
+  author    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status    Status    @default(DRAFT)
+  read      Int       @default(0)
+  category  Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   // relations 
   comments     Comment[]
-  likes        User[]        @relation("likedServices")
-  bookmarks    User[]        @relation("bookmarkedServices")
   serviceItems ServiceItem[]
+  likes        Like[]
+  views        View[]
+  bookmarks    Bookmark[]
+  requests     Request[]
 
   // times
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  userId            String
-  Request           Request[]
-  serviceCategoryId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     String
+  categoryId String?
 
   @@unique([slug, id])
 }
@@ -227,31 +219,13 @@ model ServiceItem {
   serviceId String
 }
 
-model ServiceCategory {
-  id String @id @default(cuid())
-
-  // fields
-  name  String
-  slug  String  @unique
-  image String?
-
-  // relations
-  services Service[]
-
-  // times
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([slug, id])
-}
-
 model Menu {
   id String @id @default(cuid())
 
   name   String
   links  Link[]
   parent Menu?   @relation("MenuHierarchy", fields: [menuId], references: [id])
-  Menu   Menu[]  @relation("MenuHierarchy")
+  menu   Menu[]  @relation("MenuHierarchy")
   menuId String?
 
   // times
@@ -294,6 +268,11 @@ model File {
   // times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  article   Article? @relation(fields: [articleId], references: [id])
+  articleId String?
+  service   Service? @relation(fields: [serviceId], references: [id])
+  serviceId String?
 }
 
 model Request {
@@ -315,6 +294,82 @@ model Request {
   updatedAt DateTime @updatedAt
   serviceId String
   expertId  String
+}
+
+model Like {
+  id String @id @default(cuid())
+
+  // relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // relation identifiers
+  userId    String
+  articleId String?
+  serviceId String?
+  commentId String?
+
+  @@unique([userId, articleId, serviceId, commentId])
+}
+
+model View {
+  id String @id @default(cuid())
+
+  // relations
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  // fields
+  ipAddress String?
+  userAgent String?
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // relation identifiers
+  userId    String?
+  articleId String?
+  serviceId String?
+
+  @@unique([userId, articleId, serviceId, ipAddress])
+}
+
+model Bookmark {
+  id String @id @default(cuid())
+
+  // relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  // times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // relation identifiers
+  userId    String
+  articleId String?
+  serviceId String?
+
+  @@unique([userId, articleId, serviceId])
+}
+
+enum Role {
+  USER
+  SUPERADMIN
+  ADMIN
+  EXPERT
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 enum RequestStatus {

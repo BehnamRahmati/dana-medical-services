@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
 	const category = searchParams.get('category')
 	const sort = searchParams.get('sort') || 'views_asc'
 	const where = {
-		...(category && { ServiceCategory: { is: { slug: category } } }),
+		...(category && { category: { is: { slug: category } } }),
 		...(search && {
 			title: {
 				contains: search,
@@ -18,13 +18,19 @@ export async function GET(req: NextRequest) {
 	const orderBy = (() => {
 		switch (sort) {
 			case 'views_asc':
-				return { views: 'asc' as const }
+				return { views: { _count: 'asc' as const } }
 			case 'views_desc':
-				return { views: 'desc' as const }
-			case 'name_asc':
-				return { name: 'asc' as const }
-			case 'name_desc':
-				return { name: 'desc' as const }
+				return { views: { _count: 'desc' as const } }
+			case 'comments_asc':
+				return { comments: { _count: 'asc' as const } }
+			case 'comments_desc':
+				return { comments: { _count: 'desc' as const } }
+			case 'createdAt_asc':
+				return { createdAt: 'asc' as const }
+			case 'likes_asc':
+				return { likes: { _count: 'asc' as const } }
+			case 'likes_desc':
+				return { likes: { _count: 'desc' as const } }
 			default:
 				return { createdAt: 'desc' as const }
 		}
@@ -40,7 +46,7 @@ export async function GET(req: NextRequest) {
 					image: true,
 				},
 			},
-			ServiceCategory: {
+			category: {
 				select: {
 					slug: true,
 					name: true,

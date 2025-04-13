@@ -1,8 +1,8 @@
 import ServiceEditForm from '@/components/dashboard/services/edit-form/service-edit'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import axios from 'axios'
 
-async function getService(url: string): Promise<TServices> {
+async function getService(url: string): Promise<TService> {
 	const response = await axios.get(url)
 	return await response.data.service
 }
@@ -11,9 +11,5 @@ export default async function EditService({ params }: { params: Promise<{ slug: 
 	const slug = (await params).slug
 	const service = await getService(`http://localhost:3000/api/dashboard/services/${slug}`)
 
-	return (
-		<div>
-			<ServiceEditForm service={service} />
-		</div>
-	)
+	return <ServiceEditForm service={service} />
 }

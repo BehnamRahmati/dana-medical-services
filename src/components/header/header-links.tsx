@@ -34,7 +34,11 @@ export default function HeaderLinks({ setOpen }: { setOpen?: React.Dispatch<Reac
 						<HeaderServicesLinks setOpen={setOpen} />
 						{links.map(link => (
 							<li key={link.title}>
-								<Link href={link.link} onClick={() => setOpen && setOpen(prev => !prev)}>
+								<Link
+									href={link.link}
+									className='hover:text-secondary'
+									onClick={() => setOpen && setOpen(prev => !prev)}
+								>
 									{link.title}
 								</Link>
 							</li>

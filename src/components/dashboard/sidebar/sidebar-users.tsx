@@ -13,7 +13,7 @@ const links = [
 	{
 		label: 'مشاهده همه  کاربران',
 		icon: <HambergerMenu className='size-5 stroke-content/60 ' variant='Broken' />,
-		href: '/dashboard/usres',
+		href: '/dashboard/users',
 	},
 ]
 

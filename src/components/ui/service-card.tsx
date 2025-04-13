@@ -1,8 +1,8 @@
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import { ArrowLeft3 } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
-export default function ServicesCard({ service }: { service: TServices }) {
+export default function ServicesCard({ service }: { service: TService }) {
 	return (
 		<div className='bg-accent border border-border rounded-xl mt-12 group'>
 			<div className='bg-primary/60 w-11/12 rounded-xl h-44 mx-auto -mt-12 overflow-hidden flex items-center justify-center'>
@@ -16,8 +16,8 @@ export default function ServicesCard({ service }: { service: TServices }) {
 				/>
 			</div>
 			<div className='info w-11/12 mx-auto'>
-				<Link href={`/services?category:${service.ServiceCategory.slug}`} className='text-secondary mt-3 text-sm block'>
-					{service.ServiceCategory.name}
+				<Link href={`/services?category:${service.category?.slug}`} className='text-secondary mt-3 text-sm block'>
+					{service.category?.name}
 				</Link>
 				<Link
 					href={`/services/${service.slug}`}

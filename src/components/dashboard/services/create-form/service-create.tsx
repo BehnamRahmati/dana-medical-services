@@ -21,7 +21,7 @@ export default function ServiceCreateForm() {
 			slug: '',
 			excerpt: '',
 			thumbnail: '',
-			readTime: '',
+			read: '',
 			author: '',
 			content: '',
 			status: 'DRAFT',
@@ -36,7 +36,7 @@ export default function ServiceCreateForm() {
 		formData.append('slug', values.slug)
 		formData.append('excerpt', values.excerpt)
 		formData.append('author', values.author)
-		formData.append('readTime', values.readTime.toString())
+		formData.append('read', values.read.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
 

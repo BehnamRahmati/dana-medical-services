@@ -14,7 +14,7 @@ type TProps = {
 export default function EditServiceFormSidebar({ form }: TProps) {
 	return (
 		<div className='md:w-80 flex flex-col gap-10 bg-accent p-5 rounded-lg'>
-			<DashboardCategoriesSelect label='دسته بندی خدمت :' form={form} />
+			<DashboardCategoriesSelect url='/api/dashboard/services/categories' label='دسته بندی خدمت :' form={form} />
 			<DashboardUsersSelect label='نویسنده خدمت :' form={form} />
 			<DashboardReadTimeInput label='زمان مطالعه خدمت :' form={form} />
 			<DashboardStatusSelect label='وضعیت خدمت :' form={form} />

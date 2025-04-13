@@ -1,13 +1,13 @@
 'use client'
 
 import { fetchArticles } from '@/lib/helpers'
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import useSWR from 'swr'
 
 type TArticlesContext = {
-	data: TArticles[]
+	data: TArticle[]
 	isLoading: boolean
 }
 

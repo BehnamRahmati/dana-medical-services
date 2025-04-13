@@ -66,14 +66,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
 
 		const user = await prisma.user.findUnique({
 			where: { id: userId },
-			include: { likedComments: true },
+			include: { likes: { select: { comment: true } } },
 		})
 
 		if (!user) {
 			throw new Error('user شناسایی نشد')
 		}
 
-		const alreadyLiked = user.likedComments.some(comment => comment.id === commentId)
+		const alreadyLiked = user.likes.some(like => like.comment?.id === commentId)
 
 		const data = alreadyLiked ? { likes: { disconnect: { id: userId } } } : { likes: { connect: { id: userId } } }
 

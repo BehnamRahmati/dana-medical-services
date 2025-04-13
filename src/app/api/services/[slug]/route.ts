@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 		const service = await prisma.service.findUnique({
 			where: { slug },
 			include: {
-				ServiceCategory: {
+				category: {
 					select: {
 						name: true,
 						slug: true,

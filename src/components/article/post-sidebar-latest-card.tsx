@@ -1,8 +1,8 @@
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import { Clock, Profile } from 'iconsax-react'
 import Link from 'next/link'
 
-export default function PostSidebarLatestCard({ article }: { article: TArticles }) {
+export default function PostSidebarLatestCard({ article }: { article: TArticle }) {
 	return (
 		<div className='bg-accent rounded-md py-5'>
 			<Link
@@ -19,7 +19,7 @@ export default function PostSidebarLatestCard({ article }: { article: TArticles 
 				<p className='text-xs pr-1'>
 					<Clock className='size-3 fill-content inline-block ml-1' variant='Bulk' />
 					<span>زمان مطالعه:</span>
-					<span>{article.readTime} دقیقه</span>
+					<span>{article.read} دقیقه</span>
 				</p>
 			</div>
 		</div>

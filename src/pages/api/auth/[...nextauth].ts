@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { TRole } from '@/lib/types'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import bcrypt from 'bcrypt'
 import type { AuthOptions } from 'next-auth'
@@ -29,7 +30,6 @@ export const authOptions: AuthOptions = {
 				if (!user?.hashedPassword) return null
 
 				const isValid = await bcrypt.compare(credentials.password, user.hashedPassword)
-				console.log({ isValid })
 
 				return isValid ? user : null
 			},
@@ -74,7 +74,7 @@ export const authOptions: AuthOptions = {
 				// For TypeScript validation
 				session.user.name = token.name as string
 				session.user.email = token.email as string
-				session.user.role = token.userRole as 'ADMIN' | 'USER' | 'MODERATOR'
+				session.user.role = token.userRole as TRole
 			}
 			return session
 		},

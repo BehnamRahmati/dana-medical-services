@@ -12,7 +12,7 @@ async function fetcher(url: string): Promise<{ categories: TCategory[] }> {
 }
 
 export default function CategoriesTable() {
-	const { data, isLoading } = useSWR('/api/dashboard/categories', fetcher)
+	const { data, isLoading } = useSWR('/api/dashboard/articles/categories', fetcher)
 
 	if (isLoading || !data) return <p>loading</p>
 

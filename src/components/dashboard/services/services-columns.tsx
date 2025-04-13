@@ -7,14 +7,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
 import { ArrowSwapVertical, Edit, MoreSquare, Trash } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const ServicesColumns: ColumnDef<TServices>[] = [
+export const ServicesColumns: ColumnDef<TService>[] = [
 	{
 		accessorKey: 'thumbnail',
 		header: 'تصویر',

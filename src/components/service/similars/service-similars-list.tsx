@@ -2,15 +2,15 @@
 
 import ServicesCard from '@/components/ui/service-card'
 import { fetchServices } from '@/lib/helpers'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import useSWR from 'swr'
 import ServiceSimilarsFallback from './service-similars-fallback'
 
-function filterServices(data: TServices[], serviceId: string) {
+function filterServices(data: TService[], serviceId: string) {
 	return data.filter(x => x.id !== serviceId)
 }
 
-export default function ServiceSimilarsList({ categorySlug, serviceId }: { categorySlug: string; serviceId: string }) {
+export default function ServiceSimilarsList({ categorySlug, serviceId }: { categorySlug?: string; serviceId: string }) {
 	const { data, isLoading } = useSWR(`/api/services?category=${categorySlug}`, fetchServices)
 
 	if (isLoading || !data) return <ServiceSimilarsFallback />

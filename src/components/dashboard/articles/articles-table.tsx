@@ -1,12 +1,12 @@
 'use client'
 
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import axios from 'axios'
 import useSWR from 'swr'
 import { columns } from './articles-column'
 import ArticlesDataTable from './articles-data-table'
 
-async function fetcher(url: string): Promise<{ articles: TArticles[] }> {
+async function fetcher(url: string): Promise<{ articles: TArticle[] }> {
 	const response = await axios.get(url)
 	return await response.data
 }

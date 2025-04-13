@@ -16,7 +16,11 @@ export default function HeaderServicesLinks({ setOpen }: { setOpen?: React.Dispa
 			{isMobile ? (
 				<Collapsible>
 					<CollapsibleTrigger className='flex items-center justify-between w-full'>
-						<Link href={'/services'} className='w-fit' onClick={() => setOpen && setOpen(prev => !prev)}>
+						<Link
+							href={'/services'}
+							className='w-fit hover:text-secondary'
+							onClick={() => setOpen && setOpen(prev => !prev)}
+						>
 							<span>خدمات</span>
 						</Link>
 						<ArrowDown2 className='size-4 fill-content' variant='Bulk' />

@@ -1,12 +1,12 @@
 'use client'
 
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import axios from 'axios'
 import useSWR from 'swr'
 import { ServicesColumns } from './services-columns'
 import ServicesDataTable from './services-data-table'
 
-async function fetcher(url: string): Promise<{ services: TServices[] }> {
+async function fetcher(url: string): Promise<{ services: TService[] }> {
 	const response = await axios.get(url)
 	return await response.data
 }

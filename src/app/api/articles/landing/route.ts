@@ -6,7 +6,7 @@ export async function GET() {
 		select: {
 			id: true,
 			title: true,
-			readTime: true,
+			read: true,
 			thumbnail: true,
 			slug: true,
 			category: {

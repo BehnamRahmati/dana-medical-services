@@ -1,12 +1,12 @@
 'use client'
 
 import { fetchArticles } from '@/lib/helpers'
-import { TArticles } from '@/lib/types'
+import { TArticle } from '@/lib/types'
 import useSWR from 'swr'
 import PostCard from '../../ui/post-card'
 import ArticleSimilarsFallback from './article-similars-fallback'
 
-function filterArticles(data: TArticles[], articleId: string) {
+function filterArticles(data: TArticle[], articleId: string) {
 	return data.filter(x => x.id !== articleId)
 }
 

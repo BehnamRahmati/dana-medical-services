@@ -3,10 +3,10 @@ import ServiceSidebarLatest from '@/components/service/latest/service-sidebar-la
 import ServiceContent from '@/components/service/service-content'
 import ServiceContentHeader from '@/components/service/service-content-header'
 import ServiceSimilars from '@/components/service/similars/service-similars'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import axios from 'axios'
 
-async function fetchServices(slug: string): Promise<TServices> {
+async function fetchServices(slug: string): Promise<TService> {
 	const response = await axios.get(`${process.env.NEXTAUTH_URL}/api/services/${slug}`)
 	return response.data.service
 }
@@ -20,15 +20,15 @@ export default async function SingleServicesPage({ params }: { params: Promise<{
 			<div className='flex-1 '>
 				<div className='bg-accent p-2.5 lg:p-10 rounded-xl'>
 					<ServiceContentHeader
-						category={service.ServiceCategory.name}
-						categorySlug={service.ServiceCategory.slug}
+						category={service.category?.name}
+						categorySlug={service.category?.slug}
 						thumbnail={service.thumbnail}
 						title={service.title}
-						readTime={service.readTime}
+						readTime={service.read}
 					/>
 					<ServiceContent content={service.content} />
 				</div>
-				<ServiceSimilars categorySlug={service.ServiceCategory.slug} serviceId={service.id} />
+				<ServiceSimilars categorySlug={service.category?.slug} serviceId={service.id} />
 				<ServiceComment />
 			</div>
 			<div className='lg:w-80'>

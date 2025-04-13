@@ -32,13 +32,7 @@ export default function HeaderButtons() {
 		if (status === 'loading')
 			return (
 				<div className='flex items-center gap-2'>
-					<div className='flex items-center gap-2'>
-						<Skeleton className='size-9 shrink-0 rounded-full bg-muted' />
-						<div className='hidden lg:block'>
-							<Skeleton className='h-5 w-32 bg-muted' />
-							<Skeleton className='h-5 w-32 lg:mt-2 bg-muted' />
-						</div>
-					</div>
+					<Skeleton className='size-9 h-10 w-32bg-muted' />
 				</div>
 			)
 		return (
@@ -58,7 +52,7 @@ export default function HeaderButtons() {
 						<h3 className='text-sm font-medium mt-1'>{session?.user?.name}</h3>
 					</div>
 				</Link>
-				{(session?.user?.role === 'ADMIN' || session?.user?.role === 'MODERATOR') && (
+				{(session?.user?.role === 'ADMIN' || session?.user?.role === 'SUPERADMIN') && (
 					<Link
 						href={'/admin'}
 						className='bg-secondary/20 text-sm text-secondary hover:bg-secondary/60 hover:text-white py-2 px-2.5 inline-flex gap-2 items-center rounded-lg'

@@ -6,7 +6,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { TArticles, TComment } from '@/lib/types'
+import { TArticle, TComment } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
 import { MoreSquare, TickSquare, Trash } from 'iconsax-react'
@@ -17,7 +17,7 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 		accessorKey: 'article',
 		header: 'مقاله',
 		cell({ row }) {
-			const article = row.getValue('article') as TArticles
+			const article = row.getValue('article') as TArticle
 			return <div className=''>{article.title}</div>
 		},
 	},
@@ -41,7 +41,7 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 		header: 'عملیات',
 		cell: ({ row }) => {
 			const id = row.original.id as string
-			const article = row.getValue('article') as TArticles
+			const article = row.getValue('article') as TArticle
 			const content = row.getValue('content') as string
 			return (
 				<div className='flex items-center gap-1'>

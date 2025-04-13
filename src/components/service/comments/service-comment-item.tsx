@@ -13,7 +13,7 @@ export default function ServiceCommentItem({ comment, isReply }: { comment: TCom
 		if (!session?.user) {
 			return alert('لطفا وارد حساب کاربری خود شوید')
 		}
-		await axios.patch(`/api/services/${comment.service.slug}/comments`, { userId: session?.user.id, commentId: comment.id })
+		await axios.patch(`/api/services/${comment.service?.slug}/comments`, { userId: session?.user.id, commentId: comment.id })
 	}
 
 	return (
@@ -41,7 +41,7 @@ export default function ServiceCommentItem({ comment, isReply }: { comment: TCom
 							className='bg-red-500/20 py-1 px-2.5 rounded-sm flex items-center gap-1'
 						>
 							<Heart className='size-6 stroke-red-500' variant='TwoTone' />
-							<span className='mt-1 text-lg text-red-500'>{comment._count.likes}</span>
+							<span className='mt-1 text-lg text-red-500'>{comment._count?.likes}</span>
 						</button>
 					</div>
 				</div>

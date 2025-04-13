@@ -1,7 +1,7 @@
 'use client'
 
 import { Form } from '@/components/ui/form'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
@@ -11,7 +11,7 @@ import { editServiceSchema } from '../lib/schemas'
 import EditServiceFormMain from './service-edit-main'
 import EditServiceFormSidebar from './service-edit-sidebar'
 
-export default function ServiceEditForm({ service }: { service: TServices }) {
+export default function ServiceEditForm({ service }: { service: TService }) {
 	const [imageUrl, setImageUrl] = useState(service.thumbnail)
 	const form = useForm<z.infer<typeof editServiceSchema>>({
 		resolver: zodResolver(editServiceSchema),
@@ -20,11 +20,11 @@ export default function ServiceEditForm({ service }: { service: TServices }) {
 			slug: service.slug,
 			excerpt: service.excerpt,
 			thumbnail: '',
-			readTime: service.readTime.toString(),
+			read: service.read.toString(),
 			author: service.userId,
 			content: service.content,
 			status: service.status,
-			category: service.serviceCategoryId || '',
+			category: service.categoryId || '',
 		},
 	})
 
@@ -38,7 +38,7 @@ export default function ServiceEditForm({ service }: { service: TServices }) {
 		formData.append('slug', values.slug)
 		formData.append('excerpt', values.excerpt)
 		formData.append('author', values.author)
-		formData.append('readTime', values.readTime.toString())
+		formData.append('read', values.read.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
 		formData.append('category', values.category)

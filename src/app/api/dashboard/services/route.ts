@@ -36,10 +36,10 @@ export async function POST(req: NextRequest) {
 				thumbnail: `/uploads/${fileName}`,
 				excerpt: formData.get('excerpt') as string,
 				content: formData.get('content') as string,
-				readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
+				read: formData.get('read') ? parseInt(formData.get('read') as string, 10) : 0,
 				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
 				author: { connect: { id: formData.get('author') as string } },
-				ServiceCategory: { connect: { id: formData.get('category') as string } },
+				category: { connect: { id: formData.get('category') as string } },
 			},
 		})
 
@@ -73,10 +73,10 @@ export async function PUT(req: NextRequest) {
 				...(fileName && { thumbnail: `/uploads/${fileName}` }),
 				excerpt: formData.get('excerpt') as string,
 				content: formData.get('content') as string,
-				readTime: formData.get('readTime') ? parseInt(formData.get('readTime') as string, 10) : 0,
+				read: formData.get('read') ? parseInt(formData.get('read') as string, 10) : 0,
 				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
 				author: { connect: { id: formData.get('author') as string } },
-				ServiceCategory: { connect: { id: formData.get('category') as string } },
+				category: { connect: { id: formData.get('category') as string } },
 			},
 		})
 		if (!service) {

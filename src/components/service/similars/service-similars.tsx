@@ -5,7 +5,7 @@ import { lazy, Suspense } from 'react'
 import ServiceSimilarsFallback from './service-similars-fallback'
 const ServiceSimilarsList = lazy(() => import('./service-similars-list'))
 
-export default function ServiceSimilars({ categorySlug, serviceId }: { categorySlug: string; serviceId: string }) {
+export default function ServiceSimilars({ categorySlug, serviceId }: { categorySlug?: string; serviceId: string }) {
 	const { isVisible, sectionRef } = useVisibleSection()
 	return (
 		<section

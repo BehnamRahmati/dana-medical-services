@@ -28,14 +28,16 @@ type TProps<T extends SupportedSchema & { category: string }> = {
 	form: UseFormReturn<T>
 	label: string
 	placeholder?: string
+	url: string
 }
 
 export default function DashboardCategoriesSelect<T extends SupportedSchema & { category: string }>({
 	label,
 	form,
 	placeholder,
+	url,
 }: TProps<T>) {
-	const { data, isLoading } = useSWR<{ categories: TCategory[] }>('/api/dashboard/categories', dataFetcher)
+	const { data, isLoading } = useSWR<{ categories: TCategory[] }>(url, dataFetcher)
 	if (isLoading || !data) return <SelectSkeleton />
 
 	return (

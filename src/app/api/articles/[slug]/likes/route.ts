@@ -10,26 +10,64 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 			throw new Error('userId شناسایی نشد')
 		}
 
-		const user = await prisma.user.findUnique({
-			where: { id: userId },
-			include: { likedArticles: true },
+		// First find the article by slug
+		const article = await prisma.article.findUnique({
+			where: { slug },
+			select: { id: true },
 		})
 
-		if (!user) {
-			throw new Error('user شناسایی نشد')
-		}
-
-		const alreadyLiked = user.likedArticles.some(article => article.slug === slug)
-
-		const data = alreadyLiked ? { likes: { disconnect: { id: userId } } } : { likes: { connect: { id: userId } } }
-
-		const article = await prisma.article.update({ where: { slug }, data })
-
 		if (!article) {
-			throw new Error('خطا در افزایش لایک ها')
+			throw new Error('مقاله شناسایی نشد')
 		}
 
-		return NextResponse.json({ message: 'لایک ها با موفقیت افزایش یافت', article }, { status: 200 })
+		// Check if the like already exists
+		const existingLike = await prisma.like.findUnique({
+			where: {
+				userId_articleId_serviceId_commentId: {
+					userId: userId,
+					articleId: article.id,
+					serviceId: '',
+					commentId: '',
+				},
+			},
+		})
+
+		let result
+
+		if (existingLike) {
+			// If like exists, delete it
+			result = await prisma.like.delete({
+				where: { id: existingLike.id },
+			})
+		} else {
+			// If like doesn't exist, create it
+			result = await prisma.like.create({
+				data: {
+					user: { connect: { id: userId } },
+					article: { connect: { id: article.id } },
+				},
+			})
+		}
+
+		if (!result) throw new Error('خطا در عملیات لایک')
+
+		// Get updated article with like count
+		const updatedArticle = await prisma.article.findUnique({
+			where: { slug },
+			include: {
+				_count: {
+					select: { likes: true },
+				},
+			},
+		})
+
+		return NextResponse.json(
+			{
+				message: existingLike ? 'لایک با موفقیت حذف شد' : 'لایک با موفقیت اضافه شد',
+				article: updatedArticle,
+			},
+			{ status: 200 },
+		)
 	} catch (error) {
 		if (error instanceof Error) {
 			console.log({ error })
@@ -37,7 +75,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 
 		return NextResponse.json(
 			{
-				message: 'خطا در افزایش لابک ها',
+				message: 'خطا در عملیات لایک',
 				error,
 			},
 			{ status: 200 },

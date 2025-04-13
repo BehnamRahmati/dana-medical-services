@@ -13,7 +13,7 @@ export async function GET() {
 			_count: {
 				select: { likes: true, comments: true, bookmarks: true },
 			},
-			ServiceCategory: { select: { name: true, slug: true } },
+			category: { select: { name: true, slug: true } },
 		},
 		take: 4,
 	})

@@ -2,7 +2,7 @@
 
 import { DataTable, DataTableFilters, DatatablePagination } from '@/components/ui/data-table'
 import { Input } from '@/components/ui/input'
-import { TServices } from '@/lib/types'
+import { TService } from '@/lib/types'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -17,7 +17,7 @@ import {
 
 import React from 'react'
 
-export default function ServicesDataTable({ data, columns }: { data: TServices[]; columns: ColumnDef<TServices>[] }) {
+export default function ServicesDataTable({ data, columns }: { data: TService[]; columns: ColumnDef<TService>[] }) {
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})

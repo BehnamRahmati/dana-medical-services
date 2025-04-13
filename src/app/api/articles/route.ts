@@ -20,9 +20,9 @@ export async function GET(req: NextRequest) {
 	const orderBy = (() => {
 		switch (sort) {
 			case 'views_asc':
-				return { views: 'asc' as const }
+				return { views: { _count: 'asc' as const } }
 			case 'views_desc':
-				return { views: 'desc' as const }
+				return { views: { _count: 'desc' as const } }
 			case 'comments_asc':
 				return { comments: { _count: 'asc' as const } }
 			case 'comments_desc':
