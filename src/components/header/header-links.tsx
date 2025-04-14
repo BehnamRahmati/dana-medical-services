@@ -1,5 +1,6 @@
 import { Headphone } from 'iconsax-react'
 import Link from 'next/link'
+import HeaderButtons from './header-buttons'
 import HeaderServicesLinks from './header-services-links'
 
 const links = [
@@ -27,8 +28,8 @@ const links = [
 
 export default function HeaderLinks({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
 	return (
-		<div className='header-bottom lg:bg-border w-full lg:w-11/12 lg:mx-auto lg:rounded-b-xl py-3 px-5'>
-			<div className='flex flex-col lg:flex-row lg:items-center lg:justify-between'>
+		<div className='header-bottom flex-1 lg:bg-border w-full lg:w-11/12 lg:mx-auto lg:rounded-b-xl py-3 px-5'>
+			<div className='flex flex-col h-full lg:flex-row lg:items-center lg:justify-between'>
 				<nav>
 					<ul className='flex flex-col lg:flex-row lg:items-center gap-5'>
 						<HeaderServicesLinks setOpen={setOpen} />
@@ -45,13 +46,18 @@ export default function HeaderLinks({ setOpen }: { setOpen?: React.Dispatch<Reac
 						))}
 					</ul>
 				</nav>
-				<Link
-					href=''
-					className='text-secondary border border-secondary py-1 pt-1.5 px-2.5 rounded-md flex items-center gap-2 mt-5 lg:mt-0 w-fit'
-				>
-					<Headphone className='size-5 fill-secondary mb-1' variant='Bulk' />
-					<span>تماس با پشتیبانی</span>
-				</Link>
+				<div className='flex flex-col items-center gap-2.5 mt-auto mb-0 lg:mt-0'>
+					<Link
+						href=''
+						className='text-secondary border border-secondary py-1 pt-1.5 px-2.5 rounded-md flex items-center justify-center gap-2 w-full  lg:w-fit'
+					>
+						<Headphone className='size-5 fill-secondary mb-1' variant='Bulk' />
+						<span>تماس با پشتیبانی</span>
+					</Link>
+					<div className='lg:hidden w-full'>
+						<HeaderButtons />
+					</div>
+				</div>
 			</div>
 		</div>
 	)

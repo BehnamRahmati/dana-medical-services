@@ -2,7 +2,9 @@ import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
-	const comments = await prisma.comment.findMany({ include: { article: { select: { title: true, id: true } } } })
+	const comments = await prisma.comment.findMany({
+		include: { article: { select: { title: true, id: true } }, user: { select: { name: true, image: true } } },
+	})
 	if (!comments) {
 		return NextResponse.json({ comments: [] })
 	}

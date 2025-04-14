@@ -20,7 +20,7 @@ export default function AuthnticationPage({
 	const isLogin = patthname === '/login'
 	const isRegister = patthname === '/register'
 	return (
-		<div className='container mx-auto min-h-dvh grid place-content-center py-20'>
+		<div className='container mx-auto min-h-dvh grid place-content-center py-20 px-2.5 lg:px-0'>
 			<Link href='/' className='flex items-end gap-2 mb-10 w-fit mx-auto'>
 				<span className='text-lg'>خدمات پزشکی</span>
 				<span className='text-7xl font-extrabold leading-7 text-primary'>دنــا .</span>
@@ -52,22 +52,38 @@ export default function AuthnticationPage({
 					<h2 className='text-4xl font-bold'> {title}</h2>
 					<p className='text-sm text-content/60 mt-2'>{subtitle} </p>
 				</div>
-				<div className='grid grid-cols-2 gap-5 *:w-56 *:cursor-pointer'>
-					<button type='button' onClick={() => signIn('google')} className='bg-accent rounded-lg p-4 flex items-center'>
+				<div className='grid grid-cols-1 lg:grid-cols-2 gap-5 lg:*:w-56 *:cursor-pointer'>
+					<button
+						type='button'
+						onClick={() => signIn('google', { callbackUrl: '/' })}
+						className='bg-accent rounded-lg p-4 flex items-center justify-center'
+					>
 						<FcGoogle className='text-2xl inline-block ml-2' />
-						<span>ورود یا ثیت نام با گوگل</span>
+						<span>ورود یا ثبت نام با گوگل</span>
 					</button>
-					<button type='button' className='bg-accent rounded-lg p-4 flex items-center'>
+					<button
+						type='button'
+						disabled
+						className='bg-accent disabled:opacity-50 rounded-lg p-4 flex items-center justify-center'
+					>
 						<FaYahoo className='text-2xl inline-block text-purple-700 ml-2' />
-						<span>ورود یا ثیت نام با یاهو</span>
+						<span>ورود یا ثبت نام با یاهو</span>
 					</button>
-					<button type='button' className='bg-accent rounded-lg p-4 flex items-center'>
+					<button
+						type='button'
+						disabled
+						className='bg-accent disabled:opacity-50 rounded-lg p-4 flex items-center justify-center'
+					>
 						<Instagram className='size-6 fill-pink-500 inline-block ml-2' variant='Bulk' />
-						<span>ورود یا ثیت نام با اینستگرام</span>
+						<span>ورود یا ثبت نام با اینستگرام</span>
 					</button>
-					<button type='button' className='bg-accent rounded-lg p-4 flex items-center'>
+					<button
+						type='button'
+						disabled
+						className='bg-accent disabled:opacity-50 rounded-lg p-4 flex items-center justify-center'
+					>
 						<FaLinkedin className='text-2xl inline-block text-sky-500 ml-2' />
-						<span>ورود یا ثیت نام با لینکداین</span>
+						<span>ورود یا ثبت نام با لینکداین</span>
 					</button>
 				</div>
 				{children}

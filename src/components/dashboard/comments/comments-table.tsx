@@ -16,7 +16,7 @@ export default function CommentsTable() {
 	if (isLoading || !data) return <p>loading</p>
 
 	return (
-		<div className='rounded-xl  max-w-full overflow-hidden bg-accent p-5 h-full flex flex-col'>
+		<div className='rounded-xl  max-w-full overflow-hidden bg-accent p-2.5 lg:p-5 h-full flex flex-col'>
 			<CommentsDataTable data={data.comments} columns={CommentColumns} />
 		</div>
 	)

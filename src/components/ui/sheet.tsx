@@ -63,7 +63,7 @@ function SheetContent({
 				{...props}
 			>
 				{children}
-				<SheetPrimitive.Close className='ring-offset-background data-[state=open]:bg-secondary absolute bottom-5 right-5 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none'>
+				<SheetPrimitive.Close className='hidden ring-offset-background data-[state=open]:bg-secondary absolute bottom-5 right-5 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none'>
 					<CloseSquare className='stroke-content size-7' variant='Broken' />
 					<span className='sr-only'>Close</span>
 				</SheetPrimitive.Close>

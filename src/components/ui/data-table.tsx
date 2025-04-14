@@ -1,7 +1,6 @@
 'use client'
 import { flexRender, Table as TTable } from '@tanstack/react-table'
 import { ArrowDown2, ArrowSquareLeft, ArrowSquareRight } from 'iconsax-react'
-import { columns } from '../dashboard/articles/articles-column'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from './dropdown-menu'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table'
@@ -28,7 +27,7 @@ function DataTable({ table }: { table: TTable<any> }) {
 						))}
 					</TableHeader>
 					<TableBody>
-						{table.getRowModel().rows?.length ? (
+						{table.getRowModel().rows && table.getRowModel().rows.length ? (
 							table.getRowModel().rows.map(row => (
 								<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
 									{row.getVisibleCells().map(cell => (
@@ -40,7 +39,10 @@ function DataTable({ table }: { table: TTable<any> }) {
 							))
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className='h-24 text-center'>
+								<TableCell
+									colSpan={table.getAllColumns() && table.getAllColumns().length}
+									className='h-24 text-center'
+								>
 									نتیجه ای یافت نشد!
 								</TableCell>
 							</TableRow>

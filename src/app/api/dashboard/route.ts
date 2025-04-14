@@ -14,6 +14,9 @@ export async function GET() {
 			commentsCount,
 			likesCount,
 		}
+		if (!data) {
+			return NextResponse.json({ error: 'No data found' }, { status: 404 })
+		}
 
 		return NextResponse.json({ data }, { status: 200 })
 	} catch (error) {

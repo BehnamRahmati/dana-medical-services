@@ -26,7 +26,7 @@ export default function HeaderServicesLinks({ setOpen }: { setOpen?: React.Dispa
 						<ArrowDown2 className='size-4 fill-content' variant='Bulk' />
 					</CollapsibleTrigger>
 					<CollapsibleContent>
-						<ul className='flex flex-col gap-2.5 *:w-full w-full'>
+						<ul className='flex flex-col gap-2.5 *:w-full w-full pt-2.5'>
 							{isLoading || !services ? (
 								<li className='flex flex-col gap-2.5'>
 									<Skeleton className='bg-muted h-7 w-full'></Skeleton>
@@ -39,7 +39,7 @@ export default function HeaderServicesLinks({ setOpen }: { setOpen?: React.Dispa
 										<Link
 											href={`/services/${service.slug}`}
 											onClick={() => setOpen && setOpen(prev => !prev)}
-											className='p-2.5 hover:bg-muted block rounded-md w-full'
+											className='p-2.5 bg-muted lg:bg-accent hover:bg-muted block rounded-md w-full'
 										>
 											{service.title}
 										</Link>

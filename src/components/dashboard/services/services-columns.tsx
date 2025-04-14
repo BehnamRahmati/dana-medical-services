@@ -75,7 +75,7 @@ export const ServicesColumns: ColumnDef<TService>[] = [
 	},
 
 	{
-		accessorKey: 'readTime',
+		accessorKey: 'read',
 		header: ({ column }) => {
 			return (
 				<Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -85,7 +85,7 @@ export const ServicesColumns: ColumnDef<TService>[] = [
 			)
 		},
 		cell: ({ row }) => {
-			const readTime = row.getValue('readTime') as string
+			const readTime = row.getValue('read') as string
 			return <span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>{readTime} دقیقه</span>
 		},
 	},

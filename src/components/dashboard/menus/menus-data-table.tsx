@@ -52,7 +52,7 @@ export default function MenusDataTable({
 
 	return (
 		<>
-			<div className='flex items-center gap-5 justify-between'>
+			<div className='flex flex-col md:flex-row items-center gap-5 justify-between'>
 				<div className='flex gap-5'>
 					<Input
 						placeholder='فیلتر مقالات بر اساس عنوان ... '

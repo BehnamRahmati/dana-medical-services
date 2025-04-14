@@ -10,7 +10,7 @@ export default function ServiceSimilars({ categorySlug, serviceId }: { categoryS
 	return (
 		<section
 			ref={sectionRef}
-			className={`mt-2.5 lg:mt-10 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
+			className={`mt-5 lg:mt-10 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
 		>
 			<div className='text-5xl font-extrabold'>خدمت های مشابه</div>
 			{isVisible && (

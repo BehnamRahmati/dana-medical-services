@@ -7,14 +7,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { TArticle, TCategory, TTag, TUser } from '@/lib/types'
+import { TArticle, TCategory, TLike, TTag, TView } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
 import { ArrowSwapVertical, Edit, MoreSquare, Trash } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const columns: ColumnDef<TArticle>[] = [
+export const articleColumns: ColumnDef<TArticle>[] = [
 	{
 		accessorKey: 'thumbnail',
 		header: 'تصویر',
@@ -76,8 +76,12 @@ export const columns: ColumnDef<TArticle>[] = [
 			)
 		},
 		cell: ({ row }) => {
-			const views = row.getValue('views') as number
-			return <span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs mr-5'>{views}</span>
+			const views = row.getValue('views') as TView[]
+			return (
+				<span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs mr-5'>
+					{views ? views.length : '0'}
+				</span>
+			)
 		},
 	},
 	{
@@ -91,7 +95,7 @@ export const columns: ColumnDef<TArticle>[] = [
 			)
 		},
 		cell: ({ row }) => {
-			const likes = row.getValue('likes') as TUser[]
+			const likes = row.getValue('likes') as TLike[]
 			return (
 				<span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs mr-5'>
 					{likes ? likes.length : '0'}
@@ -126,11 +130,12 @@ export const columns: ColumnDef<TArticle>[] = [
 			if (!tags) return <p>برچسبی ندارد</p>
 			return (
 				<p className='flex items-center gap-1'>
-					{tags.map(tag => (
-						<span key={tag.id} className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>
-							{tag.name}
-						</span>
-					))}
+					{tags.length &&
+						tags.map(tag => (
+							<span key={tag.id} className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>
+								{tag.name}
+							</span>
+						))}
 				</p>
 			)
 		},
@@ -152,7 +157,7 @@ export const columns: ColumnDef<TArticle>[] = [
 	},
 
 	{
-		accessorKey: 'readTime',
+		accessorKey: 'read',
 		header: ({ column }) => {
 			return (
 				<Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -162,7 +167,7 @@ export const columns: ColumnDef<TArticle>[] = [
 			)
 		},
 		cell: ({ row }) => {
-			const readTime = row.getValue('readTime') as string
+			const readTime = row.getValue('read') as string
 			return <span className=' bg-background px-1.5 py-1 rounded-md inline-block text-xs'>{readTime} دقیقه</span>
 		},
 	},

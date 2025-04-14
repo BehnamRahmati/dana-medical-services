@@ -17,10 +17,12 @@ function Header() {
 				<header>
 					<div className='container mx-auto hidden lg:block'>
 						<div className='flex flex-col px-2.5 lg:px-5'>
-							<div className='header-top bg-accent rounded-xl mt-2.5 p-4 lg:p-9.5 shadow-xs w-full flex flex-row items-center justify-between'>
+							<div className='header-top bg-accent rounded-xl mt-2.5 p-2.5 lg:p-9.5 shadow-xs w-full flex flex-row items-center justify-between'>
 								<Logo />
 								<HeaderSearchForm />
-								<HeaderButtons />
+								<div className='hidden lg:block'>
+									<HeaderButtons />
+								</div>
 							</div>
 							<div>
 								<HeaderLinks />

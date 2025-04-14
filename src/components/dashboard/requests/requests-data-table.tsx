@@ -2,7 +2,7 @@
 
 import { DataTable, DataTableFilters, DatatablePagination } from '@/components/ui/data-table'
 import { Input } from '@/components/ui/input'
-import {  TRequest } from '@/lib/types'
+import { TRequest } from '@/lib/types'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -40,7 +40,7 @@ export default function RequestsDataTable({ data, columns }: { data: TRequest[];
 
 	return (
 		<>
-			<div className='flex items-center gap-5 justify-between'>
+			<div className='flex flex-col md:flex-row items-center gap-5 justify-between'>
 				<Input
 					placeholder='فیلتر مقالات بر اساس عنوان ... '
 					type='text'

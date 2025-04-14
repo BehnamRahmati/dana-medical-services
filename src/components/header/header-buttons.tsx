@@ -12,14 +12,14 @@ export default function HeaderButtons() {
 			<div className='flex'>
 				<Link
 					href={'/login'}
-					className='bg-primary/20 text-sm text-primary hover:bg-primary/60 hover:text-white py-2.5 lg:py-1 px-2.5 inline-flex gap-2 items-center md:-ml-2 md:pl-4  rounded-lg md:rounded-l-none'
+					className='bg-primary/20 text-sm text-primary hover:bg-primary/60 hover:text-white py-1 px-2.5 inline-flex gap-2 items-center -ml-2 pl-4  rounded-lg rounded-l-none'
 				>
-					<span className='hidden md:inline'>ورود</span>
+					<span className='inline'>ورود</span>
 					<LoginCurve size='25' className='fill-primary' variant='Bulk' />
 				</Link>
 				<Link
 					href={'/register'}
-					className='bg-primary/90 text-sm hover:bg-primary/60 text-white py-2 px-2.5 hidden md:inline-flex gap-2 items-center rounded-lg'
+					className='bg-primary/90 text-sm hover:bg-primary/60 text-white py-2 px-2.5 inline-flex gap-2 items-center rounded-lg'
 				>
 					<span>عضویت</span>
 					<ProfileAdd size='25' className='fill-white' variant='Bulk' />
@@ -39,25 +39,23 @@ export default function HeaderButtons() {
 			<div className='flex items-center gap-2'>
 				<Link
 					href='/profile'
-					className='bg-primary/20 text-sm text-primary hover:bg-primary/60 hover:text-white py-2 px-2.5 inline-flex items-center gap-2 rounded-lg'
+					className='bg-primary/20 text-sm text-primary hover:bg-primary/60 hover:text-white py-2 px-2.5 flex items-center gap-2 rounded-lg'
 				>
 					<Image
 						src={session?.user?.image || '/default-profile.png'}
 						alt={session?.user?.name || 'پروفایل'}
 						width={30}
 						height={30}
-						className='size-6 rounded-md'
+						className='size-5 rounded-md'
 					/>
-					<div className='hidden lg:block'>
-						<h3 className='text-sm font-medium mt-1'>{session?.user?.name}</h3>
-					</div>
+					<h3 className='text-sm font-medium -mb-1'>{session?.user?.name}</h3>
 				</Link>
 				{(session?.user?.role === 'ADMIN' || session?.user?.role === 'SUPERADMIN') && (
 					<Link
-						href={'/admin'}
+						href={'/dashboard'}
 						className='bg-secondary/20 text-sm text-secondary hover:bg-secondary/60 hover:text-white py-2 px-2.5 inline-flex gap-2 items-center rounded-lg'
 					>
-						<span>پنل مدیریت</span>
+						<span className='hidden lg:block'>پنل مدیریت</span>
 						<Chart2 className='fill-secondary size-5' variant='Bulk' />
 					</Link>
 				)}
@@ -65,11 +63,8 @@ export default function HeaderButtons() {
 		)
 	}
 	return (
-		<div className='flex gap-5'>
-			<div className='hidden lg:block'>
-				<ToggleThemeButton />
-			</div>
-
+		<div className='flex justify-between lg:justify-start gap-2.5 w-full'>
+			<ToggleThemeButton />
 			{status === 'unauthenticated' ? renderAuthButtons() : renderProfileButton()}
 		</div>
 	)

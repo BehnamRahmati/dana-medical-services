@@ -9,9 +9,9 @@ export default function ToggleThemeButton() {
 
 	const themes = useMemo(
 		() => [
-			{ name: 'light', icon: <Sun1 size='25' className='fill-content' variant='Bulk' /> },
-			{ name: 'dark', icon: <Moon size='25' className='fill-slate-700' variant='Bulk' /> },
-			{ name: 'system', icon: <Setting2 size='25' className='fill-content' variant='Bulk' /> },
+			{ name: 'light', icon: <Sun1 className='fill-content size-5' variant='Bulk' /> },
+			{ name: 'dark', icon: <Moon className='fill-slate-700 size-5' variant='Bulk' /> },
+			{ name: 'system', icon: <Setting2 className='fill-content size-5' variant='Bulk' /> },
 		],
 		[],
 	)
@@ -46,7 +46,7 @@ export default function ToggleThemeButton() {
 						key={theme.name}
 						type='button'
 						onClick={() => toNextMode(theme.name)}
-						className={`bg-slate-100/70 rounded-full p-2 cursor-pointer text-slate-600 ${visible === theme.name ? 'block' : 'hidden'}`}
+						className={`bg-content/20 rounded-lg p-2 cursor-pointer hover:bg-content/30 text-slate-600 shrink-0 ${visible === theme.name ? 'block' : 'hidden'}`}
 					>
 						{theme.icon}
 					</button>

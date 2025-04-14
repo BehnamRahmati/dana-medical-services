@@ -12,7 +12,10 @@ async function fetcher(url: string): Promise<{ services: TService[] }> {
 }
 
 export default function ServicesTable() {
-	const { data, isLoading } = useSWR('/api/dashboard/services', fetcher)
+	const { data, isLoading } = useSWR('/api/dashboard/services', fetcher, {
+		revalidateOnFocus: true,
+		revalidateIfStale: true,
+	})
 
 	if (isLoading || !data) return <p>loading</p>
 

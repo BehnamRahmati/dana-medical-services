@@ -10,9 +10,19 @@ export async function GET() {
 			category: true,
 			likes: true,
 			bookmarks: true,
+			views: true,
+			comments: true,
 			author: {
 				select: {
 					name: true,
+				},
+			},
+			_count: {
+				select: {
+					likes: true,
+					bookmarks: true,
+					comments: true,
+					views: true,
 				},
 			},
 		},

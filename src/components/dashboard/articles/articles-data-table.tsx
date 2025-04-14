@@ -38,9 +38,11 @@ export default function ArticlesDataTable({ data, columns }: { data: TArticle[];
 		},
 	})
 
+	if (!data) return <p>loading</p>
+
 	return (
 		<>
-			<div className='flex items-center gap-5 justify-between'>
+			<div className='flex flex-col md:flex-row items-center gap-5 justify-between'>
 				<Input
 					placeholder='فیلتر مقالات بر اساس عنوان ... '
 					type='text'
