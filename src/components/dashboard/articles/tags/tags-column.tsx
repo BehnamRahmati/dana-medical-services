@@ -1,17 +1,9 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TTag } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
-import { Edit, MoreSquare, Trash } from 'iconsax-react'
-import Link from 'next/link'
-
+import { MoreSquare, Trash } from 'iconsax-react'
+import { toast } from 'sonner'
 export const tagsColumns: ColumnDef<TTag>[] = [
 	{
 		accessorKey: 'name',
@@ -32,23 +24,22 @@ export const tagsColumns: ColumnDef<TTag>[] = [
 						<MoreSquare className='stroke-content size-5' variant='Broken' />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='start'>
-						<DropdownMenuLabel> عملیات</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<Link href={`/dashboard/articles/tags/${slug}/edit`} className='flex items-center gap-2'>
-								<Edit className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>ویرایش مقاله</p>
-							</Link>
-						</DropdownMenuItem>
 						<DropdownMenuItem>
 							<button
-								className='flex items-center gap-2 cursor-pointer'
-								onClick={() => {
-									axios.delete(`/api/dashboard/tags/${slug}`)
+								className='flex items-center gap-2 cursor-pointer text-red-500'
+								onClick={async () => {
+									try {
+										toast('در حال حذف برچسب', { icon: '⏳' })
+										await axios.delete(`/api/dashboard/tags/${slug}`)
+										toast('برچسب مورد نظر با موفقیت حذف شد', { icon: '✅' })
+									} catch (error) {
+										console.log(error)
+										toast('مشکلی در حذف برچسب به وجود آمده است', { icon: '❌' })
+									}
 								}}
 							>
-								<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>حذف تگ</p>
+								<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />
+								<p className='-mb-1'>حذف برچسب</p>
 							</button>
 						</DropdownMenuItem>
 					</DropdownMenuContent>

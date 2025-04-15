@@ -195,6 +195,11 @@ body {
 	@apply mr-5 list-decimal pr-5;
 }
 
+.content-area a,
+.ql-container .ql-editor a {
+	@apply text-secondary;
+}
+
 .content-area blockquote,
 .ql-container .ql-editor blockquote {
 	@apply bg-primary relative w-full rounded-lg p-10 py-20 text-lg font-light leading-10;
@@ -213,4 +218,12 @@ body {
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+.service-item-content ul,
+.service-item-content ol {
+	@apply text-right;
+}
+.service-item-content li {
+	@apply py-1.5;
 }

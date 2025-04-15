@@ -9,8 +9,8 @@ import axios from 'axios'
 import { AddSquare } from 'iconsax-react'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
-
 const formSchema = z.object({
 	content: z.string().min(1, { message: 'لطفا دیدگاه خود را وارد کنید' }),
 })
@@ -34,13 +34,19 @@ export default function CommentReplyForm({
 	const { data: session } = useSession()
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const { data } = await axios.put('/api/dashboard/comments', {
-			content: values.content,
-			commentId,
-			userId: session?.user.id,
-			articleId,
-		})
-		console.warn(data)
+		try {
+			toast('در حال ارسال پاسخ', { icon: '⏳' })
+			await axios.put('/api/dashboard/comments', {
+				content: values.content,
+				commentId,
+				userId: session?.user.id,
+				articleId,
+			})
+			toast(' پاسخ با موفقیت حذف شد', { icon: '✅' })
+		} catch (error) {
+			console.log(error)
+			toast('خطا در ارسال پاسخ', { icon: '❌' })
+		}
 	}
 	return (
 		<Dialog modal={true}>

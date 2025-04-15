@@ -30,7 +30,6 @@ export default function EditFormSidebar({ form }: TProps) {
 			>
 				بروزرسانی مقاله
 			</Button>
-			{form.formState.isSubmitSuccessful && <p className='text-primary'>با موفقیت مقاله جدید ثبت شد</p>}
 		</div>
 	)
 }

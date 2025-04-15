@@ -1,5 +1,6 @@
 'use client'
 import Button from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -42,69 +43,79 @@ export default function LinkCreateForm() {
 		}
 	}
 	return (
-		<div className=' bg-accent rounded-lg p-5'>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
-					<FormField
-						control={form.control}
-						name='name'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>عنوان لینک</FormLabel>
-								<FormControl>
-									<Input {...field} />
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='url'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>آدرس لینک</FormLabel>
-								<FormControl>
-									<Input dir='ltr' {...field} />
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					{menuLoading || !menuData || !menuData.menus ? (
-						<p>loading</p>
-					) : (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button variant={'default'} className='py-1'>
+					ساخت لینک جدید
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>فرم ساخت لینک </DialogTitle>
+				</DialogHeader>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
 						<FormField
 							control={form.control}
-							name='menu'
+							name='name'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel> منو</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger className='w-full'>
-												<SelectValue placeholder='choose a tag' />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectGroup>
-												{menuData.menus.length &&
-													menuData.menus.map(tag => (
-														<SelectItem value={tag.id} key={tag.id}>
-															{tag.name}
-														</SelectItem>
-													))}
-											</SelectGroup>
-										</SelectContent>
-									</Select>
-									<FormMessage />
+									<FormLabel>عنوان لینک</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
 								</FormItem>
 							)}
 						/>
-					)}
-					<Button variant={'default'} size={'lg'} className='w-full'>
-						ثبت لینک جدید
-					</Button>
-				</form>
-			</Form>
-		</div>
+						<FormField
+							control={form.control}
+							name='url'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>آدرس لینک</FormLabel>
+									<FormControl>
+										<Input dir='ltr' {...field} />
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						{menuLoading || !menuData || !menuData.menus ? (
+							<p>loading</p>
+						) : (
+							<FormField
+								control={form.control}
+								name='menu'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> منو</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className='w-full'>
+													<SelectValue placeholder='choose a tag' />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectGroup>
+													{menuData.menus.length &&
+														menuData.menus.map(tag => (
+															<SelectItem value={tag.id} key={tag.id}>
+																{tag.name}
+															</SelectItem>
+														))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						)}
+						<Button variant={'default'} size={'lg'} className='w-full'>
+							ثبت لینک جدید
+						</Button>
+					</form>
+				</Form>
+			</DialogContent>
+		</Dialog>
 	)
 }

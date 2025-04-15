@@ -1,18 +1,12 @@
 import Button from '@/components/ui/button'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TService } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
 import { ArrowSwapVertical, Edit, MoreSquare, Trash } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 export const ServicesColumns: ColumnDef<TService>[] = [
 	{
@@ -100,23 +94,28 @@ export const ServicesColumns: ColumnDef<TService>[] = [
 						<MoreSquare className='stroke-content size-5' variant='Broken' />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='start'>
-						<DropdownMenuLabel> عملیات</DropdownMenuLabel>
-						<DropdownMenuSeparator />
 						<DropdownMenuItem>
-							<Link href={`/dashboard/services/${slug}/edit`} className='flex items-center gap-2'>
-								<Edit className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>ویرایش</p>
+							<Link href={`/dashboard/services/${slug}/edit`} className='flex items-center gap-2 text-amber-500'>
+								<Edit className='stroke-amber-500 size-4 shrink-0' variant='Broken' />
+								<p>ویرایش خدمت</p>
 							</Link>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
 							<button
-								className='flex items-center gap-2 cursor-pointer'
-								onClick={() => {
-									axios.delete(`/api/dashboard/services/${slug}`)
+								className='flex items-center gap-2 cursor-pointer text-red-500'
+								onClick={async () => {
+									try {
+										toast('در حال حذف خدمت', { icon: '⏳' })
+										await axios.delete(`/api/dashboard/services/${slug}`)
+										toast(' خدمت با موفقیت حذف شد', { icon: '✅' })
+									} catch (error) {
+										console.log(error)
+										toast('خطا در  حذف خدمت', { icon: '❌' })
+									}
 								}}
 							>
-								<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>حذف مقاله</p>
+								<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />
+								<p>حذف خدمت</p>
 							</button>
 						</DropdownMenuItem>
 					</DropdownMenuContent>

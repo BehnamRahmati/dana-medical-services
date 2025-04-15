@@ -93,10 +93,10 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 	}
 
 	return (
-		<div dir='ltr'>
+		<div dir='ltr' className='h-80'>
 			<ReactQuillComponent
 				forwardedRef={quillRef as RefObject<ReactQuill>}
-				className='h-[600px] mb-32 lg:mb-16'
+				className='h-56 mb-32 lg:mb-16'
 				theme='snow'
 				value={editorValue}
 				onChange={e => onChangeEditor(e)}

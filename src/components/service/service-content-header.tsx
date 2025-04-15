@@ -1,6 +1,7 @@
 import { Category, Clock } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import ServiceItemsList from './items/service-items-list'
 
 type TProps = { title: string; readTime: number; thumbnail: string; category?: string; categorySlug?: string }
 
@@ -25,6 +26,7 @@ export default function ServiceContentHeader({ category, categorySlug, title, re
 				</div>
 			</div>
 			<h1 className='text-3xl lg:text-5xl font-extrabold leading-14 lg:leading-20 mt-5'>{title}</h1>
+			<ServiceItemsList />
 		</div>
 	)
 }

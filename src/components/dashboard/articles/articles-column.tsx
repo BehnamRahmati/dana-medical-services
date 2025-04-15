@@ -1,18 +1,11 @@
 import Button from '@/components/ui/button'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+
 import { TArticle, TCategory, TLike, TTag, TView } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
-import axios from 'axios'
-import { ArrowSwapVertical, Edit, MoreSquare, Trash } from 'iconsax-react'
+import { ArrowSwapVertical } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import ArticlesActionCell from './cells/articles-action-cell'
 
 export const articleColumns: ColumnDef<TArticle>[] = [
 	{
@@ -110,14 +103,13 @@ export const articleColumns: ColumnDef<TArticle>[] = [
 			const status = row.getValue('status') as string
 			switch (status) {
 				case 'PUBLISHED':
-					return <div className='text-green-500 bg-green-500/20 w-fit py-1 px-2.5 rounded-md'>منتشر شده</div>
-					break
+					return <div className='text-green-500 text-xs bg-green-500/20 w-fit py-1 px-2.5 rounded-md'>منتشر شده</div>
+
 				case 'DRAFT':
-					return <div className='text-amber-500 bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>پیش نویس</div>
-					break
+					return <div className='text-amber-500 text-xs bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>پیش نویس</div>
+
 				default:
-					return <div className='text-content bg-content/20 w-fit py-1 px-2.5 rounded-md'>بایگانی</div>
-					break
+					return <div className='text-content text-xs bg-content/20 w-fit py-1 px-2.5 rounded-md'>بایگانی</div>
 			}
 		},
 	},
@@ -176,34 +168,7 @@ export const articleColumns: ColumnDef<TArticle>[] = [
 		header: 'عملیات',
 		cell: ({ row }) => {
 			const slug = row.getValue('slug') as string
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<MoreSquare className='stroke-content size-5' variant='Broken' />
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='start'>
-						<DropdownMenuLabel> عملیات</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<Link href={`/dashboard/articles/${slug}/edit`} className='flex items-center gap-2'>
-								<Edit className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>ویرایش مقاله</p>
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem>
-							<button
-								className='flex items-center gap-2 cursor-pointer'
-								onClick={() => {
-									axios.delete(`/api/dashboard/articles/${slug}`)
-								}}
-							>
-								<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>حذف مقاله</p>
-							</button>
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			)
+			return <ArticlesActionCell slug={slug} />
 		},
 	},
 ]

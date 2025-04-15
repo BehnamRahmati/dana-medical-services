@@ -39,10 +39,10 @@ export default function DashboardSidebar() {
 						<SheetContent side='right' className='p-5 border-0!'>
 							<SheetHeader>
 								<SheetTitle asChild>
-									<div className='flex items-center gap-2'>
+									<Link href='/' className='flex items-center gap-2'>
 										<h3 className='text-3xl font-bold leading-8 text-primary'>دنا.</h3>
 										<p className='*:inline-block shrink-0'>خدمات پزشکی در منزل</p>
-									</div>
+									</Link>
 								</SheetTitle>
 							</SheetHeader>
 							<SidebarMenu>
@@ -120,10 +120,10 @@ export default function DashboardSidebar() {
 			<div className='hidden lg:block'>
 				<Sidebar>
 					<SidebarHeader>
-						<div className='flex items-center gap-2'>
+						<Link href='/' className='flex items-center gap-2'>
 							<h3 className='text-3xl font-bold leading-8 text-primary'>دنا.</h3>
 							<p className='*:inline-block shrink-0'>خدمات پزشکی در منزل</p>
-						</div>
+						</Link>
 					</SidebarHeader>
 					<SidebarSeperator />
 					<SidebarContent>

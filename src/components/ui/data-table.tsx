@@ -3,6 +3,7 @@ import { flexRender, Table as TTable } from '@tanstack/react-table'
 import { ArrowDown2, ArrowSquareLeft, ArrowSquareRight } from 'iconsax-react'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from './dropdown-menu'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
+import { Skeleton } from './skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -111,7 +112,7 @@ function DataTableFilters({ table }: { table: TTable<any> }) {
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<button className='flex items-center gap-3 border border-input rounded-md py-1.5 px-2.5 text-sm shadow-xs'>
-						<span> حذف ستون ها </span>
+						<span> حذف ستون </span>
 						<ArrowDown2 className='size-4 stroke-content' variant='Broken' />
 					</button>
 				</DropdownMenuTrigger>
@@ -137,4 +138,28 @@ function DataTableFilters({ table }: { table: TTable<any> }) {
 	)
 }
 
-export { DataTable, DataTableFilters, DatatablePagination }
+function DataTableSkeleton() {
+	return (
+		<div className='flex flex-col gap-5 h-full justify-between bg-accent p-2.5 lg:p-5 rounded-xl'>
+			<div className='flex items-center justify-between'>
+				<Skeleton className='w-1/4 h-7 bg-content/10' />
+				<Skeleton className='w-1/4 h-7 bg-content/10' />
+			</div>
+			<div className='flex flex-col gap-2.5 flex-1'>
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+				<Skeleton className='w-full h-7 bg-content/10' />
+			</div>
+			<div className='flex items-center justify-center'>
+				<Skeleton className='w-1/4 h-7 bg-content/10' />
+			</div>
+		</div>
+	)
+}
+
+export { DataTable, DataTableFilters, DatatablePagination, DataTableSkeleton }

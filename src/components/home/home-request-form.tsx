@@ -1,6 +1,8 @@
 'use client'
 import useVisibleSection from '@/hooks/use-visible-section'
+import axios from 'axios'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { Progress } from '../ui/progress'
 import Section from '../ui/section'
@@ -26,6 +28,11 @@ export default function HomeRequestForm() {
 		setProgress(prev => prev + 1)
 	}
 
+	const handleReset = () => {
+		setProgress(1)
+		setFormData({})
+	}
+
 	const handleTimeSubmit = (data: timetype) => {
 		setFormData(prevData => ({ ...prevData, ...data }))
 		handleForward()
@@ -34,10 +41,17 @@ export default function HomeRequestForm() {
 		setFormData(prevData => ({ ...prevData, ...data }))
 		handleForward()
 	}
-	const handleInfoSubmit = (data: infotype) => {
+	const handleInfoSubmit = async (data: infotype) => {
 		const finalForm = { ...formData, ...data }
-		handleForward()
-		console.warn('Final Form Data:', finalForm)
+		try {
+			toast('در حال ارسال درخواست', { icon: '⏳' })
+			await axios.post('/api/dashboard/requests', finalForm)
+			handleForward()
+			toast('درخواست شما با موفقیت ثبت شد', { icon: '✅' })
+		} catch (error) {
+			console.error('Error submitting form:', error)
+			toast('خطا در ارسال درخواست', { icon: '❌' })
+		}
 	}
 
 	const renderingForms = (step: number) => {
@@ -47,7 +61,7 @@ export default function HomeRequestForm() {
 			case 3:
 				return <RequestInfoForm onBack={handleBack} onSubmit={handleInfoSubmit} />
 			case 4:
-				return <RequestSubmitted onReset={() => setProgress(1)} />
+				return <RequestSubmitted onReset={handleReset} />
 			default:
 				return <RequestServiceForm onSubmit={handleServiceSubmit} />
 		}
@@ -75,10 +89,10 @@ export default function HomeRequestForm() {
 	return (
 		<Section
 			ref={sectionRef}
-			className={`bg-primary px-2.5 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
+			className={`bg-primary px-2.5 my-20 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
 			id='request-service'
 		>
-			<div className='flex flex-col lg:flex-row gap-10 py-10 lg:py-0 lg:px-20 relative'>
+			<div className='flex flex-col lg:flex-row gap-10 py-10 lg:py-0 lg:px-20 relative z-10'>
 				<div className='*:text-white max-w-lg text-center lg:text-right'>
 					<H2>ثبت درخواست خدمات</H2>
 					<Paragraph>
@@ -87,7 +101,7 @@ export default function HomeRequestForm() {
 						خدمات سلامت در محل را برای کاربران تسهیل نماید.
 					</Paragraph>
 				</div>
-				<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-5 md:p-10 shadow-md lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
+				<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-5 md:p-10 shadow-md z-30 lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
 					<div className='mb-10'>
 						<H3 className=' w-fit mx-auto'>فرم درخواست خدمات</H3>
 						<Paragraph className='text-center '>

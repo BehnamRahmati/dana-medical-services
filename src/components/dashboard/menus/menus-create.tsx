@@ -1,5 +1,6 @@
 'use client'
 import Button from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -10,7 +11,6 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { z } from 'zod'
-
 const formSchema = z.object({
 	name: z.string().min(1, { message: 'required' }),
 	parent: z.string(),
@@ -42,57 +42,67 @@ export default function MenuCreateForm() {
 		}
 	}
 	return (
-		<div className='rounded-lg p-5 bg-accent mb-5'>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5 '>
-					<FormField
-						control={form.control}
-						name='name'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>عنوان منو</FormLabel>
-								<FormControl>
-									<Input {...field} />
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					{menuLoading || !menuData || !menuData.menus ? (
-						<p>loading</p>
-					) : (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button variant={'default'} className='py-1'>
+					ساخت منو جدید
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>فرم ساخت منو </DialogTitle>
+				</DialogHeader>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5 '>
 						<FormField
 							control={form.control}
-							name='parent'
+							name='name'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel> منوی والد</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger className='w-full'>
-												<SelectValue placeholder='choose a tag' />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectGroup>
-												{menuData.menus.length &&
-													menuData.menus.map(tag => (
-														<SelectItem value={tag.id} key={tag.id}>
-															{tag.name}
-														</SelectItem>
-													))}
-											</SelectGroup>
-										</SelectContent>
-									</Select>
-									<FormMessage />
+									<FormLabel>عنوان منو</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
 								</FormItem>
 							)}
 						/>
-					)}
-					<Button variant={'default'} size={'lg'} className='w-full'>
-						ثبت منو جدید
-					</Button>
-				</form>
-			</Form>
-		</div>
+						{menuLoading || !menuData || !menuData.menus ? (
+							<p>loading</p>
+						) : (
+							<FormField
+								control={form.control}
+								name='parent'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> منوی والد</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className='w-full'>
+													<SelectValue placeholder='choose a tag' />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectGroup>
+													{menuData.menus.length &&
+														menuData.menus.map(tag => (
+															<SelectItem value={tag.id} key={tag.id}>
+																{tag.name}
+															</SelectItem>
+														))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						)}
+						<Button variant={'default'} size={'lg'} className='w-full'>
+							ثبت منو جدید
+						</Button>
+					</form>
+				</Form>
+			</DialogContent>
+		</Dialog>
 	)
 }

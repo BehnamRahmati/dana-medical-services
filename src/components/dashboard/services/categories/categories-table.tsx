@@ -1,10 +1,12 @@
 'use client'
 
+import { DataTableSkeleton } from '@/components/ui/data-table'
+import GenericDataTable from '@/components/ui/generic-data-table'
 import { TCategory } from '@/lib/types'
 import axios from 'axios'
 import useSWR from 'swr'
 import { ServicescategoriesColumns } from './categories-column'
-import CategoriesDataTable from './categories-data-table'
+import ServicesCategroriesCreate from './categories-create'
 
 async function fetcher(url: string): Promise<{ categories: TCategory[] }> {
 	const response = await axios.get(url)
@@ -12,9 +14,19 @@ async function fetcher(url: string): Promise<{ categories: TCategory[] }> {
 }
 
 export default function ServicesCategoriesTable() {
-	const { data, isLoading } = useSWR('/api/dashboard/services/categories', fetcher)
+	const { data, isLoading, mutate } = useSWR('/api/dashboard/services/categories', fetcher)
 
-	if (isLoading || !data) return <p>loading</p>
+	if (isLoading || !data) return <DataTableSkeleton />
 
-	return <CategoriesDataTable columns={ServicescategoriesColumns} data={data.categories} />
+	return (
+		<div className='bg-accent p-2.5 lg:p-5 rounded-xl h-full flex flex-col'>
+			<GenericDataTable
+				data={data.categories}
+				mutate={mutate}
+				columns={ServicescategoriesColumns}
+				filterColumn='name'
+				createFormComponent={<ServicesCategroriesCreate mutate={mutate} />}
+			/>
+		</div>
+	)
 }

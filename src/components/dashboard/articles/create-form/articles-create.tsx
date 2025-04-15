@@ -3,9 +3,9 @@ import { Form } from '@/components/ui/form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { createFormSchema } from '../lib/schemas'
 import CreateFormMain from './create-form-main'
@@ -13,7 +13,7 @@ import CreateFormSidebar from './create-form-sidebar'
 
 export default function ArticlesCreateForm() {
 	const [imageUrl, setImageUrl] = useState('')
-	const router = useRouter()
+
 	const form = useForm<z.infer<typeof createFormSchema>>({
 		resolver: zodResolver(createFormSchema),
 		defaultValues: {
@@ -51,10 +51,13 @@ export default function ArticlesCreateForm() {
 
 	async function onSubmitToNewArticle(values: z.infer<typeof createFormSchema>) {
 		try {
+			toast('در حال انتشار مقاله...', { icon: '⏳' })
 			await createArticle(values)
-			router.refresh()
+			toast('مقاله با موفقیت منتشر شد.', { icon: '✅' })
+			form.reset()
 		} catch (error) {
 			console.error(error)
+			toast('مقاله منتشر نشد. دوباره تلاش کنید.', { icon: '❌' })
 		}
 	}
 

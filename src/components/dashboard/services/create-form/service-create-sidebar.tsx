@@ -26,9 +26,8 @@ export default function CreateServiceFormSidebar({ form }: TProps) {
 				size='lg'
 				className='text-lg shrink-0 cursor-pointer'
 			>
-				بروزرسانی مقاله
+				ساخت خدمت جدید
 			</Button>
-			{form.formState.isSubmitSuccessful && <p className='text-primary'>با موفقیت مقاله جدید ثبت شد</p>}
 		</div>
 	)
 }

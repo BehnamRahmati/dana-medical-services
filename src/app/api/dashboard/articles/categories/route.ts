@@ -6,6 +6,7 @@ export async function GET() {
 		where: {
 			services: { none: {} },
 		},
+		orderBy: { createdAt: 'desc' },
 	})
 	if (!categories) {
 		return NextResponse.json({ categories: [] })

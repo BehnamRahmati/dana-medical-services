@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { toast } from 'sonner'
 import { editFormSchema } from '../lib/schemas'
 import EditFormMain from './edit-form-main'
 import EditFormSidebar from './edit-form-sidebar'
@@ -49,14 +50,16 @@ export default function ArticlesEditForm({ article }: { article: TArticle }) {
 		formData.append('id', article.id)
 
 		try {
-			const response = await axios.put('/api/dashboard/articles', formData, {
+			toast('در حال بروزرسانی...', { icon: '⏳' })
+			await axios.put('/api/dashboard/articles', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			})
-			console.warn(response.data)
+			toast('مقاله با موفقیت بروزرسانی شد', { icon: '✅' })
 		} catch (error) {
 			console.error(error)
+			toast('خطا در بروزرسانی مقاله', { icon: '❌' })
 		}
 	}
 

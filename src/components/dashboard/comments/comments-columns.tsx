@@ -1,17 +1,10 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TArticle, TComment } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
 import { MoreSquare, TickSquare, Trash } from 'iconsax-react'
+import { toast } from 'sonner'
 import CommentReplyForm from './comment-reply-form'
-
 export const CommentColumns: ColumnDef<TComment>[] = [
 	{
 		accessorKey: 'article',
@@ -51,13 +44,18 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 							<MoreSquare className='stroke-content size-5' variant='Broken' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start'>
-							<DropdownMenuLabel> عملیات</DropdownMenuLabel>
-							<DropdownMenuSeparator />
 							<DropdownMenuItem>
 								<button
-									className='flex items-center gap-2 cursor-pointer '
-									onClick={() => {
-										axios.patch(`/api/dashboard/comments`, { commentId: id })
+									className='flex items-center gap-2 cursor-pointer text-green-500'
+									onClick={async () => {
+										try {
+											toast('در حال تایید دیدگاه', { icon: '⏳' })
+											axios.patch(`/api/dashboard/comments`, { commentId: id })
+											toast('دیدگاه با موفقیت تایید شد', { icon: '✅' })
+										} catch (error) {
+											console.log(error)
+											toast('خطا در تایید دیدگاه', { icon: '❌' })
+										}
 									}}
 								>
 									<TickSquare className='stroke-green-500 size-4 shrink-0' variant='Broken' />
@@ -66,9 +64,16 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<button
-									className='flex items-center gap-2 cursor-pointer '
-									onClick={() => {
-										axios.delete(`/api/dashboard/comments/${id}`)
+									className='flex items-center gap-2 cursor-pointer text-red-500'
+									onClick={async () => {
+										try {
+											toast('در حال حذف دیدگاه', { icon: '⏳' })
+											await axios.delete(`/api/dashboard/comments/${id}`)
+											toast(' دیدگاه با موفقیت حذف شد', { icon: '✅' })
+										} catch (error) {
+											console.log(error)
+											toast('خطا در حذف دیدگاه', { icon: '❌' })
+										}
 									}}
 								>
 									<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />

@@ -1,16 +1,9 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TCategory } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
-import { Edit, MoreSquare, Trash } from 'iconsax-react'
-import Link from 'next/link'
+import { MoreSquare, Trash } from 'iconsax-react'
+import { toast } from 'sonner'
 
 export const categoriesColumns: ColumnDef<TCategory>[] = [
 	{
@@ -32,22 +25,21 @@ export const categoriesColumns: ColumnDef<TCategory>[] = [
 						<MoreSquare className='stroke-content size-5' variant='Broken' />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='start'>
-						<DropdownMenuLabel> عملیات</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<Link href={`/dashboard/articles/${slug}/edit`} className='flex items-center gap-2'>
-								<Edit className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>ویرایش مقاله</p>
-							</Link>
-						</DropdownMenuItem>
 						<DropdownMenuItem>
 							<button
-								className='flex items-center gap-2 cursor-pointer'
-								onClick={() => {
-									axios.delete(`/api/dashboard/categories/${slug}`)
+								className='flex items-center gap-2 cursor-pointer text-red-500'
+								onClick={async () => {
+									try {
+										toast('در حال حذف دسته بندی', { icon: '⏳' })
+										await axios.delete(`/api/dashboard/categories/${slug}`)
+										toast('دسته بندی با موفقیت حذف شد', { icon: '✅' })
+									} catch (error) {
+										console.log(error)
+										toast('خطا در حذف دسته بندی', { icon: '❌' })
+									}
 								}}
 							>
-								<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
+								<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />
 								<p>حذف دسته بندی</p>
 							</button>
 						</DropdownMenuItem>

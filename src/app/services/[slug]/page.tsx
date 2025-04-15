@@ -5,10 +5,43 @@ import ServiceContentHeader from '@/components/service/service-content-header'
 import ServiceSimilars from '@/components/service/similars/service-similars'
 import { TService } from '@/lib/types'
 import axios from 'axios'
+import { Metadata } from 'next'
 
 async function fetchServices(slug: string): Promise<TService> {
 	const response = await axios.get(`${process.env.NEXTAUTH_URL}/api/services/${slug}`)
 	return response.data.service
+}
+
+// Generate dynamic metadata based on the article
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+	const slug = (await params).slug
+	const service = await fetchServices(slug)
+
+	// Extract the first few sentences for description (or use a dedicated excerpt field if available)
+	const description = service.excerpt ? service.excerpt : 'این مقاله را از خدمات پزشکی دنا بخوانید'
+
+	return {
+		title: `${service.title} | خدمات پزشکی دنا`,
+		description: description,
+		openGraph: {
+			title: service.title,
+			description: description,
+			url: `${process.env.NEXTAUTH_URL}/services/${service.slug}`,
+			siteName: 'Dana Medical Services',
+			images: [
+				{
+					url: service.thumbnail || `${process.env.NEXTAUTH_URL}/images/default-service.jpg`,
+					width: 1200,
+					height: 630,
+					alt: service.title,
+				},
+			],
+			locale: 'fa_IR',
+			type: 'article',
+			publishedTime: service.createdAt.toString(),
+			authors: [service.author?.name || 'خدمات پزشکی دنا'],
+		},
+	}
 }
 
 export default async function SingleServicesPage({ params }: { params: Promise<{ slug: string }> }) {

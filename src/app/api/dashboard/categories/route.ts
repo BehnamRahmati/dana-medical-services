@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
-	const categories = await prisma.category.findMany()
+	const categories = await prisma.category.findMany({ orderBy: { createdAt: 'desc' } })
 	if (!categories) {
 		return NextResponse.json({ categories: [] })
 	}

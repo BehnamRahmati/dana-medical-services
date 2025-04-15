@@ -25,6 +25,11 @@ const links = [
 		icon: <HashtagSquare className='size-5 stroke-content/60' variant='Broken' />,
 		href: '/dashboard/services/categories',
 	},
+	{
+		label: ' آیتم های خدمات',
+		icon: <HashtagSquare className='size-5 stroke-content/60' variant='Broken' />,
+		href: '/dashboard/services/items',
+	},
 ]
 
 export default function DashboardSidebarServices({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {

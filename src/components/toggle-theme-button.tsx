@@ -10,7 +10,7 @@ export default function ToggleThemeButton() {
 	const themes = useMemo(
 		() => [
 			{ name: 'light', icon: <Sun1 className='fill-content size-5' variant='Bulk' /> },
-			{ name: 'dark', icon: <Moon className='fill-slate-700 size-5' variant='Bulk' /> },
+			{ name: 'dark', icon: <Moon className='fill-content size-5' variant='Bulk' /> },
 			{ name: 'system', icon: <Setting2 className='fill-content size-5' variant='Bulk' /> },
 		],
 		[],

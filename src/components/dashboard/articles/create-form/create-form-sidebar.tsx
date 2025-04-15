@@ -16,9 +16,14 @@ interface ArticleSidebarProps {
 export default function CreateFormSidebar({ form }: ArticleSidebarProps) {
 	return (
 		<div className='w-full md:w-80 flex flex-col gap-10 bg-accent p-5 rounded-lg'>
-			<DashboardTagsSelect label='برچسب مقاله :' form={form} />
-			<DashboardCategoriesSelect url='/api/dashboard/articles/categories' label='دسته بندی مقاله :' form={form} />
-			<DashboardUsersSelect label='نویسنده مقاله :' form={form} />
+			<DashboardTagsSelect placeholder='یک برچسب را انتخاب کنید' label='برچسب مقاله :' form={form} />
+			<DashboardCategoriesSelect
+				placeholder='یک دسته بندی را انتخاب کنید'
+				url='/api/dashboard/articles/categories'
+				label='دسته بندی مقاله :'
+				form={form}
+			/>
+			<DashboardUsersSelect placeholder='یک کاربر را انتخاب کنید' label='نویسنده مقاله :' form={form} />
 			<DashboardReadTimeInput label='زمان مطالعه مقاله :' form={form} />
 			<DashboardStatusSelect label='وضعیت مقاله :' form={form} />
 
