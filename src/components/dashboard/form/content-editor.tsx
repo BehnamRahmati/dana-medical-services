@@ -1,5 +1,5 @@
-import QuillEditor from '@/components/ui/editor'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import TiptapEditor from '@/components/ui/tiptap-editor'
 import { Path, UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 import { createFormSchema, editFormSchema } from '../articles/lib/schemas'
@@ -24,10 +24,11 @@ export default function DashboardContentEditor<T extends SupportedSchema & { con
 			control={form.control}
 			name={'content' as Path<T>}
 			render={({ field }) => (
-				<FormItem>
+				<FormItem className='main-editor'>
 					<FormLabel>{label}</FormLabel>
 					<FormControl>
-						<QuillEditor onChangeEditor={field.onChange} editorValue={field.value} />
+						{/* <QuillEditor onChangeEditor={field.onChange} editorValue={field.value} /> */}
+						<TiptapEditor value={field.value} onChange={field.onChange} />
 					</FormControl>
 					<FormMessage />
 				</FormItem>

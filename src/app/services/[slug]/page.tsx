@@ -1,21 +1,20 @@
-import ServiceComment from '@/components/service/comments/service-comment'
+import ServiceItemsList from '@/components/service/items/service-items-list'
 import ServiceSidebarLatest from '@/components/service/latest/service-sidebar-latest'
 import ServiceContent from '@/components/service/service-content'
 import ServiceContentHeader from '@/components/service/service-content-header'
-import ServiceSimilars from '@/components/service/similars/service-similars'
+import ServiceViews from '@/components/service/service-views'
+import { serverDataFetcher } from '@/lib/helpers'
 import { TService } from '@/lib/types'
-import axios from 'axios'
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 
-async function fetchServices(slug: string): Promise<TService> {
-	const response = await axios.get(`${process.env.NEXTAUTH_URL}/api/services/${slug}`)
-	return response.data.service
-}
+const ServiceComment = dynamic(() => import('@/components/service/comments/service-comment'))
+const ServiceSimilars = dynamic(() => import('@/components/service/similars/service-similars'))
 
 // Generate dynamic metadata based on the article
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
 	const slug = (await params).slug
-	const service = await fetchServices(slug)
+	const service = (await serverDataFetcher<{ service: TService }>(`/api/services/${slug}`)).service
 
 	// Extract the first few sentences for description (or use a dedicated excerpt field if available)
 	const description = service.excerpt ? service.excerpt : 'این مقاله را از خدمات پزشکی دنا بخوانید'
@@ -46,10 +45,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function SingleServicesPage({ params }: { params: Promise<{ slug: string }> }) {
 	const slug = (await params).slug
-	const service = await fetchServices(slug)
+	const service = (await serverDataFetcher<{ service: TService }>(`/api/services/${slug}`)).service
 
 	return (
-		<div className='flex flex-col lg:flex-row gap-5 py-5 lg:py-20 px-2.5 lg:px-5'>
+		<div className='flex flex-col lg:flex-row gap-5 py-5 lg:py-20 px-2.5 lg:px-5 container mx-auto'>
 			<div className='flex-1 '>
 				<div className='bg-accent p-2.5 lg:p-10 rounded-xl'>
 					<ServiceContentHeader
@@ -57,8 +56,9 @@ export default async function SingleServicesPage({ params }: { params: Promise<{
 						categorySlug={service.category?.slug}
 						thumbnail={service.thumbnail}
 						title={service.title}
-						readTime={service.read}
+						read={service.read}
 					/>
+					<ServiceItemsList items={service.serviceItems} />
 					<ServiceContent content={service.content} />
 				</div>
 				<ServiceSimilars categorySlug={service.category?.slug} serviceId={service.id} />
@@ -67,6 +67,7 @@ export default async function SingleServicesPage({ params }: { params: Promise<{
 			<div className='lg:w-80'>
 				<ServiceSidebarLatest />
 			</div>
+			<ServiceViews serviceSlug={service.slug} />
 		</div>
 	)
 }

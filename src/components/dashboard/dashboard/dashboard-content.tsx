@@ -1,6 +1,7 @@
 import DashboardArticles from './dashboard-articles'
 import DashboardChart from './dashboard-chart'
 import DashboardComments from './dashboard-comments'
+import DashboardServices from './dashboard-services'
 import DashboardStatistics from './dashboard-statistics'
 
 export default function DashboardContent() {
@@ -11,8 +12,9 @@ export default function DashboardContent() {
 				<DashboardChart />
 				<DashboardArticles />
 			</div>
-			<div className='w-full lg:w-80'>
+			<div className='w-full lg:w-80 flex flex-col gap-5'>
 				<DashboardComments />
+				<DashboardServices />
 			</div>
 		</div>
 	)

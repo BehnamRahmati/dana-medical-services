@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import { Element } from 'html-react-parser'
 import { TArticle, TCategory, TComment, TRequest, TService, TTag, TUser } from './types'
 
 export async function fetchArticles(url: string): Promise<TArticle[]> {
@@ -34,4 +34,25 @@ export async function fetchRequests(url: string): Promise<TRequest[]> {
 export async function fetchServicesCategories(url: string): Promise<TCategory[]> {
 	const response = await axios.get(url)
 	return response.data.categories
+}
+
+export async function dataFetcher<T>([url]: string[], options?: RequestInit): Promise<T> {
+	const response = await fetch(url, { method: 'GET', ...options })
+	if (!response.ok) {
+		throw new Error(`Failed to fetch data from ${url}: ${response.statusText}`)
+	}
+	return response.json() as Promise<T>
+	return await response.json()
+}
+
+export async function serverDataFetcher<T>(url: string, options?: RequestInit): Promise<T> {
+	const response = await fetch(`${process.env.NEXTAUTH_URL}${url}`, { method: 'GET', cache: 'force-cache', ...options })
+	if (!response.ok) {
+		throw new Error(`Failed to fetch data from ${url}: ${response.statusText}`)
+	}
+	return response.json() as Promise<T>
+}
+
+export const getAttribute = (domNode: Element, attribute: string, defaultValue: string | number = ''): string | number => {
+	return domNode.attribs?.[attribute] || defaultValue
 }

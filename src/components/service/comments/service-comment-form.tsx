@@ -36,7 +36,7 @@ export default function ServiceCommentForm() {
 					<Profile className='fill-white size-8' variant='Bulk' />
 					<p className='text-white text-xl mt-1'>برای ارسال دیدگاه لازم است وارد شده یا ثبت‌نام کنید</p>
 				</div>
-				<Link href='/' className='text-white text-xl flex items-center gap-2'>
+				<Link href='/login' className='text-white text-xl flex items-center gap-2'>
 					<span className='underline underline-offset-2 mt-1'>ورود یا ثبت نام</span>
 					<ArrowLeft3 className='fill-white size-7' variant='Bulk' />
 				</Link>

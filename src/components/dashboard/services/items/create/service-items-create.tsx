@@ -3,9 +3,9 @@
 import DashboardServicesSelect from '@/components/dashboard/form/services-select'
 import Button from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import QuillEditor from '@/components/ui/editor'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import TiptapEditor from '@/components/ui/tiptap-editor'
 import { TServiceItem } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
@@ -57,7 +57,7 @@ export default function ServiceItemsCreateForm({
 					<DialogTitle>ساخت ایتم خدمت جدید</DialogTitle>
 				</DialogHeader>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-10'>
+					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-10 service-item'>
 						<div className='flex *:flex-1 gap-5'>
 							<FormField
 								control={form.control}
@@ -107,7 +107,8 @@ export default function ServiceItemsCreateForm({
 								<FormItem>
 									<FormLabel>توضیحات</FormLabel>
 									<FormControl>
-										<QuillEditor onChangeEditor={field.onChange} editorValue={field.value} />
+										{/* <QuillEditor onChangeEditor={field.onChange} editorValue={field.value} /> */}
+										<TiptapEditor onChange={field.onChange} value={field.value} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

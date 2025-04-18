@@ -133,37 +133,37 @@ body {
 .content-area h6,
 .content-area hr,
 .content-area img,
-.ql-container .ql-editor p,
-.ql-container .ql-editor li,
-.ql-container .ql-editor ul,
-.ql-container .ql-editor ol,
-.ql-container .ql-editor blockquote,
-.ql-container .ql-editor pre,
-.ql-container .ql-editor table,
-.ql-container .ql-editor h2,
-.ql-container .ql-editor h3,
-.ql-container .ql-editor h4,
-.ql-container .ql-editor h5,
-.ql-container .ql-editor h6,
-.ql-container .ql-editor hr,
-.ql-container .ql-editor img {
+.tiptap.ProseMirror p,
+.tiptap.ProseMirror li,
+.tiptap.ProseMirror ul,
+.tiptap.ProseMirror ol,
+.tiptap.ProseMirror blockquote,
+.tiptap.ProseMirror pre,
+.tiptap.ProseMirror table,
+.tiptap.ProseMirror h2,
+.tiptap.ProseMirror h3,
+.tiptap.ProseMirror h4,
+.tiptap.ProseMirror h5,
+.tiptap.ProseMirror h6,
+.tiptap.ProseMirror hr,
+.tiptap.ProseMirror img {
 	@apply text-content mb-5;
 }
 
 .content-area p,
-.ql-container .ql-editor p,
-.ql-container .ql-editor li,
+.tiptap.ProseMirror p,
+.tiptap.ProseMirror li,
 .content-area li {
 	@apply text-lg font-light leading-10;
 }
 
 .content-area h2,
-.ql-container .ql-editor h2 {
-	@apply text-2xl font-extrabold;
+.tiptap.ProseMirror h2 {
+	@apply text-4xl font-extrabold;
 }
 
 .content-area h3,
-.ql-container .ql-editor h3 {
+.tiptap.ProseMirror h3 {
 	@apply text-lg font-bold;
 }
 
@@ -172,43 +172,62 @@ body {
 .content-area h6,
 .content-area strong,
 .content-area b,
-.ql-container .ql-editor h4,
-.ql-container .ql-editor h5,
-.ql-container .ql-editor h6,
-.ql-container .ql-editor strong,
-.ql-container .ql-editor b {
+.tiptap.ProseMirror h4,
+.tiptap.ProseMirror h5,
+.tiptap.ProseMirror h6,
+.tiptap.ProseMirror strong,
+.tiptap.ProseMirror b {
 	@apply font-extrabold;
 }
 
 .content-area img,
-.ql-container .ql-editor img {
+.tiptap.ProseMirror img {
 	@apply w-full;
 }
 
 .content-area ul,
-.ql-container .ql-editor ul {
+.tiptap.ProseMirror ul {
 	@apply mr-5 list-disc pr-5;
 }
 
 .content-area ol,
-.ql-container .ql-editor ol {
+.tiptap.ProseMirror ol {
 	@apply mr-5 list-decimal pr-5;
 }
 
 .content-area a,
-.ql-container .ql-editor a {
+.tiptap.ProseMirror a {
 	@apply text-secondary;
 }
 
 .content-area blockquote,
-.ql-container .ql-editor blockquote {
-	@apply bg-primary relative w-full rounded-lg p-10 py-20 text-lg font-light leading-10;
+.tiptap.ProseMirror blockquote {
+	@apply bg-primary relative w-full rounded-lg p-10 py-20 text-lg font-light leading-10 text-white;
 	@apply before:absolute before:right-10 before:top-6 before:block before:h-8 before:text-9xl before:text-white before:content-['\201D'];
 	@apply after:absolute after:bottom-6 after:left-10 after:block after:h-8 after:text-9xl after:text-white after:content-['\201C'];
 }
 
-.ql-container .ql-editor {
-	font-family: yekanbakh, iranyekan, Helvetica, sans-serif;
+.content-area blockquote p,
+.content-area blockquote ul,
+.content-area blockquote ol,
+.content-area blockquote li,
+.tiptap.ProseMirror blockquote p,
+.tiptap.ProseMirror blockquote ul,
+.tiptap.ProseMirror blockquote ol,
+.tiptap.ProseMirror blockquote li {
+	@apply text-white;
+}
+
+.tiptap.ProseMirror {
+	@apply h-[500px] max-h-[500px] overflow-y-auto p-5 outline-0;
+}
+
+.service-item .tiptap.ProseMirror {
+	@apply h-[200px] max-h-[200px];
+}
+
+.ql-editor .ql-ui {
+	@apply -right-5;
 }
 
 @layer base {
@@ -226,4 +245,8 @@ body {
 }
 .service-item-content li {
 	@apply py-1.5;
+}
+
+.main-editor .react-quill-editor {
+	@apply h-[500px]!;
 }

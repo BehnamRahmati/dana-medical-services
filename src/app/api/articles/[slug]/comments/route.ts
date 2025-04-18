@@ -55,7 +55,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 	}
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
 	try {
 		const slug = (await params).slug
 		const { userId, commentId } = await req.json()
@@ -64,26 +64,47 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
 			throw new Error('userId شناسایی نشد')
 		}
 
-		const user = await prisma.user.findUnique({
-			where: { id: userId },
-			include: { likes: { select: { comment: true } } },
+		// First find the article by slug
+		const comment = await prisma.comment.findUnique({
+			where: { id: commentId },
+			select: { id: true },
 		})
 
-		if (!user) {
+		if (!comment) {
 			throw new Error('user شناسایی نشد')
 		}
 
-		const alreadyLiked = user.likes.some(like => like.comment?.id === commentId)
+		// Check if the like already exists
+		const existingLike = await prisma.like.findFirst({
+			where: {
+				userId: userId,
+				articleId: null,
+				serviceId: null,
+				commentId: commentId,
+			},
+		})
+		let result
 
-		const data = alreadyLiked ? { likes: { disconnect: { id: userId } } } : { likes: { connect: { id: userId } } }
+		if (existingLike) {
+			// If like exists, delete it
+			result = await prisma.like.delete({
+				where: { id: existingLike.id },
+			})
+		} else {
+			// If like doesn't exist, create it
+			result = await prisma.like.create({
+				data: {
+					user: { connect: { id: userId } },
+					comment: { connect: { id: comment.id } },
+				},
+			})
+		}
 
-		const comment = await prisma.article.update({ where: { slug }, data })
-
-		if (!comment) {
+		if (!result) {
 			throw new Error('خطا در افزایش لایک ها')
 		}
 
-		return NextResponse.json({ message: 'لایک ها با موفقیت افزایش یافت', comment }, { status: 200 })
+		return NextResponse.json({ message: 'لایک ها با موفقیت افزایش یافت', result }, { status: 200 })
 	} catch (error) {
 		if (error instanceof Error) {
 			console.log({ error })

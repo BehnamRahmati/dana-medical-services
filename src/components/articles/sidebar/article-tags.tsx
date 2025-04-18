@@ -2,37 +2,46 @@
 
 import { Skeleton } from '@/components/ui/skeleton'
 import useQueries from '@/hooks/use-queries'
-import { fetchTags } from '@/lib/helpers'
+import { dataFetcher } from '@/lib/helpers'
+import { TTag } from '@/lib/types'
 import { Tag2 } from 'iconsax-react'
 import Link from 'next/link'
 import useSWR from 'swr'
 
 export default function ArticleTags() {
 	const { currentParams, pathname } = useQueries()
-	const { data: tags, isLoading } = useSWR('/api/dashboard/tags', fetchTags)
+	const { data, isLoading, error } = useSWR<{ tags: TTag[] }>(['/api/dashboard/tags', 'articles-tags'], dataFetcher)
 
-	const renderTags = () => {
+	if (isLoading) {
 		return (
-			<ul className='flex items-center flex-wrap mt-5 gap-2'>
-				{isLoading || !tags ? (
-					<>
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-					</>
-				) : (
-					tags.map(tag => {
-						const newParam = { tags: tag.slug }
-						return (
-							<li key={tag.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
-								<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{tag.name}</Link>
-							</li>
-						)
-					})
-				)}
-			</ul>
+			<div className='border border-border rounded-lg py-10 px-5'>
+				<div className='flex items-center gap-2'>
+					<Tag2 className='size-10 fill-content' variant='Bulk' />
+					<h3 className='text-2xl font-bold mt-2'>برچسب های مقالات</h3>
+				</div>
+				<div className='flex flex-wrap gap-2 mt-5'>
+					{Array.from({ length: 5 }).map((_, index) => (
+						<Skeleton key={index} className='h-8 w-28 bg-content/20 rounded-md' />
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	if (error) {
+		return (
+			<div className='flex flex-col items-center justify-center gap-2'>
+				<span className='text-xl font-bold'>مشکلی پیش آمده است</span>
+				<span className='text-sm'>لطفا دوباره تلاش کنید</span>
+			</div>
+		)
+	}
+
+	if (!data || data.tags.length === 0) {
+		return (
+			<div className='flex flex-col items-center justify-center gap-2'>
+				<span className='text-xl font-bold'>برچسبی وجود ندارد</span>
+			</div>
 		)
 	}
 
@@ -40,9 +49,18 @@ export default function ArticleTags() {
 		<div className='border border-border rounded-lg py-10 px-5'>
 			<div className='flex items-center gap-2'>
 				<Tag2 className='size-10 fill-content' variant='Bulk' />
-				<h3 className='text-2xl font-bold mt-2'>تگ های مقالات</h3>
+				<h3 className='text-2xl font-bold mt-2'>برچسب های مقالات</h3>
 			</div>
-			{renderTags()}
+			<ul className='flex flex-wrap gap-2 mt-5'>
+				{data.tags.map(tag => {
+					const newParam = { tags: tag.slug }
+					return (
+						<li key={tag.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
+							<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{tag.name}</Link>
+						</li>
+					)
+				})}
+			</ul>
 		</div>
 	)
 }

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 export default function ServicesCard({ service }: { service: TService }) {
 	return (
-		<div className='bg-accent border border-border rounded-xl mt-12 group'>
+		<div className='bg-accent border border-border rounded-xl mt-12 group flex flex-col'>
 			<div className='bg-primary/60 w-11/12 rounded-xl h-44 mx-auto -mt-12 overflow-hidden flex items-center justify-center'>
 				<Image
 					alt='image'
@@ -15,7 +15,7 @@ export default function ServicesCard({ service }: { service: TService }) {
 					className='size-full rounded-xl transform group-hover:scale-110 transition-transform duration-200 ease-in-out'
 				/>
 			</div>
-			<div className='info w-11/12 mx-auto'>
+			<div className='info w-11/12 mx-auto flex-1'>
 				<Link href={`/services?category:${service.category?.slug}`} className='text-secondary mt-3 text-sm block'>
 					{service.category?.name}
 				</Link>

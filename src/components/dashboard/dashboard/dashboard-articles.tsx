@@ -1,13 +1,15 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Small } from '@/components/ui/typography'
-import { fetchArticles } from '@/lib/helpers'
+import { dataFetcher } from '@/lib/helpers'
+import { TArticle } from '@/lib/types'
 import moment from 'moment'
 import Image from 'next/image'
+import Link from 'next/link'
 import useSWR from 'swr'
 
 export default function DashboardArticles() {
-	const { data: articles, isLoading } = useSWR('/api/dashboard/articles', fetchArticles)
+	const { data, isLoading } = useSWR<{ articles: TArticle[] }>(['/api/dashboard/articles', 'dashboard-articles'], dataFetcher)
 	return (
 		<div className='w-full rounded-lg bg-accent p-5'>
 			<div className='mb-5'>
@@ -28,10 +30,10 @@ export default function DashboardArticles() {
 				<li className='w-2/12'>عملیات</li>
 			</ul>
 			<ul className='flex flex-col gap-5 w-full'>
-				{isLoading || !articles || !articles.length ? (
+				{isLoading || !data || !data.articles.length ? (
 					<Skeleton className='h-20 bg-muted w-full' />
 				) : (
-					articles.slice(0, 4).map((article, index) => (
+					data.articles.slice(0, 4).map((article, index) => (
 						<li key={index} className='flex flex-col lg:flex-row items-center gap-5 w-full'>
 							<div className='flex gap-2 w-full lg:w-4/12'>
 								<div className='h-10 w-16 rounded-xl bg-gray-100 shrink-0'>
@@ -54,18 +56,24 @@ export default function DashboardArticles() {
 								<p className='w-1/3'>{moment(article.createdAt).locale('fa').fromNow()}</p>
 							</div>
 							<div className='w-full lg:w-3/12 flex items-center gap-5'>
-								<p className='w-1/3 text-sm flex items-center gap-2 text-red-500 bg-red-500/20 rounded-lg py-1 px-2.5'>
-									{article._count?.likes} <Small>لایک</Small>
-								</p>
-								<p className='w-1/3 text-sm flex items-center gap-2 text-primary bg-primary/20 rounded-lg py-1 px-2.5'>
-									{article._count?.comments} <Small>دیدگاه</Small>
-								</p>
-								<p className='w-1/3 text-sm flex items-center gap-2 text-secondary bg-secondary/20 rounded-lg py-1 px-2.5'>
-									{article._count?.bookmarks} <Small>نشان</Small>
-								</p>
+								<div className='w-1/3'>
+									<p className='text-sm flex items-center gap-2 text-red-500 bg-red-500/20 rounded-lg py-1 px-2.5 w-fit'>
+										{article._count?.likes} <Small>لایک</Small>
+									</p>
+								</div>
+								<div className='w-1/3'>
+									<p className='text-sm flex items-center gap-2 text-primary bg-primary/20 rounded-lg py-1 px-2.5 w-fit'>
+										{article._count?.comments} <Small>دیدگاه</Small>
+									</p>
+								</div>
+								<div className='w-1/3'>
+									<p className='text-sm flex items-center gap-2 text-secondary bg-secondary/20 rounded-lg py-1 px-2.5 w-fit'>
+										{article._count?.bookmarks} <Small>نشان</Small>
+									</p>
+								</div>
 							</div>
 							<div className='w-2/12'>
-								<p className='w-full'>action</p>
+								<Link href={`/articles/${article.slug}`}>رفتن به صفحه مقاله</Link>
 							</div>
 						</li>
 					))

@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default function PostCard({ article }: { article: TArticle }) {
 	return (
-		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-border group'>
+		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-border group flex flex-col'>
 			<div className='bg-border w-full h-52 rounded-xl overflow-hidden'>
 				<Image
 					src={article.thumbnail}
@@ -16,12 +16,14 @@ export default function PostCard({ article }: { article: TArticle }) {
 					alt={article.title}
 				/>
 			</div>
-			<Link
-				href={`/articles/${article.slug}`}
-				className='text-xl mt-2 font-extrabold block transition-colors duration-200 hover:text-primary'
-			>
-				{article.title}
-			</Link>
+			<div className='flex-1'>
+				<Link
+					href={`/articles/${article.slug}`}
+					className='text-xl mt-2 font-extrabold block transition-colors duration-200 hover:text-primary'
+				>
+					{article.title}
+				</Link>
+			</div>
 			<div className='flex items-center justify-between mt-5'>
 				<div className='flex items-center gap-2'>
 					<div className='size-7 bg-slate-500 rounded-full overflow-hidden'>

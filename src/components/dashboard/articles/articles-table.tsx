@@ -13,7 +13,7 @@ async function fetcher([url]: string[]): Promise<{ articles: TArticle[] }> {
 }
 
 export default function ArticlesTable() {
-	const { data, isLoading, mutate } = useSWR(['/api/dashboard/articles', 'dashboard-articles'], fetcher)
+	const { data, isLoading, mutate } = useSWR(['/api/dashboard/articles', 'articles'], fetcher)
 
 	if (isLoading || !data) return <DataTableSkeleton />
 

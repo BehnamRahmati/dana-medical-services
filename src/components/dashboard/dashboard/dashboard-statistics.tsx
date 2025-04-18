@@ -1,7 +1,7 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
 import axios from 'axios'
-import { Chart21, DocumentText1, Heart, Profile2User } from 'iconsax-react'
+import { Chart21, DocumentText1, Heart, MessageText1, Profile2User } from 'iconsax-react'
 import useSWR from 'swr'
 
 async function staticFecher(url: string) {
@@ -25,14 +25,20 @@ export default function DashboardStatistics() {
 		{
 			title: 'کاربر',
 			value: staticsData.usersCount || 0,
-			color: 'bg-primary/20',
-			icon: <Profile2User className='stroke-primary size-12' variant='Broken' />,
+			color: 'bg-sky-500/20',
+			icon: <Profile2User className='stroke-sky-500 size-12' variant='Broken' />,
 		},
 		{
 			title: 'مقاله',
 			value: staticsData.postsCount || 0,
 			color: 'bg-amber-500/20',
 			icon: <DocumentText1 className='stroke-amber-500 size-12' variant='Broken' />,
+		},
+		{
+			title: 'دیدگاه',
+			value: staticsData.commentsCount || 0,
+			color: 'bg-primary/20',
+			icon: <MessageText1 className='stroke-primary size-12' variant='Broken' />,
 		},
 		{
 			title: 'لایک',
@@ -49,7 +55,7 @@ export default function DashboardStatistics() {
 	]
 
 	return (
-		<ul className='grid grid-cols-2 lg:grid-cols-4 gap-2.5 lg:gap-5 w-full'>
+		<ul className='grid grid-cols-2 lg:grid-cols-5 gap-2.5 lg:gap-5 w-full'>
 			{statics.map((staticItem, index) => {
 				return (
 					<li key={'strst' + index} className='bg-accent p-5 rounded-lg flex items-center gap-5 w-full'>

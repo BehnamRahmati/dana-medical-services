@@ -63,7 +63,7 @@ export default function Homebanner() {
 					</ul>
 				</div>
 				<div className='image md:w-1/2'>
-					<Image src={bannerImage} width={500} height={300} alt='banner' className='size-full' />
+					<Image src={bannerImage} width={500} height={300} priority={true} alt='banner' className='size-full' />
 				</div>
 				<div className='absolute top-full -mt-10 lg:top-10/12 left-1/12 lg:left-1/2 block size-32 transform rotate-90'>
 					<Image src={curlyArrow} width={500} height={300} alt='banner' className='size-full' />

@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
 				protocol: 'https',
 				hostname: 'lh3.googleusercontent.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'minio-m3wx75.chbk.app',
+			},
+			{
+				protocol: 'https',
+				hostname: 'homeca.ir',
+			},
 		],
 	},
 }

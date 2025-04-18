@@ -20,7 +20,7 @@ export default function ArticlesCreateForm() {
 			title: '',
 			slug: '',
 			excerpt: '',
-			tag: '',
+			tags: [],
 			category: '',
 			thumbnail: '',
 			read: '0',
@@ -36,7 +36,7 @@ export default function ArticlesCreateForm() {
 		formData.append('title', values.title)
 		formData.append('slug', values.slug)
 		formData.append('excerpt', values.excerpt)
-		formData.append('tag', values.tag)
+		formData.append('tags', values.tags.join(','))
 		formData.append('category', values.category)
 		formData.append('author', values.author)
 		formData.append('read', values.read.toString())
@@ -54,7 +54,7 @@ export default function ArticlesCreateForm() {
 			toast('در حال انتشار مقاله...', { icon: '⏳' })
 			await createArticle(values)
 			toast('مقاله با موفقیت منتشر شد.', { icon: '✅' })
-			form.reset()
+			window.location.reload()
 		} catch (error) {
 			console.error(error)
 			toast('مقاله منتشر نشد. دوباره تلاش کنید.', { icon: '❌' })

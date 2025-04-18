@@ -90,13 +90,46 @@ function QuillEditor({ onChangeEditor, editorValue }: { onChangeEditor: (value: 
 				image: handleImageUpload, // Use the custom image handler
 			},
 		},
+		clipboard: {
+			matchVisual: false,
+			matchers:
+				typeof window !== 'undefined'
+					? [
+							[
+								Node.ELEMENT_NODE,
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any
+								(node: Element, delta: any) => {
+									// Check if the node has a style attribute with background-color
+									if (
+										node.getAttribute('style')?.includes('background-color') ||
+										node.getAttribute('style')?.includes('color')
+									) {
+										// Create a new delta that omits the background attribute
+										// eslint-disable-next-line @typescript-eslint/no-explicit-any
+										const newDelta = delta.ops.map((op: any) => {
+											if (op.attributes && op.attributes.background) {
+												// eslint-disable-next-line @typescript-eslint/no-unused-vars
+												const { background, color, ...restAttributes } = op.attributes
+												return { ...op, attributes: restAttributes }
+											}
+											return op
+										})
+										return { ops: newDelta }
+									}
+									// Return the original delta if no background-color is found
+									return delta
+								},
+							],
+						]
+					: [],
+		},
 	}
 
 	return (
-		<div dir='ltr' className='h-80'>
+		<div dir='ltr'>
 			<ReactQuillComponent
 				forwardedRef={quillRef as RefObject<ReactQuill>}
-				className='h-56 mb-32 lg:mb-16'
+				className='h-56 mb-32 lg:mb-16 react-quill-editor'
 				theme='snow'
 				value={editorValue}
 				onChange={e => onChangeEditor(e)}

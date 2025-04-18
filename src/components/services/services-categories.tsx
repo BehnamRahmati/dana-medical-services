@@ -1,40 +1,67 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
 import useQueries from '@/hooks/use-queries'
-import { fetchCategory } from '@/lib/helpers'
+import { dataFetcher } from '@/lib/helpers'
+import { TCategory } from '@/lib/types'
 import { HashtagSquare } from 'iconsax-react'
 import Link from 'next/link'
 import useSWR from 'swr'
 
 export default function ServicesCategories() {
 	const { currentParams, pathname } = useQueries()
-	const { data: categories, isLoading } = useSWR('/api/dashboard/services/categories', fetchCategory)
+	const { data, isLoading, error } = useSWR<{ categories: TCategory[] }>(
+		['/api/dashboard/services/categories', 'services-categories'],
+		dataFetcher,
+	)
+
+	if (isLoading) {
+		return (
+			<div className='border border-border rounded-lg py-10 px-5'>
+				<div className='flex items-center gap-2'>
+					<HashtagSquare className='size-10 fill-content' variant='Bulk' />
+					<h3 className='text-2xl font-bold mt-2'>دسته بندی های خدمات</h3>
+				</div>
+				<div className='flex flex-wrap gap-2 mt-5'>
+					{Array.from({ length: 5 }).map((_, index) => (
+						<Skeleton key={index} className='h-8 w-28 bg-content/20 rounded-md' />
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	if (error) {
+		return (
+			<div className='flex flex-col items-center justify-center gap-2'>
+				<span className='text-xl font-bold'>مشکلی پیش آمده است</span>
+				<span className='text-sm'>لطفا دوباره تلاش کنید</span>
+			</div>
+		)
+	}
+
+	if (!data || data.categories.length === 0) {
+		return (
+			<div className='flex flex-col items-center justify-center gap-2'>
+				<span className='text-xl font-bold'>دسته بندی ای وجود ندارد</span>
+			</div>
+		)
+	}
 
 	return (
-		<div className='max-w-xl mx-auto py-5 lg:py-10 px-2.5 lg:px-5'>
+		<div className='border border-border rounded-lg py-10 px-5'>
 			<div className='flex items-center justify-center lg:justify-start gap-2'>
 				<HashtagSquare className='size-10 fill-content' variant='Bulk' />
 				<h3 className='text-2xl font-bold mt-2'>دسته بندی های خدمات</h3>
 			</div>
 			<ul className='flex items-center justify-center lg:justify-start flex-wrap mt-5 gap-2'>
-				{isLoading || !categories ? (
-					<>
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-						<Skeleton className='h-8 w-28 bg-content/20' />
-					</>
-				) : (
-					categories.map(cat => {
-						const newParam = { category: cat.slug }
-						return (
-							<li key={cat.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
-								<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{cat.name}</Link>
-							</li>
-						)
-					})
-				)}
+				{data.categories.map(cat => {
+					const newParam = { category: cat.slug }
+					return (
+						<li key={cat.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
+							<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{cat.name}</Link>
+						</li>
+					)
+				})}
 			</ul>
 		</div>
 	)

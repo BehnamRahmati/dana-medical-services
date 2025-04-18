@@ -20,6 +20,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 					},
 				},
 				comments: true,
+				serviceItems: true,
 				_count: {
 					select: { likes: true, comments: true, bookmarks: true },
 				},

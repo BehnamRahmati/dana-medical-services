@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
 	try {
-		const serviceItems = await prisma.serviceItem.findMany({ include: { service: true } })
+		const serviceItems = await prisma.serviceItem.findMany({ include: { service: true }, orderBy: { createdAt: 'desc' } })
 		if (!serviceItems) throw new Error('coudnt find any service item')
 		return NextResponse.json({ serviceItems }, { status: 200 })
 	} catch (error) {

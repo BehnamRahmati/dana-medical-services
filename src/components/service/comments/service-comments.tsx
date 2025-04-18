@@ -1,17 +1,21 @@
 'use client'
 
-import { fetchComments } from '@/lib/helpers'
+import { dataFetcher } from '@/lib/helpers'
+import { TComment } from '@/lib/types'
 import { useParams } from 'next/navigation'
 import useSWR from 'swr'
 import ServiceCommentItem from './service-comment-item'
 
 export default function ServiceComments() {
 	const params = useParams()
-	const { data, isLoading } = useSWR(`/api/services/${params?.slug}/comments`, fetchComments)
+	const { data, isLoading } = useSWR<{ comments: TComment[] }>(
+		[`/api/services/${params?.slug}/comments`, 'service-comments'],
+		dataFetcher,
+	)
 
 	if (isLoading || !data) return <p>loading</p>
 
-	const comments = data.filter(comment => !comment.commentId && comment.approved)
+	const comments = data.comments.filter(comment => !comment.commentId && comment.approved)
 
 	return (
 		<ul className='flex flex-col gap-10 mt-10'>

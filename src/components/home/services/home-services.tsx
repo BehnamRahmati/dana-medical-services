@@ -17,7 +17,7 @@ export default function HomeServices() {
 		>
 			<div className='flex flex-col md:flex-row justify-between items-center gap-10 mt-20'>
 				<Title>خدمات</Title>
-				<HomeMoreLink>مشاهده همه خدمات</HomeMoreLink>
+				<HomeMoreLink href='/services'>مشاهده همه خدمات</HomeMoreLink>
 			</div>
 			{isVisible && (
 				<Suspense fallback={<HomeServicesFallback />}>

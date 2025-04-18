@@ -18,10 +18,12 @@ const formSchema = z.object({
 export default function CommentReplyForm({
 	commentId,
 	articleId,
+	serviceId,
 	content,
 }: {
 	commentId: string
-	articleId: string
+	articleId?: string
+	serviceId?: string
 	content: string
 }) {
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -40,9 +42,9 @@ export default function CommentReplyForm({
 				content: values.content,
 				commentId,
 				userId: session?.user.id,
-				articleId,
+				...(articleId ? { articleId } : { serviceId }),
 			})
-			toast(' پاسخ با موفقیت حذف شد', { icon: '✅' })
+			toast(' پاسخ با موفقیت ارسال شد', { icon: '✅' })
 		} catch (error) {
 			console.log(error)
 			toast('خطا در ارسال پاسخ', { icon: '❌' })

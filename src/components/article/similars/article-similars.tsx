@@ -5,7 +5,7 @@ import { lazy, Suspense } from 'react'
 import ArticleSimilarsFallback from './article-similars-fallback'
 const ArticleSimilarsList = lazy(() => import('./article-similars-list'))
 
-export default function ArticleSimilars({ categorySlug, articleId }: { categorySlug: string; articleId: string }) {
+export default function ArticleSimilars({ categorySlug }: { categorySlug: string }) {
 	const { isVisible, sectionRef } = useVisibleSection()
 	return (
 		<section
@@ -15,7 +15,7 @@ export default function ArticleSimilars({ categorySlug, articleId }: { categoryS
 			<div className='text-5xl font-extrabold'> مقالات مشابه</div>
 			{isVisible && (
 				<Suspense fallback={<ArticleSimilarsFallback />}>
-					<ArticleSimilarsList articleId={articleId} categorySlug={categorySlug} />
+					<ArticleSimilarsList categorySlug={categorySlug} />
 				</Suspense>
 			)}
 		</section>

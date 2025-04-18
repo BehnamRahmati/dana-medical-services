@@ -21,14 +21,12 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 		}
 
 		// Check if the like already exists
-		const existingLike = await prisma.like.findUnique({
+		const existingLike = await prisma.like.findFirst({
 			where: {
-				userId_articleId_serviceId_commentId: {
-					userId: userId,
-					articleId: article.id,
-					serviceId: '',
-					commentId: '',
-				},
+				userId: userId,
+				articleId: article.id,
+				serviceId: null,
+				commentId: null,
 			},
 		})
 

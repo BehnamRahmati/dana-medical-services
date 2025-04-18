@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '@
 import useQueries from '@/hooks/use-queries'
 import { DocumentFilter } from 'iconsax-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 export default function ArticlesMainHeader() {
 	const { currentParams, pathname } = useQueries()
 	const [open, setOpen] = useState(false)
@@ -11,35 +11,38 @@ export default function ArticlesMainHeader() {
 	const router = useRouter()
 	const [value, setvalue] = useState(() => (currentParams.sort ? currentParams.sort : 'createdAt_desc'))
 
-	const handleValueChange = (value: string) => {
-		setvalue(value)
-		router.push(`${pathname}?${new URLSearchParams({ ...currentParams, ...{ sort: value } })}`)
-	}
+	const handleValueChange = useCallback(
+		(value: string) => {
+			setvalue(value)
+			router.push(`${pathname}?${new URLSearchParams({ ...currentParams, ...{ sort: value } })}`)
+		},
+		[currentParams, pathname, router],
+	)
 
-	const renderValue = (value: string) => {
-		switch (value) {
+	const renderValue = useCallback((currentValue: string) => {
+		switch (currentValue) {
 			case 'views_asc':
-				return 'بازدید افزایشی'
+				return 'کمترین بازدید'
 
 			case 'views_desc':
-				return 'بازدید کاهشی'
+				return ' بیشترین بازدید '
 
 			case 'comments_asc':
-				return 'دیدگاه ها افزایشی'
+				return ' کمترین دیدگاه '
 
 			case 'comments_desc':
-				return 'دیدگاه ها کاهشی'
+				return ' بیشترین دیدگاه'
 
 			case 'likes_asc':
-				return 'لایک ها افزایشی'
+				return ' کمترین لایک'
 
 			case 'likes_desc':
-				return 'لایک ها کاهشی'
+				return ' بیشترین لایک'
 
 			default:
 				return 'همه'
 		}
-	}
+	}, [])
 
 	return (
 		<div className='flex items-center justify-start gap-2.5 lg:gap-5 pb-5 border-b border-b-border mb-5'>
@@ -88,12 +91,12 @@ export default function ArticlesMainHeader() {
 					<SelectTrigger className='h-0! w-full *:hidden border-0 p-0 overflow-hidden'></SelectTrigger>
 					<SelectContent>
 						<SelectGroup>
-							<SelectItem value='views_asc'>بازدید افزایشی</SelectItem>
-							<SelectItem value='views_desc'>بازدید کاهشی</SelectItem>
-							<SelectItem value='comments_asc'>دیدگاه ها افزایشی</SelectItem>
-							<SelectItem value='comments_desc'>دیدگاه ها کاهشی</SelectItem>
-							<SelectItem value='likes_asc'>لایک ها افزایشی</SelectItem>
-							<SelectItem value='likes_desc'>لایک ها کاهشی</SelectItem>
+							<SelectItem value='views_asc'>کمترین بازدید</SelectItem>
+							<SelectItem value='views_desc'>بیشترین بازدید </SelectItem>
+							<SelectItem value='comments_asc'>کمترین دیدگاه </SelectItem>
+							<SelectItem value='comments_desc'>بیشترین دیدگاه</SelectItem>
+							<SelectItem value='likes_asc'>کمترین لایک</SelectItem>
+							<SelectItem value='likes_desc'>بیشترین لایک</SelectItem>
 						</SelectGroup>
 					</SelectContent>
 				</Select>

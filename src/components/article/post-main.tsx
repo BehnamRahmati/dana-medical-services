@@ -1,9 +1,10 @@
 import { TArticle } from '@/lib/types'
-import PostComment from './post-comment'
+import dynamic from 'next/dynamic'
 import PostContent from './post-content'
 import PostContentFooter from './post-content-footer'
 import PostContentHeader from './post-content-header'
-import ArticleSimilars from './similars/article-similars'
+const PostComment = dynamic(() => import('./comments/post-comment'))
+const ArticleSimilars = dynamic(() => import('./similars/article-similars'))
 
 export default function PostMain({ article }: { article: TArticle }) {
 	return (
@@ -12,14 +13,14 @@ export default function PostMain({ article }: { article: TArticle }) {
 				<PostContentHeader
 					category={article.category.name}
 					categorySlug={article.category.slug}
-					readTime={article.read}
+					read={article.read}
 					title={article.title}
 					thumbnail={article.thumbnail}
 				/>
 				<PostContent content={article.content} />
 				<PostContentFooter article={article} />
 			</main>
-			<ArticleSimilars articleId={article.id} categorySlug={article.category.slug} />
+			<ArticleSimilars categorySlug={article.category.slug} />
 			<PostComment />
 		</div>
 	)

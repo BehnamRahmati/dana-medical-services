@@ -1,17 +1,28 @@
+import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { TArticle, TComment } from '@/lib/types'
+import { TArticle, TComment, TService } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
 import axios from 'axios'
-import { MoreSquare, TickSquare, Trash } from 'iconsax-react'
+import { MoreSquare, Trash } from 'iconsax-react'
 import { toast } from 'sonner'
+import ApproveCell from './cells/approve-cell'
 import CommentReplyForm from './comment-reply-form'
 export const CommentColumns: ColumnDef<TComment>[] = [
 	{
-		accessorKey: 'article',
-		header: 'مقاله',
+		accessorKey: 'title',
+		header: 'عنوان',
 		cell({ row }) {
-			const article = row.getValue('article') as TArticle
-			return <div className=''>{article.title}</div>
+			const article = row.original.article as TArticle
+			const service = row.original.service as TService
+			return article ? <div> {article.title}</div> : <div>{service.title}</div>
+		},
+	},
+	{
+		accessorKey: 'kind',
+		header: 'نوع',
+		cell({ row }) {
+			const article = row.original.article as TArticle
+			return article ? <Badge variant={'secondary'}>مقاله</Badge> : <Badge>خدمت</Badge>
 		},
 	},
 	{
@@ -34,34 +45,23 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 		header: 'عملیات',
 		cell: ({ row }) => {
 			const id = row.original.id as string
-			const article = row.getValue('article') as TArticle
+			const article = row.original.article as TArticle
+			const service = row.original.service as TService
 			const content = row.getValue('content') as string
 			return (
 				<div className='flex items-center gap-1'>
-					<CommentReplyForm commentId={id} articleId={article.id} content={content} />
+					{article ? (
+						<CommentReplyForm commentId={id} articleId={article.id} content={content} />
+					) : (
+						<CommentReplyForm commentId={id} serviceId={service.id} content={content} />
+					)}
+
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<MoreSquare className='stroke-content size-5' variant='Broken' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start'>
-							<DropdownMenuItem>
-								<button
-									className='flex items-center gap-2 cursor-pointer text-green-500'
-									onClick={async () => {
-										try {
-											toast('در حال تایید دیدگاه', { icon: '⏳' })
-											axios.patch(`/api/dashboard/comments`, { commentId: id })
-											toast('دیدگاه با موفقیت تایید شد', { icon: '✅' })
-										} catch (error) {
-											console.log(error)
-											toast('خطا در تایید دیدگاه', { icon: '❌' })
-										}
-									}}
-								>
-									<TickSquare className='stroke-green-500 size-4 shrink-0' variant='Broken' />
-									<p className='mt-1.5'>تایید دیدگاه</p>
-								</button>
-							</DropdownMenuItem>
+							<ApproveCell id={id} />
 							<DropdownMenuItem>
 								<button
 									className='flex items-center gap-2 cursor-pointer text-red-500'

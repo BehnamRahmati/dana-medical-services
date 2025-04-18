@@ -7,7 +7,7 @@ import useSWR from 'swr'
 export default function DashboardComments() {
 	const { data: comments, isLoading } = useSWR('/api/dashboard/comments', fetchComments)
 	return (
-		<div className='w-full rounded-lg bg-accent h-96 p-5'>
+		<div className='w-full rounded-lg bg-accent p-5'>
 			<div className='mb-5'>
 				<h3 className='font-semibold'>دیدگاه های اخیر</h3>
 				<p className='text-muted-foreground text-xs'>دیدگاه های اخیر را می توانید در این بخش ببینید</p>

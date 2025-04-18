@@ -15,7 +15,7 @@ function H4({ className, ...props }: React.ComponentProps<'h4'>) {
 	return <h4 className={cn('scroll-m-20 text-xl font-semibold tracking-tight', className)} {...props} />
 }
 function Paragraph({ className, ...props }: React.ComponentProps<'p'>) {
-	return <p className={cn('leading-7 [&:not(:first-child)]:mt-6', className)} {...props} />
+	return <p className={cn('leading-7 text-base lg:text-lg [&:not(:first-child)]:mt-6', className)} {...props} />
 }
 function BlockQuote({ className, ...props }: React.ComponentProps<'blockquote'>) {
 	return <blockquote className={cn('mt-6 border-l-2 pl-6 italic', className)} {...props} />

@@ -6,7 +6,7 @@ import {
 	SidebarMenu,
 	SidebarMenuItem,
 } from '@/components/ui/sidebar-custom'
-import { AddSquare, HambergerMenu, HashtagSquare, I3DSquare } from 'iconsax-react'
+import { Additem, AddSquare, HambergerMenu, HashtagSquare, I3DSquare } from 'iconsax-react'
 import Link from 'next/link'
 
 const links = [
@@ -27,7 +27,7 @@ const links = [
 	},
 	{
 		label: ' آیتم های خدمات',
-		icon: <HashtagSquare className='size-5 stroke-content/60' variant='Broken' />,
+		icon: <Additem className='size-5 stroke-content/60' variant='Broken' />,
 		href: '/dashboard/services/items',
 	},
 ]

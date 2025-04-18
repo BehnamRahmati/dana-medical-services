@@ -25,6 +25,9 @@ export async function GET() {
 				select: { likes: true, comments: true, bookmarks: true },
 			},
 		},
+		orderBy: {
+			createdAt: 'desc',
+		},
 		take: 4,
 	})
 	if (!articles) {

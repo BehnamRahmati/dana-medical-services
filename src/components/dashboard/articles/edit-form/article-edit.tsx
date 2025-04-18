@@ -4,11 +4,11 @@ import { Form } from '@/components/ui/form'
 
 import { TArticle } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import axios from 'axios'
 import { toast } from 'sonner'
 import { editFormSchema } from '../lib/schemas'
 import EditFormMain from './edit-form-main'
@@ -23,7 +23,7 @@ export default function ArticlesEditForm({ article }: { article: TArticle }) {
 			title: article.title,
 			slug: article.slug,
 			excerpt: article.excerpt,
-			tag: (article.tags.length > 0 && article.tags[0].id) || '',
+			tags: article.tags.length > 0 ? article.tags.map(x => x.id) : [],
 			category: article.categoryId,
 			thumbnail: '',
 			read: article.read.toString(),
@@ -41,7 +41,7 @@ export default function ArticlesEditForm({ article }: { article: TArticle }) {
 		formData.append('title', values.title)
 		formData.append('slug', values.slug)
 		formData.append('excerpt', values.excerpt)
-		formData.append('tag', values.tag)
+		formData.append('tags', values.tags.join(','))
 		formData.append('category', values.category)
 		formData.append('author', values.author)
 		formData.append('read', values.read.toString())

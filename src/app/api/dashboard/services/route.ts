@@ -1,6 +1,6 @@
-import { handleUpload } from '@/lib/backend.helpers'
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
+import { getImageUrl, uploadImage } from './../file/file-services'
 
 export async function GET() {
 	const services = await prisma.service.findMany({
@@ -27,27 +27,50 @@ export async function POST(req: NextRequest) {
 			throw new Error('File not found or invalid file type')
 		}
 
-		const fileName = await handleUpload(file)
+		const upload = await uploadImage(file)
 
-		const service = await prisma.service.create({
-			data: {
+		try {
+			upload.on('httpUploadProgress', progress => {
+				console.log(progress)
+			})
+
+			await upload.done()
+
+			const permanentSignedUrl = getImageUrl(file.name)
+			console.log({
 				title: formData.get('title') as string,
 				slug: formData.get('slug') as string,
-				thumbnail: `/uploads/${fileName}`,
+				thumbnail: permanentSignedUrl,
 				excerpt: formData.get('excerpt') as string,
 				content: formData.get('content') as string,
-				read: formData.get('read') ? parseInt(formData.get('read') as string, 10) : 0,
+				read: parseInt(formData.get('read') as string),
 				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
-				author: { connect: { id: formData.get('author') as string } },
-				category: { connect: { id: formData.get('category') as string } },
-			},
-		})
+				author: formData.get('author') as string,
+				category: formData.get('category') as string,
+			})
+			const service = await prisma.service.create({
+				data: {
+					title: formData.get('title') as string,
+					slug: formData.get('slug') as string,
+					thumbnail: permanentSignedUrl,
+					excerpt: formData.get('excerpt') as string,
+					content: formData.get('content') as string,
+					read: parseInt(formData.get('read') as string),
+					status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
+					author: { connect: { id: formData.get('author') as string } },
+					category: { connect: { id: formData.get('category') as string } },
+				},
+			})
 
-		if (!service) {
-			throw new Error('failed to create service')
+			if (!service) {
+				throw new Error('failed to create service')
+			}
+
+			return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
+		} catch (error) {
+			console.log('failed to create service')
+			return NextResponse.json({ error, message: 'Error creating service' }, { status: 500 })
 		}
-
-		return NextResponse.json({ message: 'service created successfully', service }, { status: 201 })
 	} catch (error) {
 		return NextResponse.json({ error, message: 'Error creating service' }, { status: 500 })
 	}
@@ -58,9 +81,21 @@ export async function PUT(req: NextRequest) {
 		const formData = await req.formData()
 		const file = formData.get('thumbnail') as File
 		// Ensure the file exists and is not a simple string
-		let fileName
+		let permanentSignedUrl
 		if (file) {
-			fileName = await handleUpload(file)
+			const upload = await uploadImage(file)
+			try {
+				upload.on('httpUploadProgress', progress => {
+					console.log(progress)
+				})
+
+				await upload.done()
+
+				permanentSignedUrl = getImageUrl(file.name)
+			} catch (error) {
+				console.log(error)
+				throw new Error('failed to upload file')
+			}
 		}
 
 		const service = await prisma.service.update({
@@ -70,7 +105,7 @@ export async function PUT(req: NextRequest) {
 			data: {
 				title: formData.get('title') as string,
 				slug: formData.get('slug') as string,
-				...(fileName && { thumbnail: `/uploads/${fileName}` }),
+				...(permanentSignedUrl && { thumbnail: permanentSignedUrl }),
 				excerpt: formData.get('excerpt') as string,
 				content: formData.get('content') as string,
 				read: formData.get('read') ? parseInt(formData.get('read') as string, 10) : 0,

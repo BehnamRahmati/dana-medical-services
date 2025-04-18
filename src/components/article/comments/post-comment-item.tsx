@@ -1,19 +1,43 @@
 'use client'
 import { TComment } from '@/lib/types'
-import axios from 'axios'
 import { Heart } from 'iconsax-react'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { toast } from 'sonner'
+import { useSWRConfig } from 'swr'
 
 export default function PostCommentItem({ comment, isReply }: { comment: TComment; isReply?: boolean }) {
 	const { data: session } = useSession()
+	const { mutate } = useSWRConfig()
 
 	async function handleAddLike() {
 		if (!session?.user) {
-			return alert('لطفا وارد حساب کاربری خود شوید')
+			toast.error('برای لایک کردن دیدگاه لطفا وارد شوید', { icon: '🔒' })
+			return
 		}
-		await axios.patch(`/api/articles/${comment.article?.slug}/comments`, { userId: session?.user.id, commentId: comment.id })
+		const slug = comment.article?.slug
+
+		const likePromise = fetch(`/api/articles/${slug}/comments`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				userId: session?.user.id,
+				commentId: comment.id,
+			}),
+		})
+
+		toast.promise(likePromise, {
+			loading: 'در حال ارسال لایک',
+			success: async response => {
+				if (!response.ok) {
+					const errorData = await response.json()
+					throw new Error(errorData || `Request failed with status ${response.status}`)
+				}
+				mutate([`/api/articles/${comment.article?.slug}/comments`, 'article-comment'])
+				return 'با موفقیت لایک شد'
+			},
+			error: 'خطا در لایک',
+		})
 	}
 
 	return (

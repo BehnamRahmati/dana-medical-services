@@ -3,9 +3,9 @@
 import { Form } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { createServiceSchema } from '../lib/schemas'
 import CreateServiceFormMain from './service-create-main'
@@ -13,7 +13,6 @@ import CreateServiceFormSidebar from './service-create-sidebar'
 
 export default function ServiceCreateForm() {
 	const [imageUrl, setImageUrl] = useState('')
-	const router = useRouter()
 	const form = useForm<z.infer<typeof createServiceSchema>>({
 		resolver: zodResolver(createServiceSchema),
 		defaultValues: {
@@ -39,17 +38,20 @@ export default function ServiceCreateForm() {
 		formData.append('read', values.read.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
+		formData.append('category', values.category)
 
 		try {
-			const response = await axios.post('/api/dashboard/services', formData, {
+			toast('در حال انتشار مقاله...', { icon: '⏳' })
+			await axios.post('/api/dashboard/services', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			})
-			console.warn(response.data)
-			router.push('/dashboard/services/create')
+			toast('مقاله با موفقیت منتشر شد.', { icon: '✅' })
+			window.location.reload()
 		} catch (error) {
 			console.error(error)
+			toast('مقاله منتشر نشد. دوباره تلاش کنید.', { icon: '❌' })
 		}
 	}
 	return (

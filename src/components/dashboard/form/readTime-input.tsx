@@ -27,7 +27,7 @@ export default function DashboardReadTimeInput<T extends SupportedSchema & { rea
 	return (
 		<FormField
 			control={form.control}
-			name={'readTime' as Path<T>}
+			name={'read' as Path<T>}
 			render={({ field }) => (
 				<FormItem>
 					<FormLabel>{label}</FormLabel>

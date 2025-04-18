@@ -8,8 +8,8 @@ const HomeCategoriesList = lazy(() => import('@/components/home/categories/home-
 export default function HomeCategories() {
 	return (
 		<Section>
-			<div className='lg:gap-10 py-20 my-20 px-5 '>
-				<div className='w-fit mx-auto mb-15'>
+			<div className='lg:gap-10 py-10 my-10 px-5 '>
+				<div className='w-fit mx-auto mb-10'>
 					<Title>دسته بندی خدمات</Title>
 				</div>
 				<Suspense fallback={<HomeCategoriesFallback />}>

@@ -119,6 +119,9 @@ model Category {
   // relations
   articles Article[]
   services Service[]
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  parentId String?
 
   // times
   createdAt DateTime @default(now())
@@ -261,7 +264,7 @@ model Social {
 model File {
   id String @id @default(cuid())
 
-  filename String
+  filename String @unique
   size     Int
   url      String @unique
 

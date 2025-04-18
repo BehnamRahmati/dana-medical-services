@@ -5,15 +5,29 @@ import { Heart } from 'iconsax-react'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { toast } from 'sonner'
+import { useSWRConfig } from 'swr'
 
 export default function ServiceCommentItem({ comment, isReply }: { comment: TComment; isReply?: boolean }) {
 	const { data: session } = useSession()
+	const { mutate } = useSWRConfig()
 
 	async function handleAddLike() {
 		if (!session?.user) {
 			return alert('لطفا وارد حساب کاربری خود شوید')
 		}
-		await axios.patch(`/api/services/${comment.service?.slug}/comments`, { userId: session?.user.id, commentId: comment.id })
+		try {
+			toast('در حال ارسال لایک')
+			await axios.put(`/api/services/${comment.service?.slug}/comments`, {
+				userId: session?.user.id,
+				commentId: comment.id,
+			})
+			mutate([`/api/services/${comment.service?.slug}/comments`, 'service-comment'])
+			toast('با موفقیت لایک شد')
+		} catch (error) {
+			console.error(error)
+			toast('خطا در لایک')
+		}
 	}
 
 	return (

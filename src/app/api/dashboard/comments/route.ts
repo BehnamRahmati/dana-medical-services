@@ -3,7 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
 	const comments = await prisma.comment.findMany({
-		include: { article: { select: { title: true, id: true } }, user: { select: { name: true, image: true } } },
+		include: {
+			article: { select: { title: true, id: true } },
+			service: { select: { title: true, id: true } },
+			user: { select: { name: true, image: true } },
+		},
 	})
 	if (!comments) {
 		return NextResponse.json({ comments: [] })
@@ -13,8 +17,8 @@ export async function GET() {
 
 export async function PUT(req: NextRequest) {
 	try {
-		const { content, commentId, userId, articleId } = await req.json()
-		if (!content || !commentId || !userId || !articleId) {
+		const { content, commentId, userId, articleId, serviceId } = await req.json()
+		if (!content || !commentId || !userId) {
 			return NextResponse.json({ message: 'لطفا همه فیلدها را پر کنید' }, { status: 400 })
 		}
 		const comment = await prisma.comment.update({
@@ -23,7 +27,8 @@ export async function PUT(req: NextRequest) {
 				replies: {
 					create: {
 						content,
-						article: { connect: { id: articleId } },
+						...(serviceId && { service: { connect: { id: serviceId } } }),
+						...(articleId && { article: { connect: { id: articleId } } }),
 						user: { connect: { id: userId } },
 						approved: true,
 					},

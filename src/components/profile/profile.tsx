@@ -18,16 +18,19 @@ export default function Profile() {
 	if (isLoading) return <div>Loading...</div>
 
 	return (
-		<div className='container mx-auto px-2.5 lg:px-5 py-10'>
-			<ProfileHeader
-				image={user.image}
-				name={user.name}
-				email={user.email}
-				comments={user._count.comments}
-				likes={user._count.likes}
-				requests={user._count.requests}
-			/>
-			<ProfileContent />
-		</div>
+		<>
+			<div className='bg-primary h-96 -mt-52'></div>
+			<div className='container mx-auto px-2.5 lg:px-5 py-10'>
+				<ProfileHeader
+					image={user.image}
+					name={user.name}
+					email={user.email}
+					comments={user._count.comments}
+					likes={user._count.likes}
+					requests={user._count.requests}
+				/>
+				<ProfileContent />
+			</div>
+		</>
 	)
 }
