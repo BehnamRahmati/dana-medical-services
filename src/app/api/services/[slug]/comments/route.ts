@@ -3,7 +3,18 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
 	try {
-		const { slug } = await params
+		const slug = (await params).slug
+
+		if (!slug) {
+			return NextResponse.json({ message: 'Slug parameter is missing' }, { status: 400 })
+		}
+
+		const serviceExists = await prisma.service.findUnique({ where: { slug }, select: { id: true } })
+
+		if (!serviceExists) {
+			return NextResponse.json({ message: 'service not found' }, { status: 404 })
+		}
+
 		const comments = await prisma.comment.findMany({
 			where: { service: { slug } },
 			include: {
@@ -14,14 +25,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
 						user: { select: { id: true, name: true, image: true } },
 						_count: { select: { likes: true } },
 					},
+					orderBy: {
+						createdAt: 'asc',
+					},
 				},
 				_count: { select: { likes: true } },
 			},
 		})
 
-		if (!comments) {
-			return NextResponse.json({ comments: [] }, { status: 200 })
-		}
 		return NextResponse.json({ comments }, { status: 200 })
 	} catch (error) {
 		console.error('Error fetching comments:', error)
@@ -35,8 +46,28 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 		const body = await request.json()
 		const { content, userId, parentId } = body
 
-		if (!content) {
-			return NextResponse.json('Content is required', { status: 400 })
+		if (!slug) {
+			return NextResponse.json({ message: 'Slug parameter is missing' }, { status: 400 })
+		}
+
+		if (!content || !userId) {
+			return NextResponse.json({ message: 'Content and userId are required' }, { status: 400 })
+		}
+
+		const [service, user, parentComment] = await Promise.all([
+			prisma.service.findUnique({ where: { slug }, select: { id: true } }),
+			prisma.user.findUnique({ where: { id: userId }, select: { id: true } }),
+			parentId ? prisma.comment.findUnique({ where: { id: parentId }, select: { id: true } }) : Promise.resolve(null),
+		])
+
+		if (!service) {
+			return NextResponse.json({ message: 'service not found' }, { status: 404 })
+		}
+		if (!user) {
+			return NextResponse.json({ message: 'User not found' }, { status: 404 })
+		}
+		if (parentId && !parentComment) {
+			return NextResponse.json({ message: 'Parent comment not found' }, { status: 404 })
 		}
 
 		const comment = await prisma.comment.create({
@@ -47,6 +78,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 				...(parentId && { parent: { connect: { id: parentId } } }),
 			},
 		})
+
+		if (!comment) {
+			return NextResponse.json({ message: 'comment not found' }, { status: 404 })
+		}
 
 		return NextResponse.json({ comment }, { status: 201 })
 	} catch (error) {
@@ -60,51 +95,54 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 		const slug = (await params).slug
 		const { userId, commentId } = await req.json()
 
-		if (!userId || !slug) {
-			throw new Error('userId شناسایی نشد')
+		if (!userId) {
+			return NextResponse.json({ message: 'user id parameter is missing' }, { status: 400 })
+		}
+		if (!slug) {
+			return NextResponse.json({ message: 'Slug parameter is missing' }, { status: 400 })
+		}
+		if (!commentId) {
+			return NextResponse.json({ message: 'comment id parameter is missing' }, { status: 400 })
 		}
 
-		// First find the article by slug
-		const comment = await prisma.comment.findUnique({
-			where: { id: commentId },
-			select: { id: true },
-		})
+		const [userExists, commentExists] = await Promise.all([
+			prisma.user.findUnique({ where: { id: userId }, select: { id: true } }),
+			prisma.comment.findUnique({ where: { id: commentId }, select: { id: true } }),
+		])
 
-		if (!comment) {
-			throw new Error('user شناسایی نشد')
+		if (!userExists) {
+			return NextResponse.json({ message: 'User not found' }, { status: 404 })
+		}
+		if (!commentExists) {
+			return NextResponse.json({ message: 'Comment not found' }, { status: 404 })
 		}
 
-		// Check if the like already exists
 		const existingLike = await prisma.like.findFirst({
 			where: {
 				userId: userId,
-				articleId: '',
-				serviceId: '',
+				articleId: null,
+				serviceId: null,
 				commentId: commentId,
 			},
 		})
-		let result
+		let message
 
 		if (existingLike) {
-			// If like exists, delete it
-			result = await prisma.like.delete({
+			await prisma.like.delete({
 				where: { id: existingLike.id },
 			})
+			message = 'successfully removed like'
 		} else {
-			// If like doesn't exist, create it
-			result = await prisma.like.create({
+			await prisma.like.create({
 				data: {
 					user: { connect: { id: userId } },
-					comment: { connect: { id: comment.id } },
+					comment: { connect: { id: commentId } },
 				},
 			})
+			message = 'successfully added like'
 		}
 
-		if (!result) {
-			throw new Error('خطا در افزایش لایک ها')
-		}
-
-		return NextResponse.json({ message: 'لایک ها با موفقیت افزایش یافت', result }, { status: 200 })
+		return NextResponse.json({ message }, { status: 200 })
 	} catch (error) {
 		if (error instanceof Error) {
 			console.log({ error })
@@ -112,10 +150,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
 
 		return NextResponse.json(
 			{
-				message: 'خطا در افزایش لابک ها',
+				message: 'failed to add or remove like',
 				error,
 			},
-			{ status: 200 },
+			{ status: 500 },
 		)
 	}
 }

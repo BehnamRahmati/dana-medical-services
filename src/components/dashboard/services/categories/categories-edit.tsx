@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { Edit } from 'iconsax-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -28,17 +27,30 @@ export default function ServicesCategroriesEdit({ name, slug, id }: { name: stri
 	})
 	const { mutate } = useSWRConfig()
 
+	async function editCategories(values: z.infer<typeof formSchema>) {
+		return await fetch('/api/dashboard/services/categories', {
+			method: 'PUT',
+			body: JSON.stringify(values),
+		})
+	}
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			toast('در حال ایجاد دسته بندی جدید...', { icon: '⏳' })
-			await axios.put('/api/dashboard/services/categories', values)
-			toast('دسته بندی جدید با موفقیت ایجاد شد', { icon: '✅' })
-			form.reset()
-			mutate(['/api/dashboard/services/categories', 'services-categories'])
-		} catch (error) {
-			console.error(error)
-			toast('خطا در ایجاد دسته بندی جدید', { icon: '❌' })
-		}
+		toast.promise(editCategories(values), {
+			loading: 'در حال بروزرسانی دسته بندی...',
+			success: async response => {
+				if (!response.ok) {
+					const errorData = await response.json()
+					throw new Error(errorData || `خطا در ایجاد برچسب  ${response.status}`)
+				}
+				form.reset()
+				mutate(['/api/dashboard/services/categories', 'services-categories'])
+				return 'دسته بندی با موفقیت بروزرسانی شد'
+			},
+			error: error => {
+				console.error('Error submitting comment:', error)
+				return ` خطا در بروزرسانی برچسب : ${error.message || 'Please try again.'}`
+			},
+		})
 	}
 	return (
 		<Dialog>

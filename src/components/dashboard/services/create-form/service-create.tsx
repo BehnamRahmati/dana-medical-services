@@ -28,7 +28,7 @@ export default function ServiceCreateForm() {
 		},
 	})
 
-	async function onSubmit(values: z.infer<typeof createServiceSchema>) {
+	async function createService(values: z.infer<typeof createServiceSchema>) {
 		const formData = new FormData()
 		formData.append('thumbnail', values.thumbnail)
 		formData.append('title', values.title)
@@ -39,20 +39,19 @@ export default function ServiceCreateForm() {
 		formData.append('content', values.content)
 		formData.append('status', values.status)
 		formData.append('category', values.category)
+		return await axios.post('/api/dashboard/services', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+	}
 
-		try {
-			toast('در حال انتشار مقاله...', { icon: '⏳' })
-			await axios.post('/api/dashboard/services', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			})
-			toast('مقاله با موفقیت منتشر شد.', { icon: '✅' })
-			window.location.reload()
-		} catch (error) {
-			console.error(error)
-			toast('مقاله منتشر نشد. دوباره تلاش کنید.', { icon: '❌' })
-		}
+	async function onSubmit(values: z.infer<typeof createServiceSchema>) {
+		toast.promise(createService(values), {
+			loading: 'در حال ایجاد خدمت...',
+			success: 'خدمت با موفقیت ایجاد شد.',
+			error: 'خدمت ایجاد نشد. دوباره تلاش کنید.',
+		})
 	}
 	return (
 		<Form {...form}>

@@ -13,9 +13,11 @@ async function fetcher([url]: string[]): Promise<{ articles: TArticle[] }> {
 }
 
 export default function ArticlesTable() {
-	const { data, isLoading, mutate } = useSWR(['/api/dashboard/articles', 'articles'], fetcher)
+	const { data, isLoading, mutate, error } = useSWR(['/api/dashboard/articles', 'da-articles'], fetcher)
 
-	if (isLoading || !data) return <DataTableSkeleton />
+	if (isLoading) return <DataTableSkeleton />
+	if (error) return <p>خطا در بارگذاری</p>
+	if (!data) return <p>خطا در دیتا</p>
 
 	return (
 		<div className='rounded-xl max-w-full overflow-hidden bg-accent p-2.5 lg:p-5 h-full flex flex-col'>

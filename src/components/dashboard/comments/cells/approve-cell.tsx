@@ -15,7 +15,7 @@ export default function ApproveCell({ id }: { id: string }) {
 						toast('در حال تایید دیدگاه', { icon: '⏳' })
 						axios.patch(`/api/dashboard/comments`, { commentId: id })
 						toast('دیدگاه با موفقیت تایید شد', { icon: '✅' })
-						mutate(['/api/dashboard/comments', 'dashboard-comments'])
+						mutate(['/api/dashboard/comments', 'dc-comments'])
 					} catch (error) {
 						console.log(error)
 						toast('خطا در تایید دیدگاه', { icon: '❌' })

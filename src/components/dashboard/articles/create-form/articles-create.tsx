@@ -1,6 +1,7 @@
 'use client'
 import { Form } from '@/components/ui/form'
 
+import { handleToastPromise } from '@/lib/helpers'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
@@ -42,23 +43,35 @@ export default function ArticlesCreateForm() {
 		formData.append('read', values.read.toString())
 		formData.append('content', values.content)
 		formData.append('status', values.status)
-		return await axios.post('/api/dashboard/articles', formData, {
+		const response = await axios.post('/api/dashboard/articles', formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
 		})
+		return new Response(JSON.stringify(response.data), {
+			status: response.status,
+			headers: response.headers as HeadersInit,
+		})
 	}
 
 	async function onSubmitToNewArticle(values: z.infer<typeof createFormSchema>) {
-		try {
-			toast('در حال انتشار مقاله...', { icon: '⏳' })
-			await createArticle(values)
-			toast('مقاله با موفقیت منتشر شد.', { icon: '✅' })
-			window.location.reload()
-		} catch (error) {
-			console.error(error)
-			toast('مقاله منتشر نشد. دوباره تلاش کنید.', { icon: '❌' })
-		}
+		handleToastPromise(
+			() => createArticle(values),
+			'در حال انتشار مقاله...',
+			'مقاله با موفقیت منتشر شد.',
+			'مقاله منتشر نشد. دوباره تلاش کنید.',
+			() => {
+				window.location.reload()
+			},
+		)
+		toast.promise(createArticle(values), {
+			loading: 'در حال انتشار مقاله...',
+			success: () => {
+				window.location.reload()
+				return 'مقاله با موفقیت منتشر شد.'
+			},
+			error: 'مقاله منتشر نشد. دوباره تلاش کنید.',
+		})
 	}
 
 	return (

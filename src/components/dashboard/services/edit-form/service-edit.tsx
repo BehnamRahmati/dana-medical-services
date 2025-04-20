@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { editServiceSchema } from '../lib/schemas'
 import EditServiceFormMain from './service-edit-main'
@@ -28,8 +29,7 @@ export default function ServiceEditForm({ service }: { service: TService }) {
 		},
 	})
 
-	async function onSubmit(values: z.infer<typeof editServiceSchema>) {
-		console.warn(values)
+	async function editService(values: z.infer<typeof editServiceSchema>) {
 		const formData = new FormData()
 		if (values.thumbnail) {
 			formData.append('thumbnail', values.thumbnail)
@@ -43,16 +43,19 @@ export default function ServiceEditForm({ service }: { service: TService }) {
 		formData.append('status', values.status)
 		formData.append('category', values.category)
 
-		try {
-			const response = await axios.put('/api/dashboard/services', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			})
-			console.warn(response.data)
-		} catch (error) {
-			console.error(error)
-		}
+		return await axios.put('/api/dashboard/services', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+	}
+
+	async function onSubmit(values: z.infer<typeof editServiceSchema>) {
+		toast.promise(editService(values), {
+			loading: 'در حال ویرایش خدمت...',
+			success: 'خدمت با موفقیت ویرایش شد.',
+			error: 'خدمت ویرایش نشد.',
+		})
 	}
 	return (
 		<Form {...form}>

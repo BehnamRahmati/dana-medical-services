@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import TiptapEditor from '@/components/ui/tiptap-editor'
 import { TServiceItem } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { KeyedMutator } from 'swr'
@@ -33,17 +32,30 @@ export default function ServiceItemsCreateForm({
 		},
 	})
 
+	async function createItem(values: z.infer<typeof serviceItemsFormSchema>) {
+		return await fetch('/api/dashboard/services/items', {
+			method: 'POST',
+			body: JSON.stringify(values),
+		})
+	}
+
 	const onSubmit = async (values: z.infer<typeof serviceItemsFormSchema>) => {
-		try {
-			toast('در حال ایجاد آیتم جدید...', { icon: '⏳' })
-			await axios.post('/api/dashboard/services/items', values)
-			toast('آیتم جدید با موفقیت ایجاد شد', { icon: '✅' })
-			form.reset()
-			mutate()
-		} catch (error) {
-			console.log(error)
-			toast('خطا در ایجاد آیتم جدید', { icon: '❌' })
-		}
+		toast.promise(createItem(values), {
+			loading: 'در حال ایجاد ایتم جدید...',
+			success: async response => {
+				if (!response.ok) {
+					const errorData = await response.json()
+					throw new Error(errorData || `خطا در ایجاد ایتم  ${response.status}`)
+				}
+				form.reset()
+				mutate()
+				return 'ایتم جدید با موفقیت ایجاد شد'
+			},
+			error: error => {
+				console.error('Error submitting comment:', error)
+				return ` خطا در ایجاد ایتم جدید : ${error.message || 'Please try again.'}`
+			},
+		})
 	}
 	return (
 		<Dialog>

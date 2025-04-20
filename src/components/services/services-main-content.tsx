@@ -1,11 +1,12 @@
 'use client'
 
 import useServices from '@/hooks/use-services'
+import PaginationCustom from '../ui/pagination-custom'
 import ServicesCard from '../ui/service-card'
 import { Skeleton } from '../ui/skeleton'
 
 export default function ServicesMainContent() {
-	const { data: services, isLoading, error } = useServices()
+	const { data, isLoading, error } = useServices()
 	if (isLoading) {
 		return (
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
@@ -23,18 +24,23 @@ export default function ServicesMainContent() {
 		)
 	}
 
-	if (!services || services.length === 0) {
+	if (!data || data.services.length === 0) {
 		return (
 			<div className='col-span-1 md:col-span-2 lg:col-span-3 text-center border-4 border-dashed border-border p-10 rounded-md'>
-				هیچ خدمتی با توجه به فیلترهای انتخابی یافت نشد.
+				هیچ خدمتی یافت نشد.
 			</div>
 		)
 	}
 	return (
-		<div className='grid grid-cols-1 md:grid-cols-2 px-2.5 lg:px-0 lg:grid-cols-3 gap-5'>
-			{services.map(service => (
-				<ServicesCard service={service} key={service.id} />
-			))}
+		<div className=''>
+			<div className='grid grid-cols-1 md:grid-cols-2 px-2.5 lg:px-0 lg:grid-cols-3 gap-5'>
+				{data.services.map(service => (
+					<ServicesCard service={service} key={service.id} />
+				))}
+			</div>
+			{data.pagination.totalPages > 1 && (
+				<PaginationCustom totalPages={data.pagination.totalPages} currentPage={data.pagination.currentPage} />
+			)}
 		</div>
 	)
 }

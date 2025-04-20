@@ -4,11 +4,10 @@ import Button from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { handleToastPromise } from '@/lib/helpers'
 import { TCategory } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 const formSchema = z.object({
@@ -30,17 +29,24 @@ export default function CategroriesCreate({
 		},
 	})
 
+	async function createCategory(values: z.infer<typeof formSchema>) {
+		return await fetch('/api/dashboard/categories', {
+			method: 'POST',
+			body: JSON.stringify(values),
+		})
+	}
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			toast('در حال ایجاد دسته بندی', { icon: '⏳' })
-			await axios.post('/api/dashboard/categories', values)
-			toast('دسته بندی با موفقیت ایجاد شد', { icon: '✅' })
-			form.reset()
-			mutate()
-		} catch (error) {
-			console.error(error)
-			toast('خطا در ایجاد دسته بندی', { icon: '❌' })
-		}
+		handleToastPromise(
+			() => createCategory(values),
+			'در حال ایجاد دسته بندی',
+			'دسته بندی با موفقیت ایجاد شد',
+			'خطا در ایجاد دسته بندی',
+			() => {
+				form.reset()
+				mutate()
+			},
+		)
 	}
 	return (
 		<Dialog>

@@ -1,8 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import axios from 'axios'
+import { handleToastPromise } from '@/lib/helpers'
 import { Edit, MoreSquare, Trash } from 'iconsax-react'
 import Link from 'next/link'
-import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 export default function ArticlesActionCell({ slug }: { slug: string }) {
 	const { mutate } = useSWRConfig()
@@ -22,15 +21,16 @@ export default function ArticlesActionCell({ slug }: { slug: string }) {
 					<button
 						className='flex items-center gap-2 cursor-pointer text-red-500'
 						onClick={async () => {
-							try {
-								toast('در حال حذف مقاله', { icon: '⏳' })
-								await axios.delete(`/api/dashboard/articles/${slug}`)
-								toast(' مقاله با موفقیت حذف شد', { icon: '✅' })
-								mutate(['/api/dashboard/articles', 'dashboard-articles'])
-							} catch (error) {
-								console.log(error)
-								toast('خطا در حذف مقاله', { icon: '❌' })
-							}
+							const deleteArticle = fetch(`/api/dashboard/articles/${slug}`, {
+								method: 'DELETE',
+							})
+							handleToastPromise(
+								() => deleteArticle,
+								'در حال حذف مقاله',
+								'مقاله با موفقیت حذف شد',
+								'خطا در حذف مقاله',
+								() => mutate(['/api/dashboard/articles', 'da-articles']),
+							)
 						}}
 					>
 						<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />

@@ -2,23 +2,20 @@
 
 import { DataTableSkeleton } from '@/components/ui/data-table'
 import GenericDataTable from '@/components/ui/generic-data-table'
+import { dataFetcher } from '@/lib/helpers'
 import { TService } from '@/lib/types'
-import axios from 'axios'
 import useSWR from 'swr'
 import { ServicesColumns } from './services-columns'
 
-async function fetcher(url: string): Promise<{ services: TService[] }> {
-	const response = await axios.get(url)
-	return await response.data
-}
-
 export default function ServicesTable() {
-	const { data, isLoading, mutate } = useSWR('/api/dashboard/services', fetcher, {
-		revalidateOnFocus: true,
-		revalidateIfStale: true,
-	})
+	const { data, isLoading, mutate, error } = useSWR<{ services: TService[] }>(
+		['/api/dashboard/services', 'ds-services'],
+		dataFetcher,
+	)
 
-	if (isLoading || !data) return <DataTableSkeleton />
+	if (isLoading) return <DataTableSkeleton />
+	if (error) return <p>خطا در بارگذاری دیتا</p>
+	if (!data) return <p>هیچ دیتایی یافت نشد</p>
 
 	return (
 		<div className='rounded-xl max-w-full overflow-hidden bg-accent h-full p-2.5 lg:p-5 flex flex-col'>

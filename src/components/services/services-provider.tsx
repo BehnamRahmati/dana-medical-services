@@ -1,13 +1,23 @@
 'use client'
 
-import { fetchServices } from '@/lib/helpers'
+import { dataFetcher } from '@/lib/helpers'
 import { TService } from '@/lib/types'
 import { useSearchParams } from 'next/navigation'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 
+type TData = {
+	services: TService[]
+	pagination: {
+		currentPage: number
+		totalPages: number
+		totalServices: number
+		limit: number
+	}
+}
+
 type TServicesContext = {
-	data: TService[]
+	data: TData | undefined
 	isLoading: boolean
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	error: any
@@ -19,9 +29,9 @@ export default function ServicesProvider({ children }: { children: React.ReactNo
 	const searchParams = useSearchParams()
 
 	const url = searchParams?.size !== 0 ? `?${searchParams}` : ''
-	const { data, isLoading, error } = useSWR(`/api/services${url}`, fetchServices)
+	const { data, isLoading, error } = useSWR<TData>([`/api/services${url}`, 'services-services'], dataFetcher)
 
-	const contextvalues = useMemo(() => ({ data: data || [], isLoading, error }), [data, isLoading, error])
+	const contextvalues = useMemo(() => ({ data: data, isLoading, error }), [data, isLoading, error])
 
 	return <ServicesContext.Provider value={contextvalues}>{children}</ServicesContext.Provider>
 }

@@ -2,10 +2,9 @@ import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TArticle, TComment, TService } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
-import axios from 'axios'
-import { MoreSquare, Trash } from 'iconsax-react'
-import { toast } from 'sonner'
+import { MoreSquare } from 'iconsax-react'
 import ApproveCell from './cells/approve-cell'
+import DeleteActionButton from './cells/delete-cell'
 import CommentReplyForm from './comment-reply-form'
 export const CommentColumns: ColumnDef<TComment>[] = [
 	{
@@ -18,17 +17,18 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 		},
 	},
 	{
+		accessorKey: 'content',
+		header: 'متن دیدگاه',
+	},
+	{
 		accessorKey: 'kind',
-		header: 'نوع',
+		header: 'صفحه',
 		cell({ row }) {
 			const article = row.original.article as TArticle
 			return article ? <Badge variant={'secondary'}>مقاله</Badge> : <Badge>خدمت</Badge>
 		},
 	},
-	{
-		accessorKey: 'content',
-		header: 'دیدگاه',
-	},
+
 	{
 		accessorKey: 'approved',
 		header: 'وضعیت',
@@ -38,6 +38,17 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 				return <div className='text-green-500 bg-green-500/20 w-fit pb-1 pt-1.5 px-2.5 rounded-md text-xs'>تایید شده</div>
 			}
 			return <div className='text-amber-500 bg-amber-500/20 w-fit pb-1 pt-1.5 px-2.5 rounded-md text-xs'>بلاتکلیف</div>
+		},
+	},
+	{
+		accessorKey: 'parent',
+		header: 'نوع ',
+		cell({ row }) {
+			const parent = row.getValue('parent') as TComment
+			if (parent) {
+				return <div className='text-sm'>پاسخ</div>
+			}
+			return <div className='text-sm'>دیدگاه</div>
 		},
 	},
 	{
@@ -63,22 +74,7 @@ export const CommentColumns: ColumnDef<TComment>[] = [
 						<DropdownMenuContent align='start'>
 							<ApproveCell id={id} />
 							<DropdownMenuItem>
-								<button
-									className='flex items-center gap-2 cursor-pointer text-red-500'
-									onClick={async () => {
-										try {
-											toast('در حال حذف دیدگاه', { icon: '⏳' })
-											await axios.delete(`/api/dashboard/comments/${id}`)
-											toast(' دیدگاه با موفقیت حذف شد', { icon: '✅' })
-										} catch (error) {
-											console.log(error)
-											toast('خطا در حذف دیدگاه', { icon: '❌' })
-										}
-									}}
-								>
-									<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />
-									<p className='mt-1.5'>حذف دیدگاه</p>
-								</button>
+								<DeleteActionButton id={id} />
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

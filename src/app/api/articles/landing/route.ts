@@ -2,36 +2,42 @@ import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-	const articles = await prisma.article.findMany({
-		select: {
-			id: true,
-			title: true,
-			read: true,
-			thumbnail: true,
-			slug: true,
-			category: {
-				select: {
-					name: true,
-					slug: true,
+	try {
+		const articles = await prisma.article.findMany({
+			where: {
+				status: {
+					equals: 'PUBLISHED' as const,
 				},
 			},
-			author: {
-				select: {
-					name: true,
-					image: true,
+			select: {
+				id: true,
+				title: true,
+				read: true,
+				thumbnail: true,
+				slug: true,
+				category: {
+					select: {
+						name: true,
+						slug: true,
+					},
+				},
+				author: {
+					select: {
+						name: true,
+						image: true,
+					},
+				},
+				_count: {
+					select: { likes: true, comments: true, bookmarks: true },
 				},
 			},
-			_count: {
-				select: { likes: true, comments: true, bookmarks: true },
+			orderBy: {
+				createdAt: 'desc',
 			},
-		},
-		orderBy: {
-			createdAt: 'desc',
-		},
-		take: 4,
-	})
-	if (!articles) {
-		return NextResponse.json({ articles: [] })
+			take: 4,
+		})
+		return NextResponse.json({ articles }, { status: 200 })
+	} catch (error) {
+		return NextResponse.json({ error }, { status: 500 })
 	}
-	return NextResponse.json({ articles })
 }

@@ -4,12 +4,12 @@ import Button from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { handleToastPromise } from '@/lib/helpers'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { AddSquare } from 'iconsax-react'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+import { useSWRConfig } from 'swr'
 import { z } from 'zod'
 const formSchema = z.object({
 	content: z.string().min(1, { message: 'لطفا دیدگاه خود را وارد کنید' }),
@@ -34,21 +34,30 @@ export default function CommentReplyForm({
 	})
 
 	const { data: session } = useSession()
-
-	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			toast('در حال ارسال پاسخ', { icon: '⏳' })
-			await axios.put('/api/dashboard/comments', {
+	const { mutate } = useSWRConfig()
+	async function createReply(values: z.infer<typeof formSchema>) {
+		return await fetch('/api/dashboard/comments', {
+			method: 'PUT',
+			body: JSON.stringify({
 				content: values.content,
 				commentId,
 				userId: session?.user.id,
 				...(articleId ? { articleId } : { serviceId }),
-			})
-			toast(' پاسخ با موفقیت ارسال شد', { icon: '✅' })
-		} catch (error) {
-			console.log(error)
-			toast('خطا در ارسال پاسخ', { icon: '❌' })
-		}
+			}),
+		})
+	}
+
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		handleToastPromise(
+			() => createReply(values),
+			'در حال ارسال پاسخ',
+			'پاسخ با موفقیت ارسال شد',
+			'خطا در ارسال پاسخ',
+			() => {
+				form.reset()
+				mutate(['/api/dashboard/comments', 'dc-comments'])
+			},
+		)
 	}
 	return (
 		<Dialog modal={true}>

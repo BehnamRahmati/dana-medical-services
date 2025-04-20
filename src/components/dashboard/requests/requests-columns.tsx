@@ -1,10 +1,11 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TRequest, TService } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
-import axios from 'axios'
-import { Forbidden2, MoreSquare, TickSquare, Trash } from 'iconsax-react'
+import { MoreSquare } from 'iconsax-react'
 import moment from 'moment-jalaali'
-import { toast } from 'sonner'
+import AcceptActionButton from './cells/accept-button'
+import DeleteActionButton from './cells/delete-action'
+import RejectActionButton from './cells/reject-action'
 
 export const RequestsColumns: ColumnDef<TRequest>[] = [
 	{
@@ -82,58 +83,13 @@ export const RequestsColumns: ColumnDef<TRequest>[] = [
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start'>
 							<DropdownMenuItem>
-								<button
-									className='flex items-center gap-2 cursor-pointer text-green-500'
-									onClick={async () => {
-										try {
-											toast('در حال تایید درخواست', { icon: '⏳' })
-											await axios.patch(`/api/dashboard/requests`, { id, status: 'ACCEPTED' })
-											toast(' درخواست با موفقیت تایید شد', { icon: '✅' })
-										} catch (error) {
-											console.log(error)
-											toast('خطا در  تایید درخواست', { icon: '❌' })
-										}
-									}}
-								>
-									<TickSquare className='stroke-green-500 size-4 shrink-0' variant='Broken' />
-									<p className='mt-1.5'>تایید درخواست</p>
-								</button>
+								<AcceptActionButton id={id} />
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<button
-									className='flex items-center gap-2 cursor-pointer text-red-500'
-									onClick={async () => {
-										try {
-											toast('در حال رد درخواست', { icon: '⏳' })
-											await axios.patch(`/api/dashboard/requests`, { id, status: 'REJECTED' })
-											toast(' درخواست با موفقیت رد شد', { icon: '✅' })
-										} catch (error) {
-											console.log(error)
-											toast('خطا در  رد درخواست', { icon: '❌' })
-										}
-									}}
-								>
-									<Forbidden2 className='stroke-red-500 size-4 shrink-0' variant='Broken' />
-									<p className='mt-1.5'>رد درخواست</p>
-								</button>
+								<RejectActionButton id={id} />
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<button
-									className='flex items-center gap-2 cursor-pointer text-red-500'
-									onClick={async () => {
-										try {
-											toast('در حال حذف درخواست', { icon: '⏳' })
-											await axios.delete(`/api/dashboard/requests/${id}`)
-											toast(' درخواست با موفقیت حذف شد', { icon: '✅' })
-										} catch (error) {
-											console.log(error)
-											toast('خطا در  حذف درخواست', { icon: '❌' })
-										}
-									}}
-								>
-									<Trash className='stroke-red-500 size-4 shrink-0' variant='Broken' />
-									<p className='mt-1.5'>حذف درخواست</p>
-								</button>
+								<DeleteActionButton id={id} />
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

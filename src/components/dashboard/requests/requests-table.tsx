@@ -2,19 +2,22 @@
 
 import { DataTableSkeleton } from '@/components/ui/data-table'
 import GenericDataTable from '@/components/ui/generic-data-table'
+import { dataFetcher } from '@/lib/helpers'
 import { TRequest } from '@/lib/types'
-import axios from 'axios'
 import useSWR from 'swr'
 import { RequestsColumns } from './requests-columns'
 
-async function fetcher(url: string): Promise<{ requests: TRequest[] }> {
-	const response = await axios.get(url)
-	return await response.data
-}
 export default function RequestsTable() {
-	const { data, isLoading, mutate } = useSWR('/api/dashboard/requests', fetcher)
+	const { data, isLoading, error, mutate } = useSWR<{ requests: TRequest[] }>(
+		['/api/dashboard/requests', 'dr-requests'],
+		dataFetcher,
+	)
 
-	if (isLoading || !data) return <DataTableSkeleton />
+	if (isLoading) return <DataTableSkeleton />
+
+	if (error) return <p>خطایی رخ داده است</p>
+
+	if (!data) return <p>داده ای یافت نشد</p>
 
 	return (
 		<div className='rounded-xl  max-w-full overflow-hidden bg-accent p-2.5 lg:p-5 h-full flex flex-col'>

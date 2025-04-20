@@ -58,7 +58,7 @@ function DataTable({ table }: { table: TTable<any> }) {
 function DatatablePagination({ table }: { table: TTable<any> }) {
 	return (
 		<div className='flex items-center justify-center mt-5 '>
-			<div className='border border-input flex items-center p-2.5 gap-2.5 *:disabled:text-content/30 rounded-md *:text-sm'>
+			<div className='flex items-center gap-2.5 *:disabled:text-content/30 *:text-sm'>
 				<button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
 					اولین
 				</button>

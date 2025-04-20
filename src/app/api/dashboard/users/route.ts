@@ -2,9 +2,13 @@ import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-	const users = await prisma.user.findMany()
-	if (!users) {
-		return NextResponse.json({ users: [] })
+	try {
+		const users = await prisma.user.findMany()
+		return NextResponse.json({ users }, { status: 200 })
+	} catch (error) {
+		if (error instanceof Error) {
+			console.log({ error })
+		}
+		return NextResponse.json({ error }, { status: 500 })
 	}
-	return NextResponse.json({ users })
 }

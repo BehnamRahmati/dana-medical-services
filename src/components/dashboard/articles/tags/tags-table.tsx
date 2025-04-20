@@ -1,21 +1,18 @@
 'use client'
 import { DataTableSkeleton } from '@/components/ui/data-table'
 import GenericDataTable from '@/components/ui/generic-data-table'
+import { dataFetcher } from '@/lib/helpers'
 import { TTag } from '@/lib/types'
-import axios from 'axios'
 import useSWR from 'swr'
 import { tagsColumns } from './tags-column'
 import TagsCreate from './tags-create'
 
-async function fetcher([url]: string[]): Promise<{ tags: TTag[] }> {
-	const response = await axios.get(url)
-	return await response.data
-}
-
 export default function TagsTable() {
-	const { data, isLoading, mutate } = useSWR(['/api/dashboard/tags', 'articles-tag'], fetcher)
+	const { data, isLoading, mutate, error } = useSWR<{ tags: TTag[] }>(['/api/dashboard/tags', 'dat-tag'], dataFetcher)
 
-	if (isLoading || !data) return <DataTableSkeleton />
+	if (isLoading) return <DataTableSkeleton />
+	if (error) return <p className='text-red-500'>خطا در بارگذاری</p>
+	if (!data) return <p className='text-red-500'>دیتا یافت نشد</p>
 
 	return (
 		<div className='bg-accent rounded-xl flex flex-col h-full p-2.5 lg:p-5'>

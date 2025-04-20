@@ -8,8 +8,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { handleToastPromise } from '@/lib/helpers'
 import axios from 'axios'
-import { toast } from 'sonner'
 import { editFormSchema } from '../lib/schemas'
 import EditFormMain from './edit-form-main'
 import EditFormSidebar from './edit-form-sidebar'
@@ -33,7 +33,7 @@ export default function ArticlesEditForm({ article }: { article: TArticle }) {
 		},
 	})
 
-	async function onSubmit(values: z.infer<typeof editFormSchema>) {
+	async function editArticle(values: z.infer<typeof editFormSchema>) {
 		const formData = new FormData()
 		if (values.thumbnail) {
 			formData.append('thumbnail', values.thumbnail)
@@ -49,18 +49,24 @@ export default function ArticlesEditForm({ article }: { article: TArticle }) {
 		formData.append('status', values.status)
 		formData.append('id', article.id)
 
-		try {
-			toast('در حال بروزرسانی...', { icon: '⏳' })
-			await axios.put('/api/dashboard/articles', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			})
-			toast('مقاله با موفقیت بروزرسانی شد', { icon: '✅' })
-		} catch (error) {
-			console.error(error)
-			toast('خطا در بروزرسانی مقاله', { icon: '❌' })
-		}
+		const response = await axios.put('/api/dashboard/articles', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+		return new Response(JSON.stringify(response.data), {
+			status: response.status,
+			headers: response.headers as HeadersInit,
+		})
+	}
+
+	async function onSubmit(values: z.infer<typeof editFormSchema>) {
+		handleToastPromise(
+			() => editArticle(values),
+			'در حال بروزرسانی...',
+			'مقاله با موفقیت بروزرسانی شد',
+			'خطا در بروزرسانی مقاله',
+		)
 	}
 
 	return (

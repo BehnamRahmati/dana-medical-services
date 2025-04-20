@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
 	try {
 		const slug = (await params).slug
+		if (!slug) {
+			return NextResponse.json({ message: 'Slug parameter is missing' }, { status: 400 })
+		}
 		const article = await prisma.article.findUnique({
 			where: { slug },
 			include: {
@@ -15,18 +18,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 						image: true,
 					},
 				},
-				comments: true,
 				_count: {
 					select: { likes: true, comments: true, bookmarks: true },
 				},
 			},
 		})
 		if (!article) {
-			return new Response('Category not found', { status: 404 })
+			return NextResponse.json({ message: 'Article not found' }, { status: 404 })
 		}
-		return NextResponse.json({ article })
+
+		return NextResponse.json({ article }, { status: 200 })
 	} catch (error) {
-		console.error('Error fetching category:', error)
-		return NextResponse.json({ mesage: 'Error fetching category' }, { status: 500 })
+		return NextResponse.json({ error }, { status: 500 })
 	}
 }

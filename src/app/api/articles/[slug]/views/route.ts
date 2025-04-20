@@ -5,6 +5,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 	try {
 		const slug = (await params).slug
 
+		if (!slug) {
+			return NextResponse.json({ message: 'Slug parameter is missing' }, { status: 400 })
+		}
+
 		// Get IP address and user agent from request
 		const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
 		const userAgent = req.headers.get('user-agent') || 'unknown'
@@ -16,7 +20,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 		})
 
 		if (!article) {
-			throw new Error('مقاله یافت نشد')
+			return NextResponse.json({ message: 'Article not found' }, { status: 404 })
 		}
 
 		// Create a new view record
@@ -28,23 +32,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 			},
 		})
 
-		// Also increment the read counter on the article
-		const updatedArticle = await prisma.article.update({
-			where: { id: article.id },
-			data: {
-				read: { increment: 1 },
-			},
-			include: {
-				_count: {
-					select: { views: true },
-				},
-			},
-		})
-
 		return NextResponse.json(
 			{
-				message: 'بازدید با موفقیت ثبت شد',
-				article: updatedArticle,
+				message: 'views recorded successfully',
 			},
 			{ status: 200 },
 		)
@@ -52,7 +42,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 		console.error('Error recording view:', error)
 		return NextResponse.json(
 			{
-				message: 'خطا در ثبت بازدید',
+				message: 'Failed to record view',
 				error,
 			},
 			{ status: 500 },

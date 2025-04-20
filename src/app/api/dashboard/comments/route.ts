@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET() {
 	const comments = await prisma.comment.findMany({
 		include: {
+			parent: { select: { id: true, content: true } },
 			article: { select: { title: true, id: true } },
 			service: { select: { title: true, id: true } },
 			user: { select: { name: true, image: true } },
@@ -19,8 +20,16 @@ export async function PUT(req: NextRequest) {
 	try {
 		const { content, commentId, userId, articleId, serviceId } = await req.json()
 		if (!content || !commentId || !userId) {
-			return NextResponse.json({ message: 'لطفا همه فیلدها را پر کنید' }, { status: 400 })
+			return NextResponse.json({ message: 'Missing required fields' }, { status: 400 })
 		}
+
+		const commentExists = await prisma.comment.findUnique({
+			where: { id: commentId },
+		})
+		if (!commentExists) {
+			return NextResponse.json({ message: 'comment not found' }, { status: 404 })
+		}
+
 		const comment = await prisma.comment.update({
 			where: { id: commentId },
 			data: {
@@ -35,10 +44,10 @@ export async function PUT(req: NextRequest) {
 				},
 			},
 		})
-		return NextResponse.json({ message: 'دیدگاه با موفقیت ویرایش شد', comment })
+		return NextResponse.json({ comment }, { status: 200 })
 	} catch (error) {
 		console.log(error)
-		return NextResponse.json({ message: 'خطا در ویرایش دیدگاه' }, { status: 500 })
+		return NextResponse.json({ error }, { status: 500 })
 	}
 }
 
@@ -46,17 +55,25 @@ export async function PATCH(req: NextRequest) {
 	try {
 		const { commentId } = await req.json()
 		if (!commentId) {
-			return NextResponse.json({ message: 'لطفا همه فیلدها را پر کنید' }, { status: 400 })
+			return NextResponse.json({ message: 'comment di parameter ins missing' }, { status: 400 })
 		}
+
+		const commentExists = await prisma.comment.findUnique({
+			where: { id: commentId },
+		})
+		if (!commentExists) {
+			return NextResponse.json({ message: 'comment not found' }, { status: 404 })
+		}
+
 		const comment = await prisma.comment.update({
 			where: { id: commentId },
 			data: {
 				approved: true,
 			},
 		})
-		return NextResponse.json({ message: 'دیدگاه با موفقیت تایید شد', comment })
+		return NextResponse.json({ comment }, { status: 200 })
 	} catch (error) {
 		console.log(error)
-		return NextResponse.json({ message: 'خطا در ویرایش دیدگاه' }, { status: 500 })
+		return NextResponse.json({ error }, { status: 500 })
 	}
 }

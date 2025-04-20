@@ -6,7 +6,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { TCategory } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { KeyedMutator } from 'swr'
@@ -31,17 +30,30 @@ export default function ServicesCategroriesCreate({
 		},
 	})
 
+	async function createServiceCategory(values: z.infer<typeof formSchema>) {
+		return await fetch('/api/dashboard/services/categories', {
+			method: 'POST',
+			body: JSON.stringify(values),
+		})
+	}
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			toast('در حال ایجاد دسته بندی جدید...', { icon: '⏳' })
-			await axios.post('/api/dashboard/services/categories', values)
-			toast('دسته بندی جدید با موفقیت ایجاد شد', { icon: '✅' })
-			form.reset()
-			mutate()
-		} catch (error) {
-			console.error(error)
-			toast('خطا در ایجاد دسته بندی جدید', { icon: '❌' })
-		}
+		toast.promise(createServiceCategory(values), {
+			loading: 'در حال ایجاد دسته بندی جدید...',
+			success: async response => {
+				if (!response.ok) {
+					const errorData = await response.json()
+					throw new Error(errorData || `خطا در ایجاد دسته بندی  ${response.status}`)
+				}
+				form.reset()
+				mutate()
+				return 'دسته بندی جدید با موفقیت ایجاد شد'
+			},
+			error: error => {
+				console.error('Error submitting comment:', error)
+				return ` خطا در ایجاد دسته بندی جدید : ${error.message || 'Please try again.'}`
+			},
+		})
 	}
 	return (
 		<Dialog>

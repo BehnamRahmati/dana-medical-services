@@ -9,12 +9,14 @@ import { categoriesColumns } from './categories-column'
 import CategroriesCreate from './categories-create'
 
 export default function CategoriesTable() {
-	const { data, isLoading, mutate } = useSWR<{ categories: TCategory[] }>(
-		['/api/dashboard/articles/categories', 'articles-categories'],
+	const { data, isLoading, mutate, error } = useSWR<{ categories: TCategory[] }>(
+		['/api/dashboard/articles/categories', 'dac-categories'],
 		dataFetcher,
 	)
 
-	if (isLoading || !data) return <DataTableSkeleton />
+	if (isLoading) return <DataTableSkeleton />
+	if (error) return <p>خطا در بارگذاری دیتا</p>
+	if (!data) return <p>دیتایی یافت نشد</p>
 
 	return (
 		<div className='flex flex-col rounded-xl bg-accent p-2.5 lg:p-5 h-full'>

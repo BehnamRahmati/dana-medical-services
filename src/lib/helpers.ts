@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Element } from 'html-react-parser'
+import { toast } from 'sonner'
 import { TArticle, TCategory, TComment, TRequest, TService, TTag, TUser } from './types'
 
 export async function fetchArticles(url: string): Promise<TArticle[]> {
@@ -55,4 +56,39 @@ export async function serverDataFetcher<T>(url: string, options?: RequestInit): 
 
 export const getAttribute = (domNode: Element, attribute: string, defaultValue: string | number = ''): string | number => {
 	return domNode.attribs?.[attribute] || defaultValue
+}
+
+export async function handleToastPromise<TResponse extends Response>(
+	promiseFn: () => Promise<TResponse>,
+	loadingMessage: string,
+	successMessage: string,
+	errorMessagePrefix: string,
+	onSuccessCallback?: (response: TResponse) => void | Promise<void>,
+) {
+	toast.promise(promiseFn(), {
+		loading: loadingMessage,
+		success: async response => {
+			if (!response.ok) {
+				let errorData = 'Unknown error'
+				try {
+					const data = await response.json()
+					errorData = data?.message || data?.error || JSON.stringify(data) || `خطا با کد وضعیت ${response.status}`
+				} catch (e) {
+					console.log(e)
+					errorData = `خطا با کد وضعیت ${response.status}`
+				}
+				throw new Error(errorData)
+			}
+			if (onSuccessCallback) {
+				await onSuccessCallback(response)
+			}
+			return successMessage
+		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		error: (error: any) => {
+			console.error(`Error in ${errorMessagePrefix}:`, error)
+			const displayError = error?.message || 'لطفا دوباره تلاش کنید.'
+			return `${errorMessagePrefix}: ${displayError}`
+		},
+	})
 }

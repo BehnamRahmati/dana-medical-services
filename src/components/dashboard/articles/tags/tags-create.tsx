@@ -4,11 +4,10 @@ import Button from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { handleToastPromise } from '@/lib/helpers'
 import { TTag } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 
@@ -31,17 +30,24 @@ export default function TagsCreate({
 		},
 	})
 
+	async function createTag(values: z.infer<typeof formSchema>) {
+		return await fetch('/api/dashboard/tags', {
+			method: 'POST',
+			body: JSON.stringify(values),
+		})
+	}
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			toast('در حال ایجاد برچسب جدید...', { icon: '⏳' })
-			await axios.post('/api/dashboard/tags', values)
-			toast('برچسب جدید با موفقیت ایجاد شد', { icon: '✅' })
-			form.reset()
-			mutate()
-		} catch (error) {
-			console.error(error)
-			toast('خطا در ایجاد برچسب جدید', { icon: '❌' })
-		}
+		handleToastPromise(
+			() => createTag(values),
+			'در حال ایجاد برچسب جدید...',
+			'برچسب جدید با موفقیت ایجاد شد',
+			'خطا در ایجاد  برچسب ',
+			() => {
+				form.reset()
+				mutate()
+			},
+		)
 	}
 	return (
 		<Dialog>

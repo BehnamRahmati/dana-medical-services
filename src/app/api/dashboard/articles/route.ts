@@ -4,81 +4,145 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getImageUrl, uploadImage } from '../file/file-services'
 
 export async function GET() {
-	const articles = await prisma.article.findMany({
-		include: {
-			tags: true,
-			category: true,
-			likes: true,
-			bookmarks: true,
-			views: true,
-			comments: true,
-			author: {
-				select: {
-					name: true,
+	try {
+		const articles = await prisma.article.findMany({
+			include: {
+				tags: true,
+				category: true,
+				author: {
+					select: {
+						name: true,
+					},
+				},
+				_count: {
+					select: {
+						likes: true,
+						bookmarks: true,
+						comments: true,
+						views: true,
+					},
 				},
 			},
-			_count: {
-				select: {
-					likes: true,
-					bookmarks: true,
-					comments: true,
-					views: true,
-				},
+			orderBy: {
+				createdAt: 'desc',
 			},
-		},
-	})
-	if (!articles) {
-		return NextResponse.json({ articles: [] })
+		})
+		return NextResponse.json({ articles }, { status: 200 })
+	} catch (error) {
+		console.log(error)
+		return NextResponse.json({ error }, { status: 500 })
 	}
-	return NextResponse.json({ articles })
 }
 
 export async function POST(req: NextRequest) {
 	try {
 		const formData = await req.formData()
-		const file = formData.get('thumbnail') as File
-		// Ensure the file exists and is not a simple string
-		if (!file || typeof file === 'string') {
-			throw new Error('File not found or invalid file type')
+
+		// --- Extract and Validate Form Data ---
+		const title = formData.get('title') as string
+		const slug = formData.get('slug') as string
+		const excerpt = formData.get('excerpt') as string
+		const content = formData.get('content') as string
+		const readString = formData.get('read') as string
+		const status = formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+		const categoryId = formData.get('category') as string
+		const authorId = formData.get('author') as string
+		const tagsString = formData.get('tags') as string
+		const file = formData.get('thumbnail') as File | null
+
+		if (
+			!title ||
+			!slug ||
+			!content ||
+			!status ||
+			!categoryId ||
+			!authorId ||
+			!tagsString ||
+			!file ||
+			!excerpt ||
+			!readString
+		) {
+			return NextResponse.json(
+				{ message: 'Missing required fields (title, slug, content, status, category, author)' },
+				{ status: 400 },
+			)
 		}
 
-		const upload = await uploadImage(file)
+		if (!['DRAFT', 'PUBLISHED', 'ARCHIVED'].includes(status)) {
+			return NextResponse.json({ message: 'Invalid status value' }, { status: 400 })
+		}
 
-		try {
-			upload.on('httpUploadProgress', progress => {
-				console.log(progress)
-			})
-
-			await upload.done()
-
-			const permanentSignedUrl = getImageUrl(file.name)
-			const tagsString = formData.get('tags') as string
-			const tags = tagsString.split(',').map(tag => tag.trim())
-
-			const article = await prisma.article.create({
-				data: {
-					title: formData.get('title') as string,
-					slug: formData.get('slug') as string,
-					thumbnail: permanentSignedUrl,
-					excerpt: formData.get('excerpt') as string,
-					content: formData.get('content') as string,
-					read: formData.get('read') ? parseInt(formData.get('read') as string, 10) : 0,
-					status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
-					category: { connect: { id: formData.get('category') as string } },
-					author: { connect: { id: formData.get('author') as string } },
-					tags: { connect: tags.map(tag => ({ id: tag })) },
-				},
-			})
-
-			if (!article) {
-				throw new Error('failed to create article')
+		let permanentSignedUrl: string | undefined = undefined
+		if (file && typeof file !== 'string' && file.size > 0) {
+			try {
+				const upload = await uploadImage(file)
+				upload.on('httpUploadProgress', progress => {
+					console.log(progress)
+				})
+				await upload.done()
+				permanentSignedUrl = getImageUrl(file.name)
+			} catch (uploadError) {
+				console.error('File upload failed:', uploadError)
+				return NextResponse.json({ message: 'Failed to upload thumbnail' }, { status: 500 })
 			}
-
-			return NextResponse.json({ message: 'Article created successfully', article }, { status: 201 })
-		} catch (error) {
-			console.log(error)
-			throw new Error('failed to create article')
+		} else {
+			return NextResponse.json({ message: 'Thumbnail file is required' }, { status: 400 }) // Make thumbnail required on create
 		}
+
+		// --- Check Existence & Uniqueness Concurrently ---
+		const tagIds = tagsString
+			? tagsString
+					.split(',')
+					.map(tag => tag.trim())
+					.filter(id => id)
+			: []
+		const [existingSlug, categoryExists, authorExists, existingTags] = await Promise.all([
+			prisma.article.findUnique({ where: { slug }, select: { id: true } }),
+			prisma.category.findUnique({ where: { id: categoryId }, select: { id: true } }),
+			prisma.user.findUnique({ where: { id: authorId }, select: { id: true } }), // Assuming author is a User
+			tagIds.length > 0
+				? prisma.tag.findMany({ where: { id: { in: tagIds } }, select: { id: true } })
+				: Promise.resolve([]),
+		])
+
+		if (existingSlug) {
+			return NextResponse.json({ message: `Article with slug '${slug}' already exists` }, { status: 409 }) // Conflict
+		}
+		if (!categoryExists) {
+			return NextResponse.json({ message: `Category with ID '${categoryId}' not found` }, { status: 400 })
+		}
+		if (!authorExists) {
+			return NextResponse.json({ message: `Author with ID '${authorId}' not found` }, { status: 400 })
+		}
+		// Verify all provided tag IDs were found
+		if (existingTags.length !== tagIds.length) {
+			const foundIds = new Set(existingTags.map(t => t.id))
+			const notFoundIds = tagIds.filter(id => !foundIds.has(id))
+			return NextResponse.json({ message: `Tags not found: ${notFoundIds.join(', ')}` }, { status: 400 })
+		}
+
+		// --- Create Article ---
+		const article = await prisma.article.create({
+			data: {
+				title,
+				slug,
+				thumbnail: permanentSignedUrl,
+				excerpt,
+				content,
+				read: readString ? parseInt(readString, 10) : 0,
+				status,
+				category: { connect: { id: categoryId } },
+				author: { connect: { id: authorId } },
+				tags: { connect: tagIds.map(id => ({ id })) },
+			},
+			include: {
+				category: true,
+				author: { select: { id: true, name: true } },
+				tags: true,
+			},
+		})
+
+		return NextResponse.json({ message: 'Article created successfully', article }, { status: 200 })
 	} catch (error) {
 		return NextResponse.json({ error, message: 'Error creating article' }, { status: 500 })
 	}
@@ -87,53 +151,111 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
 	try {
 		const formData = await req.formData()
-		const file = formData.get('thumbnail') as File
-		// Ensure the file exists and is not a simple string
-		let permanentSignedUrl
-		if (file) {
-			const upload = await uploadImage(file)
+		// --- Extract and Validate Form Data ---
+		const currentSlug = formData.get('currentSlug') as string // Need the current slug to find the article
+		const title = formData.get('title') as string
+		const newSlug = formData.get('slug') as string // The potentially updated slug
+		const excerpt = formData.get('excerpt') as string
+		const content = formData.get('content') as string
+		const readStr = formData.get('read') as string
+		const status = formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+		const categoryId = formData.get('category') as string
+		const authorId = formData.get('author') as string
+		const tagsString = formData.get('tags') as string
+		const file = formData.get('thumbnail') as File | null
+
+		if (!currentSlug) {
+			return NextResponse.json({ message: 'Missing currentSlug to identify article for update' }, { status: 400 })
+		}
+		if (!title || !newSlug || !content || !status || !categoryId || !authorId) {
+			return NextResponse.json(
+				{ message: 'Missing required fields (title, slug, content, status, category, author)' },
+				{ status: 400 },
+			)
+		}
+		if (!['DRAFT', 'PUBLISHED', 'ARCHIVED'].includes(status)) {
+			return NextResponse.json({ message: 'Invalid status value' }, { status: 400 })
+		}
+
+		// --- File Upload (if provided) ---
+		let permanentSignedUrl: string | undefined = undefined
+		if (file && typeof file !== 'string' && file.size > 0) {
 			try {
-				upload.on('httpUploadProgress', progress => {
-					console.log(progress)
-				})
-
+				const upload = await uploadImage(file)
 				await upload.done()
-
 				permanentSignedUrl = getImageUrl(file.name)
-			} catch (error) {
-				console.log(error)
-				throw new Error('failed to upload file')
+			} catch (uploadError) {
+				console.error('File upload failed:', uploadError)
+				return NextResponse.json({ message: 'Failed to upload thumbnail' }, { status: 500 })
 			}
 		}
 
-		const tagsString = formData.get('tags') as string
-		const tags = tagsString.split(',').map(tag => tag.trim())
+		// --- Check Existence & Uniqueness Concurrently ---
+		const tagIds = tagsString
+			? tagsString
+					.split(',')
+					.map(tag => tag.trim())
+					.filter(id => id)
+			: []
+		const [articleToUpdate, conflictingSlugArticle, categoryExists, authorExists, existingTags] = await Promise.all([
+			prisma.article.findUnique({ where: { slug: currentSlug }, select: { id: true } }),
+			newSlug !== currentSlug
+				? prisma.article.findUnique({ where: { slug: newSlug }, select: { id: true } })
+				: Promise.resolve(null),
+			prisma.category.findUnique({ where: { id: categoryId }, select: { id: true } }),
+			prisma.user.findUnique({ where: { id: authorId }, select: { id: true } }),
+			tagIds.length > 0
+				? prisma.tag.findMany({ where: { id: { in: tagIds } }, select: { id: true } })
+				: Promise.resolve([]),
+		])
 
-		const article = await prisma.article.update({
-			where: {
-				slug: formData.get('slug') as string,
-			},
-			data: {
-				title: formData.get('title') as string,
-				slug: formData.get('slug') as string,
-				...(permanentSignedUrl && { thumbnail: permanentSignedUrl }),
-				excerpt: formData.get('excerpt') as string,
-				content: formData.get('content') as string,
-				read: formData.get('read') ? parseInt(formData.get('read') as string, 10) : 0,
-				status: formData.get('status') as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED',
-				category: { connect: { id: formData.get('category') as string } },
-				author: { connect: { id: formData.get('author') as string } },
-				tags: {
-					set: [],
-					connect: tags.map(tag => ({ id: tag })),
-				},
-			},
-		})
-		if (!article) {
-			throw new Error('failed to create article')
+		if (!articleToUpdate) {
+			return NextResponse.json({ message: `Article with slug '${currentSlug}' not found` }, { status: 404 })
+		}
+		if (conflictingSlugArticle) {
+			return NextResponse.json({ message: `Another article with slug '${newSlug}' already exists` }, { status: 409 })
+		}
+		if (!categoryExists) {
+			return NextResponse.json({ message: `Category with ID '${categoryId}' not found` }, { status: 400 })
+		}
+		if (!authorExists) {
+			return NextResponse.json({ message: `Author with ID '${authorId}' not found` }, { status: 400 })
+		}
+		if (existingTags.length !== tagIds.length) {
+			const foundIds = new Set(existingTags.map(t => t.id))
+			const notFoundIds = tagIds.filter(id => !foundIds.has(id))
+			return NextResponse.json({ message: `Tags not found: ${notFoundIds.join(', ')}` }, { status: 400 })
 		}
 
-		return NextResponse.json({ message: 'Article created successfully', article }, { status: 201 })
+		// --- Update Article ---
+		const article = await prisma.article.update({
+			where: {
+				slug: currentSlug,
+			},
+			data: {
+				title,
+				slug: newSlug,
+				...(permanentSignedUrl && { thumbnail: permanentSignedUrl }),
+				excerpt,
+				content,
+				read: readStr ? parseInt(readStr, 10) : 0,
+				status,
+				category: { connect: { id: categoryId } },
+				author: { connect: { id: authorId } },
+				tags: {
+					set: [],
+					connect: tagIds.map(id => ({ id })),
+				},
+			},
+			include: {
+				// Include relations in response
+				category: true,
+				author: { select: { id: true, name: true } },
+				tags: true,
+			},
+		})
+
+		return NextResponse.json({ message: 'Article updated successfully', article }, { status: 200 })
 	} catch (error) {
 		return NextResponse.json({ error, message: 'Error creating article' }, { status: 500 })
 	}
