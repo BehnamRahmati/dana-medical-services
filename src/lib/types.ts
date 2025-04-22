@@ -24,6 +24,12 @@ type TUser = {
 	likes: TLike[]
 	views: TView[]
 	bookmarks: TBookmark[]
+	_count: {
+		likes: number
+		bookmarks: number
+		comments: number
+		requests: number
+	}
 }
 
 type TLike = {

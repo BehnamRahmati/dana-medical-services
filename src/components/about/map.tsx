@@ -42,7 +42,7 @@ function MapComponent() {
 		// map.fitBounds(bounds);
 	}, [])
 
-	const onUnmount = React.useCallback(function callback(map: google.maps.Map) {
+	const onUnmount = React.useCallback(function callback() {
 		mapRef.current = null
 	}, [])
 
