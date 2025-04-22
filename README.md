@@ -5,6 +5,8 @@
 
 [وب سایت دنا](https://dena.chbk.app)
 
+برای دسترسی به cms پروژه با اکانت زیر وارد شوید.
+
 ## اطلاعات اکانت دمو
 
 Demo email = demo@demo.com
