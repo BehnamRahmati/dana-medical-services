@@ -10,12 +10,12 @@ export default function DashboardServices() {
 		dataFetcher,
 	)
 	return (
-		<div className='w-full rounded-lg bg-accent p-5'>
+		<div className='w-full rounded-lg bg-accent p-5 lg:flex-1'>
 			<div className='mb-5'>
 				<h3 className='font-semibold'> خدمات اخیر</h3>
 				<p className='text-muted-foreground text-xs'> خدمات اخیر را می توانید در این بخش ببینید</p>
 			</div>
-			<ul className='flex flex-col gap-5'>
+			<ul className='flex flex-wrap gap-2.5 '>
 				{isLoading && (
 					<li>
 						<Skeleton className='h-20 bg-muted w-full' />
@@ -25,7 +25,7 @@ export default function DashboardServices() {
 				{!isLoading && !error && data && (
 					<>
 						{data.services.map((service, index) => (
-							<li key={index} className='flex gap-2'>
+							<li key={index} className='flex gap-2 bg-content/10 rounded-sm shadow-sm px-2 py-1 text-sm'>
 								{service.title}
 							</li>
 						))}

@@ -80,6 +80,11 @@ export const authOptions: AuthOptions = {
 		},
 	},
 	secret: process.env.NEXTAUTH_SECRET!,
+	pages: {
+		signIn: '/login',
+		newUser: '/',
+		error: '/login',
+	},
 }
 
 export default NextAuth(authOptions)

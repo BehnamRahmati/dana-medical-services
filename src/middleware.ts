@@ -11,7 +11,8 @@ export async function middleware(request: NextRequest) {
 
 	if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
 		const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
-		if (token && token.role) {
+		if (token) {
+			console.log('authenticated login accessed')
 			const url = request.nextUrl.clone()
 			url.pathname = '/'
 			return NextResponse.redirect(url)
@@ -22,9 +23,6 @@ export async function middleware(request: NextRequest) {
 
 	if (pathname.startsWith('/api/')) {
 		if (origin && !allowedOrigins.includes(origin)) {
-			// Check if origin exists AND is not allowed
-			console.log(`Origin ${origin} blocked for API access.`) // Log blocked origin
-
 			return new NextResponse(null, {
 				status: 403,
 				statusText: 'Forbidden: Invalid Origin', // More specific status text
@@ -38,13 +36,10 @@ export async function middleware(request: NextRequest) {
 	}
 
 	if (pathname.startsWith('/dashboard')) {
-		console.log('Dashboard route accessed')
-		// Get the token containing user information
-		// Ensure you have NEXTAUTH_SECRET set in your environment variables
 		const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
 
 		// Check if the user is authenticated and has an allowed role
-		if (!token || !token.role || !allowedRoles.includes(token.role as string)) {
+		if (!token || !token.userRole || !allowedRoles.includes(token.userRole as string)) {
 			const url = request.nextUrl.clone()
 			url.pathname = '/login'
 			return NextResponse.redirect(url)

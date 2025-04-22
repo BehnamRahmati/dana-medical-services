@@ -1,7 +1,7 @@
+import enamad from '@/assets/enamad.png'
+import samandehi from '@/assets/samandehi.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import enamad from '../../../public/static/enamad.png'
-import samandehi from '../../../public/static/samandehi.png'
 import FooterTitle from './footer-title'
 export default function FooterContact() {
 	return (
