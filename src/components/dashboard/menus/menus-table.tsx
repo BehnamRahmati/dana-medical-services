@@ -1,22 +1,19 @@
 'use client'
 import { DataTableSkeleton } from '@/components/ui/data-table'
 import GenericDataTable from '@/components/ui/generic-data-table'
+import { dataFetcher } from '@/lib/helpers'
 import { TMenu } from '@/lib/types'
-import axios from 'axios'
 import useSWR from 'swr'
 import LinkCreateForm from './links/link-create'
 import { menusColumns } from './menus-column'
 import MenuCreateForm from './menus-create'
 
-async function fetcher(url: string): Promise<{ menus: TMenu[] }> {
-	const response = await axios.get(url)
-	return await response.data
-}
-
 export default function MenusTable() {
-	const { data, isLoading, mutate } = useSWR('/api/dashboard/menus', fetcher)
+	const { data, isLoading, mutate, error } = useSWR<{ menus: TMenu[] }>(['/api/dashboard/menus', 'dm-menus'], dataFetcher)
 
-	if (isLoading || !data) return <DataTableSkeleton />
+	if (isLoading) return <DataTableSkeleton />
+	if (error) return <p>خطا در بارگذاری دیتا</p>
+	if (!data) return <p>هیچ دیتایی یافت نشد</p>
 
 	const renderCreateComponents = () => {
 		return (

@@ -2,14 +2,14 @@
 
 import DashboardServicesSelect from '@/components/dashboard/form/services-select'
 import Button from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import TiptapEditor from '@/components/ui/tiptap-editor'
+import { handleToastPromise } from '@/lib/helpers'
 import { TServiceItem } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import { serviceItemsFormSchema } from './service-items-schema'
@@ -40,22 +40,16 @@ export default function ServiceItemsCreateForm({
 	}
 
 	const onSubmit = async (values: z.infer<typeof serviceItemsFormSchema>) => {
-		toast.promise(createItem(values), {
-			loading: 'در حال ایجاد ایتم جدید...',
-			success: async response => {
-				if (!response.ok) {
-					const errorData = await response.json()
-					throw new Error(errorData || `خطا در ایجاد ایتم  ${response.status}`)
-				}
+		handleToastPromise(
+			() => createItem(values),
+			'در حال ایجاد ایتم جدید...',
+			'ایتم جدید با موفقیت ایجاد شد',
+			' خطا در ایجاد ایتم جدید ',
+			() => {
 				form.reset()
 				mutate()
-				return 'ایتم جدید با موفقیت ایجاد شد'
 			},
-			error: error => {
-				console.error('Error submitting comment:', error)
-				return ` خطا در ایجاد ایتم جدید : ${error.message || 'Please try again.'}`
-			},
-		})
+		)
 	}
 	return (
 		<Dialog>
@@ -67,6 +61,7 @@ export default function ServiceItemsCreateForm({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>ساخت ایتم خدمت جدید</DialogTitle>
+					<DialogDescription className='hidden'>دیالوگ ساخت آیتم جدید</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-10 service-item'>

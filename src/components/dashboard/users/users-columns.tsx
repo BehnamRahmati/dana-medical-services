@@ -26,13 +26,12 @@ export const UserColumns: ColumnDef<TUser>[] = [
 			switch (role) {
 				case 'ADMIN':
 					return <div className='text-red-500 bg-red-500/20 w-fit py-1 px-2.5 rounded-md'>ادمین</div>
-					break
-				case 'MODERATOR':
+				case 'SUPERADMIN':
 					return <div className='text-amber-500 bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>متخصص</div>
-					break
+				case 'EXPERT':
+					return <div className='text-green-500 bg-green-500/20 w-fit py-1 px-2.5 rounded-md'>متخصص</div>
 				default:
 					return <div className='text-content bg-content/20 w-fit py-1 px-2.5 rounded-md'>کاربر</div>
-					break
 			}
 		},
 	},

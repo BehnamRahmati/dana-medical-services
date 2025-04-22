@@ -37,7 +37,7 @@ function Sidebar({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
-	return <div className={cn('flex-1 overflow-y-auto overflow-x-hidden', className)} {...props} />
+	return <div className={cn('flex-1 overflow-y-auto no-scrollbar overflow-x-hidden', className)} {...props} />
 }
 
 function SidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {

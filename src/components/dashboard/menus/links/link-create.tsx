@@ -1,14 +1,15 @@
 'use client'
 import Button from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { handleToastPromise } from '@/lib/helpers'
 import { TLink } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { z } from 'zod'
 
 const formSchema = z.object({
@@ -31,16 +32,23 @@ export default function LinkCreateForm() {
 			menu: '',
 		},
 	})
-
+	const { mutate } = useSWRConfig()
 	const { data: menuData, isLoading: menuLoading } = useSWR('/api/dashboard/menus', tagFetcher)
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			const response = await axios.post('/api/dashboard/menus/links', values)
-			console.warn(response.data)
-		} catch (error) {
-			console.warn(error)
-		}
+		const submitpromise = fetch('/api/dashboard/menus/links', {
+			method: 'POST',
+			body: JSON.stringify(values),
+		})
+		handleToastPromise(
+			() => submitpromise,
+			'در حال ساخت لینک ...',
+			'لینک جدید با موفقیت ساخته شد.',
+			'خطا در ایجاد لینک.',
+			() => {
+				mutate(['/api/dashboard/menus', 'dm-menus'])
+			},
+		)
 	}
 	return (
 		<Dialog>
@@ -52,6 +60,7 @@ export default function LinkCreateForm() {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>فرم ساخت لینک </DialogTitle>
+					<DialogDescription className='hidden'>دیالوگ ساخت لینک جدید</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>

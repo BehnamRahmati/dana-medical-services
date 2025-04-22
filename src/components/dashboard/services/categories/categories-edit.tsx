@@ -1,7 +1,7 @@
 'use client'
 
 import Button from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -62,6 +62,7 @@ export default function ServicesCategroriesEdit({ name, slug, id }: { name: stri
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>فرم ویرایش دسته بندی</DialogTitle>
+					<DialogDescription className='hidden'>دیالوگ ویرایش دسته بندی </DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-10'>

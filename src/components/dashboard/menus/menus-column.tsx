@@ -1,22 +1,10 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TLink, TMenu } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
-import axios from 'axios'
-import { MoreSquare, Trash } from 'iconsax-react'
+import { MoreSquare } from 'iconsax-react'
+import DeleteActionButton from './cells/delete-action-button'
 
 export const menusColumns: ColumnDef<TMenu>[] = [
-	{
-		accessorKey: 'id',
-		header: '',
-		cell: '',
-	},
 	{
 		accessorKey: 'name',
 		header: 'عنوان',
@@ -50,26 +38,14 @@ export const menusColumns: ColumnDef<TMenu>[] = [
 		accessorKey: 'action',
 		header: 'عملیات',
 		cell: ({ row }) => {
-			const id = row.getValue('id') as string
+			const id = row.original.id as string
 			return (
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<MoreSquare className='stroke-content size-5' variant='Broken' />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='start'>
-						<DropdownMenuLabel> عملیات</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<button
-								className='flex items-center gap-2 cursor-pointer'
-								onClick={() => {
-									axios.delete(`/api/dashboard/menus/${id}`)
-								}}
-							>
-								<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
-								<p>حذف منو</p>
-							</button>
-						</DropdownMenuItem>
+						<DeleteActionButton id={id} />
 					</DropdownMenuContent>
 				</DropdownMenu>
 			)

@@ -1,7 +1,7 @@
 'use client'
 
 import Button from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { TCategory } from '@/lib/types'
@@ -65,6 +65,7 @@ export default function ServicesCategroriesCreate({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>فرم ساخت دسته بندی</DialogTitle>
+					<DialogDescription className='hidden'>دیالوگ ساخت دسته بندی</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-10'>

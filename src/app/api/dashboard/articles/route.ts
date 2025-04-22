@@ -152,9 +152,9 @@ export async function PUT(req: NextRequest) {
 	try {
 		const formData = await req.formData()
 		// --- Extract and Validate Form Data ---
-		const currentSlug = formData.get('currentSlug') as string // Need the current slug to find the article
+		const articleId = formData.get('id') as string // Need the current slug to find the article
 		const title = formData.get('title') as string
-		const newSlug = formData.get('slug') as string // The potentially updated slug
+		const slug = formData.get('slug') as string // The potentially updated slug
 		const excerpt = formData.get('excerpt') as string
 		const content = formData.get('content') as string
 		const readStr = formData.get('read') as string
@@ -164,10 +164,10 @@ export async function PUT(req: NextRequest) {
 		const tagsString = formData.get('tags') as string
 		const file = formData.get('thumbnail') as File | null
 
-		if (!currentSlug) {
+		if (!articleId) {
 			return NextResponse.json({ message: 'Missing currentSlug to identify article for update' }, { status: 400 })
 		}
-		if (!title || !newSlug || !content || !status || !categoryId || !authorId) {
+		if (!title || !slug || !content || !status || !categoryId || !authorId) {
 			return NextResponse.json(
 				{ message: 'Missing required fields (title, slug, content, status, category, author)' },
 				{ status: 400 },
@@ -197,11 +197,8 @@ export async function PUT(req: NextRequest) {
 					.map(tag => tag.trim())
 					.filter(id => id)
 			: []
-		const [articleToUpdate, conflictingSlugArticle, categoryExists, authorExists, existingTags] = await Promise.all([
-			prisma.article.findUnique({ where: { slug: currentSlug }, select: { id: true } }),
-			newSlug !== currentSlug
-				? prisma.article.findUnique({ where: { slug: newSlug }, select: { id: true } })
-				: Promise.resolve(null),
+		const [articleToUpdate, categoryExists, authorExists, existingTags] = await Promise.all([
+			prisma.article.findUnique({ where: { id: articleId }, select: { id: true } }),
 			prisma.category.findUnique({ where: { id: categoryId }, select: { id: true } }),
 			prisma.user.findUnique({ where: { id: authorId }, select: { id: true } }),
 			tagIds.length > 0
@@ -210,10 +207,7 @@ export async function PUT(req: NextRequest) {
 		])
 
 		if (!articleToUpdate) {
-			return NextResponse.json({ message: `Article with slug '${currentSlug}' not found` }, { status: 404 })
-		}
-		if (conflictingSlugArticle) {
-			return NextResponse.json({ message: `Another article with slug '${newSlug}' already exists` }, { status: 409 })
+			return NextResponse.json({ message: `Article with slug '${articleId}' not found` }, { status: 404 })
 		}
 		if (!categoryExists) {
 			return NextResponse.json({ message: `Category with ID '${categoryId}' not found` }, { status: 400 })
@@ -230,11 +224,11 @@ export async function PUT(req: NextRequest) {
 		// --- Update Article ---
 		const article = await prisma.article.update({
 			where: {
-				slug: currentSlug,
+				id: articleId,
 			},
 			data: {
 				title,
-				slug: newSlug,
+				slug,
 				...(permanentSignedUrl && { thumbnail: permanentSignedUrl }),
 				excerpt,
 				content,

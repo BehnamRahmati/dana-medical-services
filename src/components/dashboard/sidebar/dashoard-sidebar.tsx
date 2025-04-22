@@ -76,7 +76,7 @@ export default function DashboardSidebar() {
 								</SidebarMenuItem>
 								<SidebarMenuItem>
 									<Link
-										href='/dashboard'
+										href='/dashboard/images'
 										onClick={() => setOpen(prev => !prev)}
 										className='flex items-center flex-1 gap-2 group *:shrink-0 '
 									>
@@ -153,7 +153,7 @@ export default function DashboardSidebar() {
 								<DashboardSidebarComments />
 							</SidebarMenuItem>
 							<SidebarMenuItem>
-								<Link href='/dashboard' className='flex items-center flex-1 gap-2 group *:shrink-0 '>
+								<Link href='/dashboard/images' className='flex items-center flex-1 gap-2 group *:shrink-0 '>
 									{/* eslint-disable-next-line jsx-a11y/alt-text */}
 									<Image
 										className='h-8.5 stroke-content transform group-hover:scale-110 transition-transform duration:200 p-1 rounded-lg'

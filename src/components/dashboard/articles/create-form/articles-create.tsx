@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 import { createFormSchema } from '../lib/schemas'
 import CreateFormMain from './create-form-main'
@@ -64,14 +63,6 @@ export default function ArticlesCreateForm() {
 				window.location.reload()
 			},
 		)
-		toast.promise(createArticle(values), {
-			loading: 'در حال انتشار مقاله...',
-			success: () => {
-				window.location.reload()
-				return 'مقاله با موفقیت منتشر شد.'
-			},
-			error: 'مقاله منتشر نشد. دوباره تلاش کنید.',
-		})
 	}
 
 	return (

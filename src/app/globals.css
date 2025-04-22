@@ -250,3 +250,18 @@ body {
 .main-editor .react-quill-editor {
 	@apply h-[500px]!;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+	width: 0px;
+}
+/* Track */
+.no-scrollbar::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px grey;
+	border-radius: 10px;
+}
+
+/* Handle */
+.no-scrollbar::-webkit-scrollbar-thumb {
+	background: red;
+	border-radius: 10px;
+}

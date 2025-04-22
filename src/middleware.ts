@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
 	if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
 		const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
 		if (token) {
-			console.log('authenticated login accessed')
 			const url = request.nextUrl.clone()
 			url.pathname = '/'
 			return NextResponse.redirect(url)

@@ -1,11 +1,11 @@
 'use client'
 
 import { Form } from '@/components/ui/form'
+import { handleToastPromise } from '@/lib/helpers'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 import { createServiceSchema } from '../lib/schemas'
 import CreateServiceFormMain from './service-create-main'
@@ -39,19 +39,27 @@ export default function ServiceCreateForm() {
 		formData.append('content', values.content)
 		formData.append('status', values.status)
 		formData.append('category', values.category)
-		return await axios.post('/api/dashboard/services', formData, {
+		const response = await axios.post('/api/dashboard/services', formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
 		})
+		return new Response(JSON.stringify(response.data), {
+			status: response.status,
+			headers: response.headers as HeadersInit,
+		})
 	}
 
 	async function onSubmit(values: z.infer<typeof createServiceSchema>) {
-		toast.promise(createService(values), {
-			loading: 'در حال ایجاد خدمت...',
-			success: 'خدمت با موفقیت ایجاد شد.',
-			error: 'خدمت ایجاد نشد. دوباره تلاش کنید.',
-		})
+		handleToastPromise(
+			() => createService(values),
+			'در حال ایجاد خدمت...',
+			'خدمت با موفقیت ایجاد شد.',
+			'خدمت ایجاد نشد. دوباره تلاش کنید.',
+			() => {
+				window.location.reload()
+			},
+		)
 	}
 	return (
 		<Form {...form}>

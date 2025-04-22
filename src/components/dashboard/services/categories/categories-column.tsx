@@ -1,9 +1,9 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TCategory } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
-import axios from 'axios'
-import { MoreSquare, Trash } from 'iconsax-react'
+import { MoreSquare } from 'iconsax-react'
 import ServicesCategroriesEdit from './categories-edit'
+import ServiceCategoriesActions from './cells/categories-actions'
 
 export const ServicescategoriesColumns: ColumnDef<TCategory>[] = [
 	{
@@ -28,17 +28,7 @@ export const ServicescategoriesColumns: ColumnDef<TCategory>[] = [
 							<MoreSquare className='stroke-content size-5' variant='Broken' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start'>
-							<DropdownMenuItem>
-								<button
-									className='flex items-center gap-2 cursor-pointer'
-									onClick={() => {
-										axios.delete(`/api/dashboard/categories/${slug}`)
-									}}
-								>
-									<Trash className='stroke-content size-4 shrink-0' variant='Broken' />
-									<p>حذف دسته بندی</p>
-								</button>
-							</DropdownMenuItem>
+							<ServiceCategoriesActions slug={slug} />
 						</DropdownMenuContent>
 					</DropdownMenu>
 					<ServicesCategroriesEdit slug={slug} name={name} id={id} />

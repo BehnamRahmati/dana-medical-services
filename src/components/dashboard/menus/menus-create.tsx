@@ -1,15 +1,15 @@
 'use client'
 import Button from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { handleToastPromise } from '@/lib/helpers'
 import { TMenu } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { z } from 'zod'
 const formSchema = z.object({
 	name: z.string().min(1, { message: 'required' }),
@@ -29,17 +29,23 @@ export default function MenuCreateForm() {
 			parent: '',
 		},
 	})
-	const router = useRouter()
-
+	const { mutate } = useSWRConfig()
 	const { data: menuData, isLoading: menuLoading } = useSWR('/api/dashboard/menus', tagFetcher)
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		try {
-			await axios.post('/api/dashboard/menus', values)
-			router.replace('/dashboard/menus')
-		} catch (error) {
-			console.warn(error)
-		}
+		const submitpromise = fetch('/api/dashboard/menus', {
+			method: 'POST',
+			body: JSON.stringify(values),
+		})
+		handleToastPromise(
+			() => submitpromise,
+			'در حال ساخت منو ...',
+			'منوی جدید با موفقیت ساخته شد.',
+			'خطا در ایجاد منو.',
+			() => {
+				mutate(['/api/dashboard/menus', 'dm-menus'])
+			},
+		)
 	}
 	return (
 		<Dialog>
@@ -51,6 +57,7 @@ export default function MenuCreateForm() {
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>فرم ساخت منو </DialogTitle>
+					<DialogDescription className='hidden'>دیالوگ ساخت منو جدید</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5 '>

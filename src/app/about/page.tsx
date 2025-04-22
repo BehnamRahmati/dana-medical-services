@@ -1,6 +1,5 @@
 import enamad from '@/assets/enamad.png'
 import samandehi from '@/assets/samandehi.png'
-import MapComponent from '@/components/about/map'
 import Section from '@/components/ui/section'
 import Title from '@/components/ui/title'
 import { H1, H4, Paragraph } from '@/components/ui/typography'
@@ -66,7 +65,7 @@ export default function AboutPage() {
 			<Section>
 				<div className='px-2.5 lg:px-5 py-10 lg:py-20'>
 					<Title>ارزش های کلینیک دنا</Title>
-					<ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-20 mt-10 lg:mt-20'>
+					<ul className='grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20 mt-10 lg:mt-20 lg:w-2/3 mx-auto '>
 						{values.map(value => (
 							<li key={value.title} className='bg-secondary/10 p-10 rounded-4xl *:text-secondary'>
 								<div className='mx-auto w-fit'>{value.icon}</div>
@@ -98,7 +97,7 @@ export default function AboutPage() {
 					</ul>
 				</div>
 			</Section>
-			<Section>
+			{/* <Section>
 				<div className='px-2.5 lg:px-5 py-10 lg:py-20'>
 					<Title>آدرس کلینیک دنا</Title>
 					<div className='mt-10 flex flex-col lg:flex-row gap-10 items-center'>
@@ -108,7 +107,7 @@ export default function AboutPage() {
 						</div>
 					</div>
 				</div>
-			</Section>
+			</Section> */}
 		</div>
 	)
 }

@@ -8,6 +8,9 @@ export async function GET() {
 				none: {},
 			},
 		},
+		orderBy: {
+			createdAt: 'desc',
+		},
 	})
 	if (!categories) {
 		return NextResponse.json({ categories: [] })
