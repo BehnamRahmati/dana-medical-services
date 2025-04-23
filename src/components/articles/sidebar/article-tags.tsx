@@ -10,7 +10,7 @@ import useSWR from 'swr'
 
 export default function ArticleTags() {
 	const { currentParams, pathname } = useQueries()
-	const { data, isLoading, error } = useSWR<{ tags: TTag[] }>(['/api/dashboard/tags', 'articles-tags'], dataFetcher)
+	const { data, isLoading, error } = useSWR<{ tags: TTag[] }>(['/api/articles/tags', 'articles-tags'], dataFetcher)
 
 	if (isLoading) {
 		return (
@@ -56,7 +56,7 @@ export default function ArticleTags() {
 					const newParam = { tags: tag.slug }
 					return (
 						<li key={tag.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
-							<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{tag.name}</Link>
+							<Link href={{ pathname, query: { ...currentParams, page: 1, ...newParam } }}>#{tag.name}</Link>
 						</li>
 					)
 				})}

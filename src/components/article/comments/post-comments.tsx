@@ -17,20 +17,24 @@ export default function ArticleComments() {
 	if (isLoading)
 		return (
 			<div className='flex flex-col gap-5'>
-				<Skeleton className='h-56 w-full rounded-xl bg-content/10 ' />
-				<Skeleton className='h-56 w-full rounded-xl bg-content/10 ' />
-				<Skeleton className='h-56 w-full rounded-xl bg-content/10 ' />
+				<PostCommentSkeleton />
+				<div className='pr-5'>
+					<PostCommentSkeleton />
+				</div>
+				<PostCommentSkeleton />
 			</div>
 		)
 
 	if (error)
 		return (
-			<div className='text-center p-2.5 lg:p-10 border-4 border-dashed border-border bg-muted/50 '>خطایی رخ داده است.</div>
+			<div className='text-center p-2.5 lg:p-10 border-4 border-dashed border-border bg-muted/50 mt-5'>
+				خطایی رخ داده است.
+			</div>
 		)
 
 	if (!data)
 		return (
-			<div className='text-center p-2.5 lg:p-10 border-4 border-dashed border-border bg-muted/50 '>
+			<div className='text-center p-2.5 lg:p-10 border-4 border-dashed border-border bg-muted/50 mt-5'>
 				محتوای مورد نظر یافت نشد.
 			</div>
 		)
@@ -48,5 +52,26 @@ export default function ArticleComments() {
 				</div>
 			)}
 		</ul>
+	)
+}
+
+export function PostCommentSkeleton() {
+	return (
+		<div className='bg-content/10 rounded-xl p-5'>
+			<div className='flex items-center justify-between'>
+				<div className='flex items-center gap-2'>
+					<Skeleton className='bg-content/10 size-14 rounded-full' />
+					<div className=''>
+						<Skeleton className='bg-content/10 h-6 w-18 rounded-md' />
+						<Skeleton className='bg-content/10 h-6 w-18 rounded-md mt-1' />
+					</div>
+				</div>
+
+				<Skeleton className='bg-content/10 h-7 w-10 rounded-md' />
+			</div>
+			<div className='mt-5'>
+				<Skeleton className='bg-content/10 h-28 w-full rounded-md' />
+			</div>
+		</div>
 	)
 }

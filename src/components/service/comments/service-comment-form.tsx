@@ -1,13 +1,14 @@
 'use client'
 
+import { handleToastPromise } from '@/lib/helpers'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { ArrowLeft3, Profile } from 'iconsax-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useSWRConfig } from 'swr'
 import { z } from 'zod'
 import { Form, FormField } from '../../ui/form'
 import { Textarea } from '../../ui/textarea'
@@ -27,6 +28,7 @@ export default function ServiceCommentForm() {
 	})
 	const { data: session, status } = useSession()
 	const params = useParams()
+	const { mutate } = useSWRConfig()
 	const [rules, setRules] = React.useState(false)
 
 	if (status === 'unauthenticated' || !session?.user) {
@@ -45,15 +47,23 @@ export default function ServiceCommentForm() {
 	}
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		try {
-			await axios.post(`/api/services/${params?.slug}/comments`, {
+		const submitpromise = fetch(`/api/services/${params?.slug}/comments`, {
+			method: 'POST',
+			body: JSON.stringify({
 				content: values.content,
 				userId: session.user.id,
 				parentId: values.parent,
-			})
-		} catch (error) {
-			console.error('Error submitting comment:', error)
-		}
+			}),
+		})
+		handleToastPromise(
+			() => submitpromise,
+			'در حال ارسال دیدگاه ...',
+			'دیدگاه با موفقیت ارسال شد.',
+			'خطا در ارسال دیدگاه',
+			() => {
+				mutate([`/api/services/${params?.slug}/comments`, 'service-comments'])
+			},
+		)
 	}
 	return (
 		<Form {...form}>

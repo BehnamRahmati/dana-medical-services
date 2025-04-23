@@ -2,17 +2,13 @@
 
 import { DataTableSkeleton } from '@/components/ui/data-table'
 import GenericDataTable from '@/components/ui/generic-data-table'
+import { dataFetcher } from '@/lib/helpers'
 import { TUser } from '@/lib/types'
-import axios from 'axios'
 import useSWR from 'swr'
 import { UserColumns } from './users-columns'
 
-async function fetcher(url: string): Promise<{ users: TUser[] }> {
-	const response = await axios.get(url)
-	return await response.data
-}
 export default function UsersTable() {
-	const { data, isLoading, mutate } = useSWR('/api/dashboard/users', fetcher)
+	const { data, isLoading, mutate } = useSWR<{ users: TUser[] }>(['/api/dashboard/users', 'du-users'], dataFetcher)
 
 	if (isLoading || !data) return <DataTableSkeleton />
 

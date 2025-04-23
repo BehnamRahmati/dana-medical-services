@@ -2,6 +2,7 @@ import { TArticle } from '@/lib/types'
 import { Bookmark2, Heart, MessageText1, Watch } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Skeleton } from './skeleton'
 
 export default function PostCard({ article }: { article: TArticle }) {
 	return (
@@ -58,6 +59,29 @@ export default function PostCard({ article }: { article: TArticle }) {
 					<span>زمان مطالعه :</span>
 					<span>{article.read} دقیقه</span>
 				</p>
+			</div>
+		</div>
+	)
+}
+
+export function PostCardSkeleton() {
+	return (
+		<div className='bg-content/10 h-[400] w-full lg:w-[370px] p-5 rounded-xl'>
+			<Skeleton className='w-full h-52 bg-content/10 rounded-lg mb-2' />
+			<Skeleton className='w-full h-7 bg-content/10 rounded-md mb-1' />
+			<Skeleton className='w-22 h-7 bg-content/10 rounded-md mb-4' />
+			<div className='flex items-center justify-between mb-2'>
+				<Skeleton className='w-22 h-7 bg-content/10 rounded-md ' />
+				<Skeleton className='w-18 h-7 bg-content/10 rounded-md ' />
+			</div>
+			<div className='flex items-center justify-between mb-2'>
+				<div className='flex gap-2'>
+					<Skeleton className='w-10 h-6 bg-content/10 rounded-md ' />
+					<Skeleton className='w-10 h-6 bg-content/10 rounded-md ' />
+					<Skeleton className='w-10 h-6 bg-content/10 rounded-md ' />
+				</div>
+
+				<Skeleton className='w-22 h-7 bg-content/10 rounded-md ' />
 			</div>
 		</div>
 	)

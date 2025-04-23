@@ -4,8 +4,8 @@ import { NextResponse } from 'next/server'
 export async function GET() {
 	try {
 		const users = await prisma.user.findMany({
-			where: { role: { in: ['ADMIN', 'SUPERADMIN'] } },
-			select: { name: true, id: true },
+			where: { role: { equals: 'EXPERT' } },
+			select: { name: true, id: true, image: true },
 		})
 		if (!users) {
 			return NextResponse.json({ users: [] })

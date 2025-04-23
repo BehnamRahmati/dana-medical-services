@@ -7,6 +7,7 @@ import ToggleThemeButton from '../toggle-theme-button'
 import { Skeleton } from '../ui/skeleton'
 export default function HeaderButtons() {
 	const { data: session, status } = useSession()
+
 	const renderAuthButtons = () => {
 		return (
 			<div className='flex'>
@@ -65,6 +66,11 @@ export default function HeaderButtons() {
 	return (
 		<div className='flex justify-between lg:justify-start gap-2.5 w-full'>
 			<ToggleThemeButton />
+			{status === 'loading' && !session && (
+				<div className=''>
+					<Skeleton className='bg-content/10 w-32 h-8 rounded-md' />
+				</div>
+			)}
 			{status === 'unauthenticated' ? renderAuthButtons() : renderProfileButton()}
 		</div>
 	)

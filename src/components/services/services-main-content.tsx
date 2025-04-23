@@ -2,8 +2,7 @@
 
 import useServices from '@/hooks/use-services'
 import PaginationCustom from '../ui/pagination-custom'
-import ServicesCard from '../ui/service-card'
-import { Skeleton } from '../ui/skeleton'
+import ServicesCard, { ServiceCardSkeleton } from '../ui/service-card'
 
 export default function ServicesMainContent() {
 	const { data, isLoading, error } = useServices()
@@ -11,7 +10,7 @@ export default function ServicesMainContent() {
 		return (
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
 				{Array.from({ length: 6 }).map((_, index) => (
-					<Skeleton key={index} className='h-[350px] w-full bg-content/10 rounded-md' />
+					<ServiceCardSkeleton key={index} />
 				))}
 			</div>
 		)

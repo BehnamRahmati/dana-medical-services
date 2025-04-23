@@ -1,6 +1,33 @@
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+	try {
+		const slug = (await params).slug
+		if (!slug) {
+			return NextResponse.json({ message: 'slug parameter is missing' }, { status: 400 })
+		}
+
+		const article = await prisma.article.findUnique({
+			where: { slug },
+			select: { id: true },
+		})
+
+		if (!article) {
+			return NextResponse.json({ message: 'Article not found' }, { status: 404 })
+		}
+
+		const bookmarks = await prisma.bookmark.count({
+			where: { article: { id: article.id } },
+		})
+
+		return NextResponse.json({ bookmarks }, { status: 200 })
+	} catch (error) {
+		console.log(error)
+		return NextResponse.json({ error }, { status: 500 })
+	}
+}
+
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
 	try {
 		const slug = (await params).slug

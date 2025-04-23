@@ -1,6 +1,9 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { TUser } from '@/lib/types'
 import { ColumnDef } from '@tanstack/react-table'
+import { MoreSquare } from 'iconsax-react'
 import Image from 'next/image'
+import UserAction from './cells/user-action'
 export const UserColumns: ColumnDef<TUser>[] = [
 	{
 		accessorKey: 'image',
@@ -27,7 +30,7 @@ export const UserColumns: ColumnDef<TUser>[] = [
 				case 'ADMIN':
 					return <div className='text-red-500 bg-red-500/20 w-fit py-1 px-2.5 rounded-md'>ادمین</div>
 				case 'SUPERADMIN':
-					return <div className='text-amber-500 bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>متخصص</div>
+					return <div className='text-amber-500 bg-amber-500/20 w-fit py-1 px-2.5 rounded-md'>سوپر ادمین</div>
 				case 'EXPERT':
 					return <div className='text-green-500 bg-green-500/20 w-fit py-1 px-2.5 rounded-md'>متخصص</div>
 				default:
@@ -38,5 +41,18 @@ export const UserColumns: ColumnDef<TUser>[] = [
 	{
 		accessorKey: 'action',
 		header: 'عملیات',
+		cell: ({ row }) => {
+			const id = row.original.id as string
+			return (
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<MoreSquare className='stroke-content size-5' variant='Broken' />
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align='start'>
+						<UserAction id={id} />
+					</DropdownMenuContent>
+				</DropdownMenu>
+			)
+		},
 	},
 ]

@@ -2,6 +2,8 @@ import { TService } from '@/lib/types'
 import { ArrowLeft3 } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Skeleton } from './skeleton'
+
 export default function ServicesCard({ service }: { service: TService }) {
 	return (
 		<div className='bg-accent border border-border rounded-xl mt-12 group flex flex-col'>
@@ -36,6 +38,19 @@ export default function ServicesCard({ service }: { service: TService }) {
 				<span className='text-lg font-bold'>مشاهده</span>
 				<ArrowLeft3 size={25} className='fill-primary inline-block' variant='Bulk' />
 			</Link>
+		</div>
+	)
+}
+
+export function ServiceCardSkeleton() {
+	return (
+		<div className='bg-content/10 rounded-xl mt-12 group flex flex-col h-[350px] w-full'>
+			<Skeleton className='w-11/12 rounded-xl h-44 mx-auto -mt-12 bg-content/10' />
+			<div className='info w-11/12 mx-auto flex-1'>
+				<Skeleton className='w-22 rounded-md h-5 bg-content/10 my-2' />
+				<Skeleton className='w-full rounded-md h-8 bg-content/10 mb-5' />
+				<Skeleton className='w-full rounded-md h-28 bg-content/10 mb-2.5' />
+			</div>
 		</div>
 	)
 }

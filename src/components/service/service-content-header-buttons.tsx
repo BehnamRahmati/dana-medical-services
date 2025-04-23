@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import useSWR, { useSWRConfig } from 'swr'
 
-export default function PostContentFooterButtons({
+export default function ServiceContentheadererButtons({
 	counts,
 	slug,
 }: {
@@ -17,11 +17,11 @@ export default function PostContentFooterButtons({
 	const [isBookmarking, setIsBookmarking] = useState(false)
 	const { data: session } = useSession()
 	const { data: likesData, isLoading: likesLoading } = useSWR<{ likes: number }>(
-		[`/api/articles/${slug}/likes`, 'article-likes'],
+		[`/api/services/${slug}/likes`, 'service-likes'],
 		dataFetcher,
 	)
 	const { data: bookmarksData, isLoading: bookmarksLoading } = useSWR<{ bookmarks: number }>(
-		[`/api/articles/${slug}/bookmarks`, 'article-bookmarks'],
+		[`/api/services/${slug}/bookmarks`, 'service-bookmarks'],
 		dataFetcher,
 	)
 	const { mutate } = useSWRConfig()
@@ -34,7 +34,7 @@ export default function PostContentFooterButtons({
 		if (isBookmarking) return // Prevent double clicks
 		setIsBookmarking(true) // Set loading state
 
-		const bookmarksSubmissionPromise = fetch(`/api/articles/${slug}/bookmarks`, {
+		const bookmarksSubmissionPromise = fetch(`/api/services/${slug}/bookmarks`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export default function PostContentFooterButtons({
 					throw new Error(errorData || `Request failed with status ${response.status}`)
 				}
 				setIsBookmarking(false)
-				mutate([`/api/articles/${slug}/bookmarks`, 'article-bookmarks'])
+				mutate([`/api/services/${slug}/bookmarks`, 'service-bookmarks'])
 				return 'مقاله به نشان شده ها اضافه شد'
 			},
 			error: error => {
@@ -69,7 +69,7 @@ export default function PostContentFooterButtons({
 		if (isLiking) return // Prevent double clicks
 		setIsLiking(true) // Set loading state
 
-		const likesSubmissionPromise = fetch(`/api/articles/${slug}/likes`, {
+		const likesSubmissionPromise = fetch(`/api/services/${slug}/likes`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function PostContentFooterButtons({
 					throw new Error(errorData || `Request failed with status ${response.status}`)
 				}
 				setIsLiking(false)
-				mutate([`/api/articles/${slug}/likes`, 'article-likes'])
+				mutate([`/api/services/${slug}/likes`, 'service-likes'])
 				return 'مقاله به علاقه‌مندی‌ها اضافه شد'
 			},
 			error: error => {

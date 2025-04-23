@@ -92,7 +92,7 @@ export default function HomeRequestForm() {
 			className={`bg-primary px-2.5 my-20 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
 			id='request-service'
 		>
-			<div className='flex flex-col lg:flex-row gap-10 py-10 lg:py-0 lg:px-20 relative z-10'>
+			<div className='flex flex-col lg:flex-row items-center gap-10 py-10 lg:py-0 lg:px-20 relative z-10'>
 				<div className='*:text-white max-w-lg text-center lg:text-right'>
 					<H2>ثبت درخواست خدمات</H2>
 					<Paragraph>

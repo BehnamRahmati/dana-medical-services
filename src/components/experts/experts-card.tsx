@@ -1,17 +1,17 @@
-import placeholderImg from '@/assets/user-placeholder.png'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { TUser } from '@/lib/types'
 import { ArrowLeft3 } from 'iconsax-react'
 import Button from '../ui/button'
 import { H4, Paragraph } from '../ui/typography'
-export default function ExpertsCard() {
+export default function ExpertsCard({ user }: { user: TUser }) {
 	return (
 		<div className='border rounded-2xl border-border p-4 lg:p-8 hover:bg-accent hover:shadow-lg transition-all duration-500'>
 			<div className=''>
 				<Avatar className='size-28 border border-border mx-auto'>
-					<AvatarImage src={placeholderImg.src} />
-					<AvatarFallback>CN</AvatarFallback>
+					<AvatarImage src={user.image} alt={user.name} className='size-full rounded-full' />
+					<AvatarFallback>{user.name}</AvatarFallback>
 				</Avatar>
-				<H4 className='text-center text-secondary mt-5'>سید شهاب حسینی</H4>
+				<H4 className='text-center text-secondary mt-5'>{user.name}</H4>
 			</div>
 			<div className='py-10 px-5'>
 				<Paragraph className='text-center'>

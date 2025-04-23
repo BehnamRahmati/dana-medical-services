@@ -43,7 +43,6 @@ export async function dataFetcher<T>([url]: string[], options?: RequestInit): Pr
 		throw new Error(`Failed to fetch data from ${url}: ${response.statusText}`)
 	}
 	return response.json() as Promise<T>
-	return await response.json()
 }
 
 export async function serverDataFetcher<T>(url: string, options?: RequestInit): Promise<T> {

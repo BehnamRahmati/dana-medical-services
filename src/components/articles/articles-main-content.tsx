@@ -2,8 +2,7 @@
 
 import useArticles from '@/hooks/use-articles'
 import PaginationCustom from '../ui/pagination-custom'
-import PostCard from '../ui/post-card'
-import { Skeleton } from '../ui/skeleton'
+import PostCard, { PostCardSkeleton } from '../ui/post-card'
 
 export default function ArticlesMainContent() {
 	const { data, isLoading, error } = useArticles()
@@ -13,7 +12,7 @@ export default function ArticlesMainContent() {
 		return (
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
 				{Array.from({ length: 6 }).map((_, index) => (
-					<Skeleton key={index} className='h-[350px] w-full bg-content/10 rounded-md' /> // Added rounded-md for consistency
+					<PostCardSkeleton key={index} />
 				))}
 			</div>
 		)

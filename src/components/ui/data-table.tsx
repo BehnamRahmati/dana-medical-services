@@ -140,7 +140,7 @@ function DataTableFilters({ table }: { table: TTable<any> }) {
 
 function DataTableSkeleton() {
 	return (
-		<div className='flex flex-col gap-5 h-full justify-between bg-accent p-2.5 lg:p-5 rounded-xl'>
+		<div className='flex flex-col gap-5 h-full justify-between bg-content/10 p-2.5 lg:p-5 rounded-xl'>
 			<div className='flex items-center justify-between'>
 				<Skeleton className='w-1/4 h-7 bg-content/10' />
 				<Skeleton className='w-1/4 h-7 bg-content/10' />

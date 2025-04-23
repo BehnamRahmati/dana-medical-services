@@ -65,7 +65,9 @@ export default function DashboardTagsSelect<T extends SupportedSchema & { tags: 
 											)
 										})}
 										{!field.value?.length && (
-											<span className='text-muted-foreground'>{placeholder || 'Select tags...'}</span>
+											<span className='text-muted-foreground'>
+												{placeholder || 'برچسب ها را انتخاب کنید...'}
+											</span>
 										)}
 									</div>
 									<ChevronsUpDown className='h-4 w-4 opacity-50' />
@@ -74,8 +76,8 @@ export default function DashboardTagsSelect<T extends SupportedSchema & { tags: 
 						</PopoverTrigger>
 						<PopoverContent className='md:w-[calc(20rem-2.5rem)] p-0'>
 							<Command>
-								<CommandInput placeholder='Search tags...' />
-								<CommandEmpty>No tag found.</CommandEmpty>
+								<CommandInput placeholder='جستجو در میان برچسب ها...' />
+								<CommandEmpty>هیچ برچسبی یافت نشد.</CommandEmpty>
 								<CommandGroup>
 									{data.tags.map(tag => {
 										const isSelected = field.value?.includes(tag.id)

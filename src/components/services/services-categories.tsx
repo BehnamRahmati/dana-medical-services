@@ -10,7 +10,7 @@ import useSWR from 'swr'
 export default function ServicesCategories() {
 	const { currentParams, pathname } = useQueries()
 	const { data, isLoading, error } = useSWR<{ categories: TCategory[] }>(
-		['/api/dashboard/services/categories', 'services-categories'],
+		['/api/services/categories', 'services-categories'],
 		dataFetcher,
 	)
 

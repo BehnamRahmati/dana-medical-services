@@ -27,24 +27,28 @@ export default function Profile() {
 	if (status === 'loading') return renderLoading()
 	if (status === 'unauthenticated' || !session) return <div>Unauthenticated</div>
 
-	if (isLoading) return renderLoading()
-	if (!data) {
-		return <p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>هیچ دیتایی یافت نشد</p>
-	}
-	if (error) return <p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>خطا در بارگذاری دیتا</p>
-
 	return (
 		<>
 			<div className='bg-secondary h-96 -mt-52'></div>
 			<div className='container mx-auto px-2.5 lg:px-5 py-10'>
-				<ProfileHeader
-					image={data.user.image}
-					name={data.user.name}
-					email={data.user.email}
-					comments={data.user._count.comments}
-					likes={data.user._count.likes}
-					requests={data.user._count.requests}
-				/>
+				{isLoading && renderLoading()}
+				{error && (
+					<p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>خطا در بارگذاری دیتا</p>
+				)}
+				{!data && (
+					<p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>هیچ دیتایی یافت نشد</p>
+				)}
+				{!isLoading && data && !error && (
+					<ProfileHeader
+						image={data.user.image}
+						name={data.user.name}
+						email={data.user.email}
+						comments={data.user._count.comments}
+						likes={data.user._count.likes}
+						requests={data.user._count.requests}
+					/>
+				)}
+
 				<ProfileContent />
 				<div className='px-2.5 lg:px-5'>
 					<div className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>Still working on it</div>

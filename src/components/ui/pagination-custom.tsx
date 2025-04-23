@@ -23,7 +23,10 @@ export default function PaginationCustom({ currentPage, totalPages }: { currentP
 				)}
 				{currentPage > 2 && (
 					<PaginationItem>
-						<PaginationLink className='bg-white shadow-sm pb-1.5 px-3' href='#'>
+						<PaginationLink
+							className='bg-white shadow-sm pb-1.5 px-3'
+							href={`${pathname}?${new URLSearchParams({ ...currentParams, page: (currentPage - 1).toString() })}`}
+						>
 							{currentPage - 1}
 						</PaginationLink>
 					</PaginationItem>
@@ -35,21 +38,30 @@ export default function PaginationCustom({ currentPage, totalPages }: { currentP
 				</PaginationItem>
 				{currentPage < totalPages && (
 					<PaginationItem>
-						<PaginationLink className='bg-white shadow-sm pb-1.5 px-3' href='#'>
+						<PaginationLink
+							className='bg-white shadow-sm pb-1.5 px-3'
+							href={`${pathname}?${new URLSearchParams({ ...currentParams, page: (currentPage + 1).toString() })}`}
+						>
 							{currentPage + 1}
 						</PaginationLink>
 					</PaginationItem>
 				)}
 				{currentPage + 1 < totalPages && (
 					<PaginationItem>
-						<PaginationLink className='bg-white shadow-sm pb-1.5 px-3' href='#'>
+						<PaginationLink
+							className='bg-white shadow-sm pb-1.5 px-3'
+							href={`${pathname}?${new URLSearchParams({ ...currentParams, page: (currentPage + 2).toString() })}`}
+						>
 							{currentPage + 2}
 						</PaginationLink>
 					</PaginationItem>
 				)}
-				<PaginationItem>
-					<PaginationEllipsis />
-				</PaginationItem>
+				{currentPage < totalPages && (
+					<PaginationItem>
+						<PaginationEllipsis />
+					</PaginationItem>
+				)}
+
 				{currentPage < totalPages && (
 					<PaginationItem>
 						<PaginationNext
