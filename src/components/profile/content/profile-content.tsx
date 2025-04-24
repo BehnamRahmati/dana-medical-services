@@ -12,7 +12,7 @@ export default function ProfileContent() {
 		<Tabs
 			defaultValue='likes'
 			onValueChange={setActiveTab}
-			className='w-full lg:w-2/3 mt-5 lg:mt-10 lg:mx-auto bg-accent rounded-xl p-2.5 lg:p-5'
+			className='w-full lg:w-3/4 2xl:w-2/3 mt-5 lg:mt-10 lg:mx-auto bg-accent rounded-xl p-2.5 lg:p-5'
 			dir='rtl'
 		>
 			<TabsList className='gap-5 w-full justify-start overflow-auto bg-accent border border-border mb-2.5 lg:mb-5'>

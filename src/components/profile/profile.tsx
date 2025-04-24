@@ -9,43 +9,52 @@ import ProfileHeader from './header/profile-header'
 
 export default function Profile() {
 	const { data: session, status } = useSession()
-	const { data, isLoading, error } = useSWR<{ user: TUser }>([`/api/users/${session?.user?.id}`, 'user-profile'], dataFetcher)
+	const userId = session?.user?.id
+	const shouldFetch = userId && status === 'authenticated'
+	const {
+		data: userData,
+		isLoading: isUserDataLoading,
+		error: userDataError,
+	} = useSWR<{ user: TUser }>(shouldFetch ? [`/api/users/${userId}`, 'user-profile'] : null, dataFetcher)
+
+	const isLoading = status === 'loading' || (status === 'authenticated' && isUserDataLoading)
+
 	const renderLoading = () => {
 		return (
-			<div>
-				<div className='bg-secondary h-96 -mt-52'></div>
-				<div className='container mx-auto px-2.5 lg:px-5 py-10'>
+			<>
+				<div className='container mx-auto'>
 					<div className='flex flex-col lg:flex-row  lg:items-stretch gap-5 -mt-36'>
 						<Skeleton className='size-56 rounded-4xl' />
 						<Skeleton className='h-56 rounded-4xl flex-1' />
 					</div>
 				</div>
-			</div>
+			</>
 		)
 	}
 
-	if (status === 'loading') return renderLoading()
-	if (status === 'unauthenticated' || !session) return <div>Unauthenticated</div>
+	if (status === 'unauthenticated') return <div>برای مشاهده پروفایل وارد حساب کاربری خود شوید.</div>
 
 	return (
 		<>
 			<div className='bg-secondary h-96 -mt-52'></div>
 			<div className='container mx-auto px-2.5 lg:px-5 py-10'>
 				{isLoading && renderLoading()}
-				{error && (
-					<p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>خطا در بارگذاری دیتا</p>
+				{userDataError && (
+					<p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>
+						خطا در بارگذاری اطلاعات پروفایل
+					</p>
 				)}
-				{!data && (
-					<p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>هیچ دیتایی یافت نشد</p>
+				{!userData && !isLoading && (
+					<p className='p-10 text-center text-xl border-dashed border-border border-4 mt-20'>اطلاعات کاربری یافت نشد</p>
 				)}
-				{!isLoading && data && !error && (
+				{!isLoading && userData && !userDataError && (
 					<ProfileHeader
-						image={data.user.image}
-						name={data.user.name}
-						email={data.user.email}
-						comments={data.user._count.comments}
-						likes={data.user._count.likes}
-						requests={data.user._count.requests}
+						image={userData.user.image}
+						name={userData.user.name}
+						email={userData.user.email}
+						comments={userData.user._count.comments}
+						likes={userData.user._count.likes}
+						requests={userData.user._count.requests}
 					/>
 				)}
 

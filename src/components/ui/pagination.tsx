@@ -54,7 +54,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
 	return (
 		<PaginationLink
 			aria-label='Go to previous page'
-			className={cn('gap-1 px-2.5 sm:pl-2.5 bg-white shadow-sm', className)}
+			className={cn('gap-1 px-2.5 sm:pl-2.5 bg-accent shadow-sm', className)}
 			{...props}
 		>
 			<ArrowRight2 className='size-4 fill-content' />
@@ -67,7 +67,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
 	return (
 		<PaginationLink
 			aria-label='Go to next page'
-			className={cn('gap-1 px-2.5 sm:pr-2.5 bg-white shadow-sm', className)}
+			className={cn('gap-1 px-2.5 sm:pr-2.5 bg-accent shadow-sm', className)}
 			{...props}
 		>
 			<span className='hidden sm:block -mb-1'>بعدی</span>

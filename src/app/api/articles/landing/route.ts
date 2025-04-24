@@ -13,6 +13,7 @@ export async function GET() {
 				id: true,
 				title: true,
 				read: true,
+				excerpt: true,
 				thumbnail: true,
 				slug: true,
 				category: {

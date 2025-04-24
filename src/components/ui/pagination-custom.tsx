@@ -24,7 +24,7 @@ export default function PaginationCustom({ currentPage, totalPages }: { currentP
 				{currentPage > 2 && (
 					<PaginationItem>
 						<PaginationLink
-							className='bg-white shadow-sm pb-1.5 px-3'
+							className='bg-accent shadow-sm pb-1.5 px-3'
 							href={`${pathname}?${new URLSearchParams({ ...currentParams, page: (currentPage - 1).toString() })}`}
 						>
 							{currentPage - 1}
@@ -39,7 +39,7 @@ export default function PaginationCustom({ currentPage, totalPages }: { currentP
 				{currentPage < totalPages && (
 					<PaginationItem>
 						<PaginationLink
-							className='bg-white shadow-sm pb-1.5 px-3'
+							className='bg-accent shadow-sm pb-1.5 px-3'
 							href={`${pathname}?${new URLSearchParams({ ...currentParams, page: (currentPage + 1).toString() })}`}
 						>
 							{currentPage + 1}
@@ -49,7 +49,7 @@ export default function PaginationCustom({ currentPage, totalPages }: { currentP
 				{currentPage + 1 < totalPages && (
 					<PaginationItem>
 						<PaginationLink
-							className='bg-white shadow-sm pb-1.5 px-3'
+							className='bg-accent shadow-sm pb-1.5 px-3'
 							href={`${pathname}?${new URLSearchParams({ ...currentParams, page: (currentPage + 2).toString() })}`}
 						>
 							{currentPage + 2}

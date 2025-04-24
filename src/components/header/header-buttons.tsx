@@ -3,9 +3,11 @@ import { Chart2, LoginCurve, ProfileAdd } from 'iconsax-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import React from 'react'
 import ToggleThemeButton from '../toggle-theme-button'
 import { Skeleton } from '../ui/skeleton'
-export default function HeaderButtons() {
+
+function HeaderButtons() {
 	const { data: session, status } = useSession()
 
 	const renderAuthButtons = () => {
@@ -63,15 +65,20 @@ export default function HeaderButtons() {
 			</div>
 		)
 	}
+
 	return (
 		<div className='flex justify-between lg:justify-start gap-2.5 w-full'>
 			<ToggleThemeButton />
-			{status === 'loading' && !session && (
-				<div className=''>
-					<Skeleton className='bg-content/10 w-32 h-8 rounded-md' />
+			{status === 'loading' && (
+				<div className='flex items-center gap-2.5'>
+					<Skeleton className='bg-content/10 w-32 h-10 rounded-md' />
+					<Skeleton className='bg-content/10 w-20 h-10 rounded-md' />
 				</div>
 			)}
-			{status === 'unauthenticated' ? renderAuthButtons() : renderProfileButton()}
+			{status === 'unauthenticated' && renderAuthButtons()}
+			{status === 'authenticated' && renderProfileButton()}
 		</div>
 	)
 }
+
+export default React.memo(HeaderButtons)

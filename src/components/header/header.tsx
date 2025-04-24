@@ -17,7 +17,7 @@ function Header() {
 				<header>
 					<div className='container mx-auto hidden lg:block relative z-10'>
 						<div className='flex flex-col px-2.5 lg:px-5'>
-							<div className='header-top bg-accent rounded-xl mt-2.5 p-2.5 lg:p-9.5 shadow-xs w-full flex flex-row items-center justify-between'>
+							<div className='header-top bg-accent rounded-xl mt-2.5 p-2.5 lg:p-5 2xl:p-9.5 shadow-xs w-full flex flex-row items-center justify-between'>
 								<Logo />
 								<HeaderSearchForm />
 								<div className='hidden lg:block'>

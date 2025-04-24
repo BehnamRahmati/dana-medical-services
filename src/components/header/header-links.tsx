@@ -1,3 +1,11 @@
+'use client'
+import {
+	NavigationMenu,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu'
 import { Headphone } from 'iconsax-react'
 import Link from 'next/link'
 import HeaderButtons from './header-buttons'
@@ -13,8 +21,8 @@ const links = [
 		link: '/#request-service',
 	},
 	{
-		title: 'مقالات',
-		link: '/articles',
+		title: 'مجله سلامت',
+		link: '/magazine',
 	},
 	{
 		title: 'درباره ما',
@@ -29,23 +37,27 @@ const links = [
 export default function HeaderLinks({ setOpen }: { setOpen?: React.Dispatch<React.SetStateAction<boolean>> }) {
 	return (
 		<div className='header-bottom flex-1 lg:bg-border w-full lg:w-11/12 lg:mx-auto lg:rounded-b-xl py-3 px-5'>
-			<div className='flex flex-col h-full lg:flex-row lg:items-center lg:justify-between'>
-				<nav>
-					<ul className='flex flex-col lg:flex-row lg:items-center gap-5'>
-						<HeaderServicesLinks setOpen={setOpen} />
+			<div className='flex flex-col h-full lg:flex-row justify-start lg:items-center lg:justify-between'>
+				<NavigationMenu className='max-w-full lg:max-w-max *:w-full lg:*:w-fit items-start lg:items-center' dir='rtl'>
+					<NavigationMenuList dir='rtl' className='flex-col lg:flex-row w-full '>
+						<NavigationMenuItem asChild>
+							<HeaderServicesLinks setOpen={setOpen} />
+						</NavigationMenuItem>
 						{links.map(link => (
-							<li key={link.title}>
-								<Link
-									href={link.link}
-									className='hover:text-secondary'
-									onClick={() => setOpen && setOpen(prev => !prev)}
-								>
-									{link.title}
+							<NavigationMenuItem key={link.title} className='w-full'>
+								<Link href={link.link} legacyBehavior passHref>
+									<NavigationMenuLink
+										className={navigationMenuTriggerStyle()}
+										onClick={() => setOpen && setOpen(prev => !prev)}
+									>
+										{link.title}
+									</NavigationMenuLink>
 								</Link>
-							</li>
+							</NavigationMenuItem>
 						))}
-					</ul>
-				</nav>
+					</NavigationMenuList>
+				</NavigationMenu>
+
 				<div className='flex flex-col items-center gap-2.5 mt-auto mb-0 lg:mt-0'>
 					<Link
 						href=''
