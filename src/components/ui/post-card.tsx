@@ -7,10 +7,10 @@ import { Skeleton } from './skeleton'
 export default function PostCard({ article }: { article: TArticle }) {
 	return (
 		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-border group flex flex-col'>
-			<div className='bg-border w-full h-52 rounded-xl overflow-hidden'>
+			<div className='bg-border w-full lg:h-40 2xl:h-52 rounded-xl overflow-hidden'>
 				<Image
 					src={article.thumbnail}
-					className='w-full h-full transform group-hover:scale-110 transition-transform duration-200 ease-in-out'
+					className='w-full h-full transform group-hover:scale-110 transition-transform duration-200 ease-in-out object-cover'
 					height={500}
 					width={300}
 					loading='lazy'
@@ -66,7 +66,7 @@ export default function PostCard({ article }: { article: TArticle }) {
 
 export function PostCardSkeleton() {
 	return (
-		<div className='bg-content/10 h-[400] w-full lg:w-[370px] p-5 rounded-xl'>
+		<div className='bg-content/10  h-[400] w-full lg:w-[300px] 2xl:w-[370px] p-5 rounded-xl'>
 			<Skeleton className='w-full h-52 bg-content/10 rounded-lg mb-2' />
 			<Skeleton className='w-full h-7 bg-content/10 rounded-md mb-1' />
 			<Skeleton className='w-22 h-7 bg-content/10 rounded-md mb-4' />

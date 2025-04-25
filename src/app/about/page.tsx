@@ -5,6 +5,7 @@ import Title from '@/components/ui/title'
 import { H1, H4, Paragraph } from '@/components/ui/typography'
 import { BoxTime, EmptyWallet, I24Support, MoneyRecive } from 'iconsax-react'
 import Image from 'next/image'
+
 export default function AboutPage() {
 	const values = [
 		{
@@ -63,7 +64,7 @@ export default function AboutPage() {
 				</div>
 			</Section>
 			<Section>
-				<div className='px-2.5 lg:px-5 py-10 lg:py-20'>
+				<div className='px-2.5 lg:px-5 py-10 lg:py-20 flex flex-col items-center'>
 					<Title>ارزش های کلینیک دنا</Title>
 					<ul className='grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20 mt-10 lg:mt-20 lg:w-2/3 mx-auto '>
 						{values.map(value => (
@@ -77,7 +78,7 @@ export default function AboutPage() {
 				</div>
 			</Section>
 			<Section>
-				<div className='px-2.5 lg:px-5 py-10 lg:py-20'>
+				<div className='px-2.5 lg:px-5 py-10 lg:py-20 flex flex-col items-center'>
 					<Title>مجوز های کلینیک دنا</Title>
 					<ul className='grid grid-cols-1 gap-5 lg:gap-20 mt-10 lg:mt-20 lg:w-2/3 mx-auto'>
 						{permissions.map(permit => (
@@ -97,17 +98,6 @@ export default function AboutPage() {
 					</ul>
 				</div>
 			</Section>
-			{/* <Section>
-				<div className='px-2.5 lg:px-5 py-10 lg:py-20'>
-					<Title>آدرس کلینیک دنا</Title>
-					<div className='mt-10 flex flex-col lg:flex-row gap-10 items-center'>
-						<div className='flex-1'></div>
-						<div className='flex-1'>
-							<MapComponent />
-						</div>
-					</div>
-				</div>
-			</Section> */}
 		</div>
 	)
 }

@@ -1,10 +1,9 @@
 import clinicBg from '@/assets/clinic-bg.jpg'
-import { serverDataFetcher } from '@/lib/helpers'
 import { TArticle } from '@/lib/types'
 import { Clock } from 'iconsax-react'
 import Link from 'next/link'
-export default async function MagazineBanner() {
-	const data = await serverDataFetcher<{ articles: TArticle[] }>('/api/articles/landing')
+
+export default function MagazineBanner({ articles }: { articles: TArticle[] }) {
 	return (
 		<div className=''>
 			<div
@@ -14,7 +13,7 @@ export default async function MagazineBanner() {
 				<div className='container mx-auto flex flex-col h-full px-2.5 lg:px-5'>
 					<div className='h-24 lg:h-44 2xl:h-56 shrink-0'></div>
 					<div className='grid grid-cols-1 md:grid-cols-12 grid-rows-4 gap-2.5 pb-5 flex-1'>
-						{data.articles.map((article, i) => {
+						{articles.map((article, i) => {
 							return (
 								<div
 									className='bg-slate-600 group rounded-2xl bg-cover bg-blend-overlay row-span-1 col-span-1  md:col-span-3 md:row-span-2 md:first:row-span-4 md:first:col-span-6 md:nth-of-type-[2]:row-span-4'

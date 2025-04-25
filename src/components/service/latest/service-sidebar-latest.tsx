@@ -1,15 +1,16 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fetchServices } from '@/lib/helpers'
+import { dataFetcher } from '@/lib/helpers'
+import { TService } from '@/lib/types'
 import { ArrowLeft3, Cards } from 'iconsax-react'
 import Link from 'next/link'
 import useSWR from 'swr'
 import ServiceSidebarLatestCard from './service-sidebar-latest-card'
 
 export default function ServiceSidebarLatest() {
-	const { data: services, isLoading } = useSWR('/api/services/landing', fetchServices)
+	const { data, isLoading } = useSWR<{ services: TService[] }>(['/api/services/landing', 'home-services'], dataFetcher)
 
-	if (isLoading || !services)
+	if (isLoading || !data)
 		return (
 			<div className='flex flex-col gap-5 mb-5'>
 				<Skeleton className='h-14 w-full bg-content/10' />
@@ -28,7 +29,7 @@ export default function ServiceSidebarLatest() {
 				</div>
 			</div>
 			<ul className='flex flex-col mt-5 gap-2'>
-				{services.map(service => (
+				{data.services.map(service => (
 					<li key={'ltst' + service.id}>
 						<ServiceSidebarLatestCard service={service} />
 					</li>

@@ -1,4 +1,3 @@
-import Header from '@/components/header/header'
 import Providers from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import type { Metadata } from 'next'
@@ -7,6 +6,7 @@ import React from 'react'
 import './globals.css'
 
 const Footer = dynamic(() => import('@/components/footer/footer'))
+const Header = dynamic(() => import('@/components/header/header'))
 
 export const metadata: Metadata = {
 	title: 'خدمات پزشکی دنا',

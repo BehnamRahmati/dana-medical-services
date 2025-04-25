@@ -57,7 +57,7 @@ export default function HeaderServicesLinks({ setOpen }: { setOpen?: React.Dispa
 				<>
 					<NavigationMenuTrigger>خدمات</NavigationMenuTrigger>
 					<NavigationMenuContent dir='rtl'>
-						<ul className='grid grid-cols-4 gap-2.5 lg:w-5xl 2xl:w-7xl'>
+						<ul className='grid lg:grid-cols-3 xl:grid-cols-4 gap-2.5 lg:w-[52.5rem] xl:w-[67rem] 2xl:w-[82rem]'>
 							{isLoading || !data ? (
 								<li className='flex flex-col gap-2.5'>
 									<Skeleton className='bg-muted h-7 w-full'></Skeleton>

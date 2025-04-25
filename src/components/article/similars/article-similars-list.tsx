@@ -14,8 +14,6 @@ export default function ArticleSimilarsList({ categorySlug }: { categorySlug: st
 		dataFetcher,
 	)
 
-	console.warn(data)
-
 	if (isLoading) return <ArticleSimilarsFallback />
 
 	if (!data)
@@ -32,7 +30,7 @@ export default function ArticleSimilarsList({ categorySlug }: { categorySlug: st
 		)
 
 	return (
-		<div className='grid grid-cols-1 lg:grid-cols-3 gap-5 xl:gap-10 mt-5'>
+		<div className='grid grid-cols-1 lg:grid-cols-3 gap-5 2xl:gap-10 mt-5'>
 			{data.articles.map(article => (
 				<PostCard article={article} key={'similars' + article.id} />
 			))}

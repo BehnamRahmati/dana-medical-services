@@ -87,32 +87,33 @@ export default function HomeRequestForm() {
 	}
 
 	return (
-		<Section
-			ref={sectionRef}
-			className={`bg-primary px-2.5 my-20 lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
-			id='request-service'
-		>
-			<div className='flex flex-col lg:flex-row items-center gap-10 py-10 lg:py-0 lg:px-20 relative z-10'>
-				<div className='*:text-white max-w-lg text-center lg:text-right'>
-					<H2>ثبت درخواست خدمات</H2>
-					<Paragraph>
-						دنا مجموعه ارائه‌ دهنده خدمات سلامت در منزل و محل کار است. دنا یک «آزمایشگاه» یا «مرکز درمانی» نیست بلکه
-						تلاش می‌کند تا از طریق اتصال کاربران به آزمایشگاه‌های معتبر، پرستاران کارآزموده و پزشکان متخصص، انجام
-						خدمات سلامت در محل را برای کاربران تسهیل نماید.
-					</Paragraph>
-				</div>
-				<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-5 md:p-10 shadow-md z-30 lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
-					<div className='mb-10'>
-						<H3 className=' w-fit mx-auto'>فرم درخواست خدمات</H3>
-						<Paragraph className='text-center '>
-							با پرکردن فرم زیر درخواست خود را برای دریافت خدمات ثبت کنید.
+		<div className='py-10 lg:py-30' id='request-service'>
+			<Section
+				ref={sectionRef}
+				className={`bg-primary px-2.5  lg:px-5 transition-all transform duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}
+			>
+				<div className='flex flex-col lg:flex-row items-center gap-10 py-10 lg:py-0 lg:px-20 relative z-10'>
+					<div className='*:text-white max-w-lg text-center lg:text-right'>
+						<H2>ثبت درخواست خدمات</H2>
+						<Paragraph>
+							دنا مجموعه ارائه‌ دهنده خدمات سلامت در منزل و محل کار است. دنا یک «آزمایشگاه» یا «مرکز درمانی» نیست
+							بلکه تلاش می‌کند تا از طریق اتصال کاربران به آزمایشگاه‌های معتبر، پرستاران کارآزموده و پزشکان متخصص،
+							انجام خدمات سلامت در محل را برای کاربران تسهیل نماید.
 						</Paragraph>
 					</div>
-					<div className=''>{renderingForms(progress)}</div>
+					<div className='lg:w-lg mx-auto bg-accent border border-border rounded-lg p-5 md:p-10 shadow-md z-30 lg:absolute left-20 top-1/2 lg:transform lg:-translate-y-1/2'>
+						<div className='mb-10'>
+							<H3 className=' w-fit mx-auto'>فرم درخواست خدمات</H3>
+							<Paragraph className='text-center '>
+								با پرکردن فرم زیر درخواست خود را برای دریافت خدمات ثبت کنید.
+							</Paragraph>
+						</div>
+						<div className=''>{renderingForms(progress)}</div>
 
-					<div className=''>{renderingProgress(progress)}</div>
+						<div className=''>{renderingProgress(progress)}</div>
+					</div>
 				</div>
-			</div>
-		</Section>
+			</Section>
+		</div>
 	)
 }

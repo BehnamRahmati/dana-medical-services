@@ -3,11 +3,11 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 const allowedRoles = ['ADMIN', 'SUPERADMIN']
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [process.env.NEXTAUTH_URL].filter(Boolean) // Filter out potential undefined values if NEXTAUTH_URL isn't set
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [process.env.NEXT_PUBLIC_URL].filter(Boolean) // Filter out potential undefined values if NEXTAUTH_URL isn't set
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl
-	const origin = request.headers.get('Origin') // This can be null for same-origin requests
+	const origin = request.headers.get('Origin')
 
 	if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
 		const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })

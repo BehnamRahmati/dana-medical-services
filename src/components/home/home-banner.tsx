@@ -1,8 +1,8 @@
+import bannerImage from '@/assets/Doctors-bro.png'
+import curlyArrow from '@/assets/curly-arrow.svg'
 import { ArrowLeft3, Briefcase, I24Support, Map, Profile2User } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import bannerImage from '../../../public/static/Doctors-bro.png'
-import curlyArrow from '../../../public/static/curly-arrow.svg'
 import Section from '../ui/section'
 
 export default function Homebanner() {

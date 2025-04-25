@@ -14,7 +14,7 @@ export default function ServicesCard({ service }: { service: TService }) {
 					width={300}
 					height={300}
 					loading='lazy'
-					className='size-full rounded-xl transform group-hover:scale-110 transition-transform duration-200 ease-in-out'
+					className='size-full rounded-xl transform group-hover:scale-110 transition-transform duration-200 ease-in-out object-cover'
 				/>
 			</div>
 			<div className='info w-11/12 mx-auto flex-1'>

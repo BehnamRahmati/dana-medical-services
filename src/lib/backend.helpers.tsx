@@ -2,6 +2,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { prisma } from './prisma'
 
 export async function handleUpload(file: File) {
 	// Convert the file into a buffer
@@ -23,4 +24,85 @@ export async function handleUpload(file: File) {
 	await fs.promises.writeFile(filePath, fileBuffer)
 
 	return fileName
+}
+
+export async function fetchLastFourArticle() {
+	return await prisma.article.findMany({
+		where: {
+			status: {
+				equals: 'PUBLISHED' as const,
+			},
+		},
+		select: {
+			id: true,
+			title: true,
+			read: true,
+			excerpt: true,
+			thumbnail: true,
+			slug: true,
+			category: {
+				select: {
+					name: true,
+					slug: true,
+				},
+			},
+			author: {
+				select: {
+					name: true,
+					image: true,
+				},
+			},
+			_count: {
+				select: { likes: true, comments: true, bookmarks: true },
+			},
+		},
+		orderBy: {
+			createdAt: 'desc',
+		},
+		take: 4,
+	})
+}
+
+export async function fetchArticle(slug: string) {
+	return await prisma.article.findUnique({
+		where: { slug },
+		include: {
+			tags: true,
+			category: true,
+			author: {
+				select: {
+					name: true,
+					image: true,
+				},
+			},
+			_count: {
+				select: { likes: true, comments: true, bookmarks: true },
+			},
+		},
+	})
+}
+
+export async function fetchService(slug: string) {
+	return await prisma.service.findUnique({
+		where: { slug },
+		include: {
+			category: {
+				select: {
+					name: true,
+					slug: true,
+				},
+			},
+			author: {
+				select: {
+					name: true,
+					image: true,
+				},
+			},
+			comments: true,
+			serviceItems: true,
+			_count: {
+				select: { likes: true, comments: true, bookmarks: true },
+			},
+		},
+	})
 }
