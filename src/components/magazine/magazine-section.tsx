@@ -56,7 +56,7 @@ export default function MagazineSection({ categorySlug, title }: { categorySlug:
 function SectionSkeleton() {
 	return (
 		<div className='container mx-auto px-2.5 lg:px-5 py-5 lg:py-10 2xl:py-20'>
-			<div className='border border-border rounded-2xl p-2.5 grid grid-cols-5 gap-2.5'>
+			<div className='border border-border rounded-2xl p-2.5 grid grid-cols-5 gap-2.5 bg-content/10'>
 				<div className=' flex flex-col items-center justify-center h-full'>
 					<div className='flex flex-col items-center justify-center px-2.5 text-base lg:text-lg'>
 						<Skeleton className='h-7 w-full bg-content/10 mb-2.5' />

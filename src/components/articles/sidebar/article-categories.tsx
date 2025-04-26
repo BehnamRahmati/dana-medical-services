@@ -54,10 +54,11 @@ export default function ArticleCategories() {
 			</div>
 			<ul className='flex flex-wrap gap-2 mt-5'>
 				{data.categories.map(cat => {
+					delete currentParams.page
 					const newParam = { category: cat.slug }
 					return (
 						<li key={cat.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
-							<Link href={{ pathname, query: { ...currentParams, page: 1, ...newParam } }}>#{cat.name}</Link>
+							<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{cat.name}</Link>
 						</li>
 					)
 				})}

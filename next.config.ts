@@ -11,21 +11,16 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'static.roocket.ir',
-			},
-			{
-				protocol: 'https',
 				hostname: 'lh3.googleusercontent.com',
 			},
 			{
 				protocol: 'https',
 				hostname: 'minio-m3wx75.chbk.app',
 			},
-			{
-				protocol: 'https',
-				hostname: 'homeca.ir',
-			},
 		],
+	},
+	experimental: {
+		optimizePackageImports: ['iconsax-react', 'lucide-react', 'react-icons'],
 	},
 }
 

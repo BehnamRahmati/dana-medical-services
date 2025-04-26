@@ -1,7 +1,14 @@
 'use client'
+import dynamic from 'next/dynamic'
 import { Bar, BarChart } from 'recharts'
 
-import { ChartConfig, ChartContainer } from '@/components/ui/chart'
+const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), { ssr: false })
+type ChartConfig = {
+	[key: string]: {
+		label: string
+		color: string
+	}
+}
 
 const chartData = [
 	{ month: 'January', desktop: 186, mobile: 80 },

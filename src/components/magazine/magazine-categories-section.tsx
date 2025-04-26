@@ -5,6 +5,7 @@ import { Category2 } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import useSWR from 'swr'
+import { Skeleton } from '../ui/skeleton'
 
 export default function MagazineCategoriseSection() {
 	const { data, isLoading, error } = useSWR<{ categories: TCategory[] }>(
@@ -12,7 +13,19 @@ export default function MagazineCategoriseSection() {
 		dataFetcher,
 	)
 
-	if (isLoading) return <p>مقالات یافت نشد</p>
+	if (isLoading)
+		return (
+			<div className='container mx-auto px-2.5 lg:px-5 py-5 lg:py-10 2xl:pb-15 2xl:pt-30'>
+				<div className='grid grid-cols-2 md:grid-cols-4 place-content-center lg:flex flex-col md:flex-row items-center md:items-start justify-center gap-10 '>
+					{Array.from({ length: 5 }).map((_, i) => (
+						<div key={i} className='flex flex-col items-center justify-center gap-2 '>
+							<Skeleton className='bg-content/10 size-20 rounded-full' />
+							<Skeleton className='bg-content/10 h-7 w-32' />
+						</div>
+					))}
+				</div>
+			</div>
+		)
 	if (error) return <p>خطا در بارگذاری مقالات</p>
 	if (!data) return <p>مقالات یافت نشد</p>
 

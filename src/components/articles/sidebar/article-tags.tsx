@@ -53,10 +53,11 @@ export default function ArticleTags() {
 			</div>
 			<ul className='flex flex-wrap gap-2 mt-5'>
 				{data.tags.map(tag => {
+					delete currentParams.page
 					const newParam = { tags: tag.slug }
 					return (
 						<li key={tag.id} className='bg-content/20 pt-1 pb-0.5 px-2.5 rounded-lg cursor-pointer'>
-							<Link href={{ pathname, query: { ...currentParams, page: 1, ...newParam } }}>#{tag.name}</Link>
+							<Link href={{ pathname, query: { ...currentParams, ...newParam } }}>#{tag.name}</Link>
 						</li>
 					)
 				})}

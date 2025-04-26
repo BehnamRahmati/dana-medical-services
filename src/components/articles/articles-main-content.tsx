@@ -7,10 +7,9 @@ import PostCard, { PostCardSkeleton } from '../ui/post-card'
 export default function ArticlesMainContent() {
 	const { data, isLoading, error } = useArticles()
 
-	console.warn('data', data)
 	if (isLoading) {
 		return (
-			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 2xl:gap-5'>
 				{Array.from({ length: 6 }).map((_, index) => (
 					<PostCardSkeleton key={index} />
 				))}
@@ -34,7 +33,7 @@ export default function ArticlesMainContent() {
 	}
 	return (
 		<div className=''>
-			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 2xl:gap-5'>
 				{data.articles.map(article => (
 					<PostCard article={article} key={article.id} />
 				))}

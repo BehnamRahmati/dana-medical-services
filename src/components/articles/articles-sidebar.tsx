@@ -28,7 +28,7 @@ export default function ArticlesSidebar() {
 			</Drawer>
 		)
 	return (
-		<aside className='w-full lg:w-80 flex-col gap-5 hidden lg:flex'>
+		<aside className='w-full lg:w-64 xl:w-72 2xl:w-80 flex-col gap-5 hidden lg:flex'>
 			<ArticleSearch />
 			<ArticleTags />
 			<ArticleCategories />

@@ -31,7 +31,7 @@ type PaginationLinkProps = {
 } & Pick<React.ComponentProps<typeof Button>, 'size'> &
 	React.ComponentProps<'a'>
 
-function PaginationLink({ className, isActive, href = '#', size = 'icon', ...props }: PaginationLinkProps) {
+function PaginationLink({ className, isActive, href = '#', size = 'default', ...props }: PaginationLinkProps) {
 	return (
 		<Link
 			href={href}
@@ -40,7 +40,7 @@ function PaginationLink({ className, isActive, href = '#', size = 'icon', ...pro
 			data-active={isActive}
 			className={cn(
 				buttonVariants({
-					variant: isActive ? 'default' : 'ghost',
+					variant: isActive ? 'default' : 'outline',
 					size,
 				}),
 				className,
