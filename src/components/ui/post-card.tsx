@@ -2,9 +2,10 @@ import { TArticle } from '@/lib/types'
 import { Bookmark2, Heart, MessageText1, Watch } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import React from 'react'
 import { Skeleton } from './skeleton'
 
-export default function PostCard({ article }: { article: TArticle }) {
+function PostCard({ article }: { article: TArticle }) {
 	return (
 		<div className='w-full bg-accent min-h-32 p-5 rounded-xl border border-border group flex flex-col'>
 			<div className='bg-border w-full lg:h-40 2xl:h-52 rounded-xl overflow-hidden'>
@@ -63,6 +64,8 @@ export default function PostCard({ article }: { article: TArticle }) {
 		</div>
 	)
 }
+
+export default React.memo(PostCard)
 
 export function PostCardSkeleton() {
 	return (

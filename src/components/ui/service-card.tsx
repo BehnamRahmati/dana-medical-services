@@ -2,9 +2,10 @@ import { TService } from '@/lib/types'
 import { ArrowLeft3 } from 'iconsax-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import React from 'react'
 import { Skeleton } from './skeleton'
 
-export default function ServicesCard({ service }: { service: TService }) {
+function ServicesCard({ service }: { service: TService }) {
 	return (
 		<div className='bg-accent border border-border rounded-xl mt-12 group flex flex-col'>
 			<div className='bg-primary/60 w-11/12 rounded-xl h-44 mx-auto -mt-12 overflow-hidden flex items-center justify-center'>
@@ -41,6 +42,8 @@ export default function ServicesCard({ service }: { service: TService }) {
 		</div>
 	)
 }
+
+export default React.memo(ServicesCard)
 
 export function ServiceCardSkeleton() {
 	return (
